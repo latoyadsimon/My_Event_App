@@ -43,6 +43,8 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run lint
+      - name: Unit and component tests (Vitest)
+        run: npm test
       - name: Color contrast (WCAG AA) for app modes and event themes
         run: npm run check:contrast
       - run: npm run build

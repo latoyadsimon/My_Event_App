@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repo is
 
-Design-stage repo for an all-in-one **event planner app** (multi-tenant SaaS for event planners: leads → proposals → contracts → payments → guests/RSVPs, later equipment, staff, photo booth, karaoke, donations). The repo holds the product design, a Supabase Postgres schema with server functions, database tests, and a fresh Vite + React scaffold (`src/`, `package.json`) where the app will be built. The user is a beginner developer (Code Platoon), so explain decisions and keep code commented for learning.
+Design-stage repo for an all-in-one **event planner app** (multi-tenant SaaS for event planners: leads → proposals → contracts → payments → guests/RSVPs, later equipment, staff, photo booth, karaoke, donations). The repo holds the product design, a Supabase Postgres schema with server functions, database tests, and the front-end single-page app (`src/`, React + Vite), built phase by phase on in-memory demo data. The user is a beginner developer (Code Platoon), so explain decisions and keep code commented for learning.
 
 Build phases: **P1** core business (the current focus), P2 event operations, P3 guest experience, P4 growth. Running example used everywhere: the **Rivera wedding** (Sat Jun 12, 2027, 120 guests, total $14,850 = deposit $4,455 + $5,940 + $4,455). Keep new examples consistent with its timeline (see `wireframes/walkthrough_rivera.md`).
 
@@ -24,7 +24,9 @@ python3 -B qa/test_generators.py -v     # generators in sync, counts, Markdown l
 #   PGTEST_PORT overrides the port (default 54330). PG_BIN=/usr/lib/postgresql/16/bin picks a PostgreSQL version.
 
 # Front end (Vite + React)
-npm run dev      # local dev server
+npm run dev      # local dev server (http://localhost:5173)
+npm test         # Vitest + React Testing Library (npm run test:watch while coding)
+npx vitest run src/App.test.jsx -t "phone bar"   # one file / one test by name
 npm run lint     # ESLint (ignores .claude/ and the generated erd_data.js)
 npm run build
 
@@ -76,6 +78,26 @@ Supabase Postgres, verified on Postgres 16 (CI) and 18. Read `erd/README.md` and
 - **`functions.sql`:** `client_*` / `planner_*` functions check the caller inside (`security definer`), run in one transaction, and raise plain-language errors meant to be shown to users. `_name` helpers are not callable. Grants are explicit at the bottom of the file; give new functions the same treatment.
 - **Tests:** `tests/helpers.sql` provides `test.eq(label, actual, expected)` and `test.expect_error(sql, fragment)`. Tests switch identity with `set role authenticated; set request.jwt.claim.sub = '<uuid>';` (`supabase_stub.sql` fakes `auth.uid()` and the anon/authenticated/service_role roles).
 
+## Front-end SPA (`src/`)
+
+React 19 + Vite + React Router 7 (declarative `BrowserRouter`). **No backend yet:** all data lives in memory and a refresh resets it (no localStorage) until Supabase is connected. Built in phases (0 Foundation, 1 Planner setup, 2 Leads and selling, 3 Booking, 4 Event Hub, 5 Client portal, 6 Guests and staff, 7 Polish); each phase ends with `qa/frontend/phase_N_review.md` plus Playwright screenshots in `qa/frontend/screens/phase-N/`, and waits for the owner's approval.
+
+- **Routes:** `src/App.jsx`. `/app/*` planner, `/app/staff/*` staff, `/portal/*` client (Ana), `/b/:biz/*` public inquiry/booking, `/e/:slug/*` and `/i/:token` guests, `/join/:token` staff invite, `/outbox` demo messages. A screen not built yet renders `<Planned id>` from `src/routes/screens.js` (phase, design folder, next links), so there are no dead links. Swap the `<Planned>` for the real page when you build it.
+- **State:**
+  - `src/store/reducer.js` (pure; every change is an action, tested in `reducer.test.js`), `StoreContext.jsx` (`useStore()` → `{ state, dispatch }`), `selectors.js`.
+  - Seed data is `src/data/seed.js`: the Rivera story on **Thu Nov 5, 2026, 6 PM**, which `src/lib/clock.js` fixes as "today" (never call `new Date()` for today).
+  - Money is in cents (`src/lib/money.js`). Calendar days are `'YYYY-MM-DD'`, read as local days with `parseDay`.
+  - Reducer actions should mirror the server functions in `functions.sql` (same rules, e.g. countersign needs the deposit) so Supabase can replace them.
+- **Demo:**
+  - The demo bar's role switcher (`ui.role`) decides which area opens. `RequireRole` shows the friendly no-access page otherwise.
+  - Emails/SMS/push go to the Outbox via `dispatch({ type: 'outbox/send', message })`. `message.link.role` switches the role when the link is opened.
+- **Layouts:** `AppShell` (sidebar ≥1024px, top tabs 768–1023, phone bottom bar with 4 items + "More (n)") is shared by the planner, portal and staff layouts.
+  - The portal locks Home/Guests/Mood Board/Approvals until the deposit.
+  - `GuestLayout` applies the event theme via `themeToCssVars`.
+  - `EventHubLayout` sets `data-tone="respectful"` for memorials.
+- **Tests:** `src/test/renderApp.jsx` renders the whole app at a URL as a role. Write tests first, query by role/label (Testing Library), and keep them in CI (`npm test` in the frontend job).
+- **Design skills** in `.claude/skills/` (frontend-design, ui-ux-pro-max, taste-skill: read `references/app-screens.md` for workspace screens, design-motion-principles). Where they conflict with `style_guide.md`, the style guide wins.
+
 ## Style system (`app_outline/style_guide.md`)
 
 - **Layers:** app mode (Calm default / Bold opt-in, `data-mode` on `<html>`) → business branding (NFR-15) → per-event theme (`events.theme` stores a theme id) → respectful tone (`data-tone="respectful"`, automatic for `tone: 'respectful'` themes and `memorial` events, also quiets the planner's Event Hub for that event).
@@ -90,7 +112,7 @@ The intended workflow is: branches `main` / `dev` / `feature/...`; Dockerfiles f
 GitHub Actions (`.github/workflows/ci.yml`) runs on every push and on pull requests into `main`/`dev`, as three parallel jobs:
 - **database:** `run_tests.sh` and `run_qa_db_probes.sh`, using the runner's PostgreSQL 16
 - **generators:** `qa/test_generators.py`, so generated files must be committed in sync
-- **frontend:** `npm ci`, `npm run lint`, `npm run build`
+- **frontend:** `npm ci`, `npm run lint`, `npm test`, `npm run check:contrast`, `npm run build`
 
 ## Notes
 

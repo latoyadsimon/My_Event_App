@@ -19,4 +19,9 @@ export default defineConfig([
       parserOptions: { ecmaFeatures: { jsx: true } },
     },
   },
+  // Test files: Vitest provides describe / it / expect as globals (vite.config.js: test.globals)
+  {
+    files: ['**/*.test.{js,jsx}', 'src/test/**'],
+    languageOptions: { globals: { ...globals.browser, ...globals.vitest } },
+  },
 ])
