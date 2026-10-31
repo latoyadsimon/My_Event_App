@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repo is
 
-Design-stage repo for an all-in-one **event planner app** (multi-tenant SaaS for event planners: leads → proposals → contracts → payments → guests/RSVPs, later equipment, staff, photo booth, karaoke, donations). The repo holds the product design, a Supabase Postgres schema with server functions, database tests, and the front-end single-page app (`src/`, React + Vite), built phase by phase on in-memory demo data. The user is a beginner developer (Code Platoon), so explain decisions and keep code commented for learning.
+Repo for an all-in-one **event planner app** (multi-tenant SaaS for event planners: leads → proposals → contracts → payments → guests/RSVPs, later equipment, staff, photo booth, karaoke, donations). The repo holds the product design, a Supabase Postgres schema with server functions, database tests, and the front-end single-page app (`src/`, React + Vite), built phase by phase on in-memory demo data. The user is a beginner developer (Code Platoon), so explain decisions and keep code commented for learning.
 
 Build phases: **P1** core business (the current focus), P2 event operations, P3 guest experience, P4 growth. Running example used everywhere: the **Rivera wedding** (Sat Jun 12, 2027, 120 guests, total $14,850 = deposit $4,455 + $5,940 + $4,455). Keep new examples consistent with its timeline (see `wireframes/walkthrough_rivera.md`).
 
@@ -62,6 +62,7 @@ Several files are **generated**. Edit the source, then re-run the generator:
 - `product_spec.md`: the owner's spec (roles, modules, phases, integrations, open questions).
 - `user_journeys.md`: stages, numbered steps, edge cases and **cross-role triggers** (domain events) per role. Screen names in code style are the route names.
 - `user_stories.md`: 151 stories (76 P1). IDs are `ROLE-STAGE.N`: PL planner, CL client, GU guest, ST staff, VN vendor, DN donor, SYS backend, NFR non-functional. Each step became a story and each edge case an acceptance-criteria checkbox. When work is ambiguous, find its story first; a missing story means the feature isn't designed yet.
+- `documentation/README.md`: the long-form project guide (folder layout, how the pieces connect, booking flow and event bus, known gaps). `QA_REPORT.md` is the earlier QA audit.
 - `pages/`: one folder per P1 screen/feature (grouped `planner/ client/ guest/ staff/ messages/ shared/`), with the story copy, a cropped wireframe, and a tests checklist.
 - `wireframes/wireframe.html`: lo-fi wireframes for every P1 screen in desktop, tablet and phone views, built from a `JOURNEYS` data array with small HTML-string helpers (`shell`, `card`, `state`, `msg`…). Every screen has `from`/`next` fields (its click path), and the page's nav items must each map to a screen route (no dead ends). `walkthrough_rivera.md` logs the end-to-end walkthrough and the decisions made.
 
@@ -92,11 +93,17 @@ React 19 + Vite + React Router 7 (declarative `BrowserRouter`). **No backend yet
   - The demo bar's role switcher (`ui.role`) decides which area opens. `RequireRole` shows the friendly no-access page otherwise.
   - Emails/SMS/push go to the Outbox via `dispatch({ type: 'outbox/send', message })`. `message.link.role` switches the role when the link is opened.
 - **Planner setup (phase 1):** `src/pages/planner/setup/` holds the forms shared by the onboarding wizard and Settings (BusinessFields, BrandingFields, PackagesManager, ConnectCards, TeamManager, TemplatesEditor). Form checks live in `src/lib/validate.js`, and the brand color is made readable with `src/lib/brand.js` (`brandInk`). Dashboard numbers come from `getDashboard()` in `selectors.js`. Destructive actions use `ConfirmDialog`.
+- **Styling:** `src/main.jsx` imports `index.css` (which imports `tokens.css`) *before* any component, so CSS-module styles load after the tokens and win ties. `GuestLayout` remaps the app tokens (`--color-*`, `--font-display`) onto the event theme's `--theme-*` variables, so shared components (Button, Field, Card) automatically wear the event theme on guest pages.
 - **Layouts:** `AppShell` (sidebar ≥1024px, top tabs 768–1023, phone bottom bar with 4 items + "More (n)") is shared by the planner, portal and staff layouts.
   - The portal locks Home/Guests/Mood Board/Approvals until the deposit.
   - `GuestLayout` applies the event theme via `themeToCssVars`.
   - `EventHubLayout` sets `data-tone="respectful"` for memorials.
-- **Tests:** `src/test/renderApp.jsx` renders the whole app at a URL as a role. Write tests first, query by role/label (Testing Library), and keep them in CI (`npm test` in the frontend job).
+- **Tests:**
+  - `src/test/renderApp.jsx` renders the whole app at a URL as a role (optionally with a modified `initialState()`). Write tests first, query by role/label (Testing Library), and keep them in CI (`npm test` in the frontend job).
+  - `src/test/setup.js` adds jest-dom matchers and stubs what jsdom lacks (`<dialog>` `showModal`/`close`, `window.scrollTo`).
+  - Accessible names join adjacent elements without spaces, so put a real `{' '}` between a visually-hidden prefix and the label.
+- **Lint rule to know:** `react-refresh/only-export-components`. A `.jsx` file should export only components, so shared constants live in `src/lib/` (e.g. `ROLE_HOME` in `lib/roles.js`) or stay unexported.
+- **Browser checks (Playwright/Chrome DevTools):** a full page load resets the store, including the demo role to planner. To open client/guest/staff pages, click the no-access page's "View as …" button or change the demo bar's select, then navigate client-side.
 - **Design skills** in `.claude/skills/` (frontend-design, ui-ux-pro-max, taste-skill: read `references/app-screens.md` for workspace screens, design-motion-principles). Where they conflict with `style_guide.md`, the style guide wins.
 
 ## Style system (`app_outline/style_guide.md`)
@@ -119,3 +126,5 @@ GitHub Actions (`.github/workflows/ci.yml`) runs on every push and on pull reque
 
 - `.claude/agents/` and `.claude/skills/` were copied from a previous project ("BookWorm"). `front-end-agent.md` still refers to BookWorm's `front-end/` folder, so adapt it before relying on it.
 - Root-level `*:Zone.Identifier` files are Windows download metadata; ignore them.
+- `README.md` is still the Vite template boilerplate; the real project guide is `documentation/README.md`.
+- `prompt-claude-master.md` (untracked) is the owner's front-end build prompt; its HTML comment about building the front end only, before the backend, is intentional and should stay.
