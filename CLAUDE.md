@@ -76,6 +76,13 @@ Supabase Postgres, verified on Postgres 16 (CI) and 18. Read `erd/README.md` and
 - **`functions.sql`:** `client_*` / `planner_*` functions check the caller inside (`security definer`), run in one transaction, and raise plain-language errors meant to be shown to users. `_name` helpers are not callable. Grants are explicit at the bottom of the file; give new functions the same treatment.
 - **Tests:** `tests/helpers.sql` provides `test.eq(label, actual, expected)` and `test.expect_error(sql, fragment)`. Tests switch identity with `set role authenticated; set request.jwt.claim.sub = '<uuid>';` (`supabase_stub.sql` fakes `auth.uid()` and the anon/authenticated/service_role roles).
 
+## Style system (`app_outline/style_guide.md`)
+
+- **Layers:** app mode (Calm default / Bold opt-in, `data-mode` on `<html>`) → business branding (NFR-15) → per-event theme (`events.theme` stores a theme id) → respectful tone (`data-tone="respectful"`, automatic for `tone: 'respectful'` themes and `memorial` events, also quiets the planner's Event Hub for that event).
+- **Code:** `src/styles/tokens.css` (app tokens; keep its `/* @mode … */` comments, the contrast script parses them), `src/styles/themes.js` (27 event themes as data, `themeToCssVars`, status-chip maps, `APP_NAME`), `src/styles/contrast.js`, fonts in `src/assets/fonts/` (self-hosted, licences alongside).
+- **Rules:** components use CSS variables only (never raw hex); display fonts only for headings ≥ 24px; errors/money/legal text never playful. Adding a theme = one object in `themes.js`, then `npm run check:contrast` (also runs in CI and fails below WCAG AA).
+- **Preview:** `python3 -m http.server 8767` from the repo root → `/app_outline/style_guide/theme_gallery.html` (imports the real tokens and themes). Re-take its `theme_gallery_*.png` screenshots when the look changes.
+
 ## Course workflow (`setup.md`) and CI
 
 The intended workflow is: branches `main` / `dev` / `feature/...`; Dockerfiles for running and for testing; write tests first, then code, refactor, document and comment. Work on a `feature/...` branch and open a pull request into `dev`; merge `dev` into `main` when it's stable. There's no Docker setup yet.
