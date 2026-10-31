@@ -5,7 +5,8 @@ import reactRefresh from 'eslint-plugin-react-refresh'
 import { defineConfig, globalIgnores } from 'eslint/config'
 
 export default defineConfig([
-  globalIgnores(['dist']),
+  // Lint the app only: not Claude's copied skill assets or the generated ERD data.
+  globalIgnores(['dist', '.claude', '.playwright-mcp', 'app_outline/erd/erd_data.js']),
   {
     files: ['**/*.{js,jsx}'],
     extends: [

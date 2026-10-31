@@ -1,0 +1,46 @@
+# Continuous integration: runs every test suite on each push and pull request.
+# Three jobs run side by side; a red ✗ on any of them means "don't merge yet".
+name: CI
+
+on:
+  push:
+    branches: ['**']        # every branch (main, dev, feature/...)
+  pull_request:
+    branches: [main, dev]
+
+jobs:
+  # 1. The Supabase schema + server functions, on a throwaway PostgreSQL.
+  database:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      # The runner image ships PostgreSQL 16's server tools (initdb, pg_ctl) in
+      # /usr/lib/postgresql/16/bin; the test scripts find them there on their own.
+      - name: Existing database tests (booking flow + RLS)
+        run: bash app_outline/erd/tests/run_tests.sh
+      - name: QA regression probes (61 checks)
+        run: bash qa/run_qa_db_probes.sh
+
+  # 2. The Python generators are in sync with their sources, and Markdown links resolve.
+  generators:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Generator and documentation tests
+        run: python3 -B qa/test_generators.py -v
+
+  # 3. The React app (Vite) lints and builds.
+  frontend:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npm run build
