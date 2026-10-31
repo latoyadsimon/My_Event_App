@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:,">  <!-- no favicon file: stops the browser's automatic favicon.ico request (a 404 in the console) -->
+<title>Event Planner ERD</title>
+<style>
+/* =========================================================
+   Event Planner — Entity Relationship Diagram
+   Data comes from erd_data.js (generated from schema.sql by build_erd.py).
+   Style follows bookworm_erd.png.
+   ========================================================= */
+:root {
+  --ink: #23262f;
+  --muted: #646a77;   /* ≥ 4.5:1 on white and on the page background (WCAG 1.4.3) */
+  --line: #e3e5ea;
+  --bg: #f7f7f8;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0; color: var(--ink); font-family: Inter, "Segoe UI", system-ui, -apple-system, sans-serif;
+  background: var(--bg) radial-gradient(#d9dbe0 1px, transparent 1px) 0 0 / 18px 18px;
+}
+.page { max-width: 1840px; margin: 0 auto; padding: 28px 24px 60px; }
+h1 { margin: 0 0 4px; font-size: 1.875rem; }
+h2 { margin: 0 0 2px; font-size: 1.375rem; }
+.sub { color: var(--muted); font-size: 0.875rem; margin: 0 0 18px; }
+section { margin-top: 30px; padding: 18px; background: rgba(247,247,248,.85); }
+.blurb { color: var(--muted); font-size: 0.875rem; margin: 0 0 14px; }
+
+/* Area colors. --c = borders and lines (≥ 3:1, WCAG 1.4.11),
+   --ct = a darker shade of the same color for TEXT (≥ 4.5:1 on --tint and white, WCAG 1.4.3),
+   --tint = header background. */
+.a-identity { --c: #e0457b; --ct: #b53763; --tint: #fde4ec; }
+.a-sales    { --c: #5167d6; --ct: #495dc2; --tint: #e4e8fc; }
+.a-events   { --c: #c5791a; --ct: #985d14; --tint: #fdf0dc; }
+.a-planning { --c: #2f9e6b; --ct: #237650; --tint: #ddf3e8; }
+.a-guests   { --c: #1d97ad; --ct: #167283; --tint: #dcf1f5; }
+.a-system   { --c: #6b7280; --ct: #626875; --tint: #eceef1; }
+
+/* ---------- Full table cards (area diagrams) ---------- */
+/* padding-top leaves a free "channel" above the cards for lines that must jump over a column */
+.diagram { position: relative; display: flex; gap: 80px; align-items: flex-start; padding: 26px 40px 8px 8px; width: max-content; }
+.col { display: flex; flex-direction: column; gap: 44px; width: 20rem; }
+.card { background: #fff; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,.08); border-top: 4px solid var(--c); overflow: hidden;
+        position: relative; z-index: 1; }  /* cards sit above the lines, so a line never covers text */
+.card .head { background: var(--tint); text-align: center; padding: 8px 10px; }
+.card .head small { display: block; font-size: 0.625rem; letter-spacing: .8px; color: var(--ct); font-weight: 600; }
+.card .head b { font-size: 1.0625rem; color: var(--ct); }
+.card .head a { display: block; font-size: 0.6875rem; color: var(--ink); }
+.row { display: flex; align-items: center; gap: 6px; padding: 5px 12px; font-size: 0.8125rem; border-top: 1px solid #f1f2f4; }
+.row .ico { width: 14px; color: var(--muted); font-size: 0.75rem; flex: none; text-align: center; }
+.row .nm { white-space: nowrap; }
+.row.pk .nm { font-weight: 700; }
+.row .ty { margin-left: auto; color: var(--muted); white-space: nowrap; font-size: 0.7812rem; }
+.badge { font-size: 0.5625rem; font-weight: 700; letter-spacing: .4px; color: #3b4bb8; background: #e4e8fc; border-radius: 3px; padding: 1px 4px; }
+.tag { font-size: 0.625rem; color: var(--muted); border: 1px solid var(--line); border-radius: 8px; padding: 0 5px; white-space: nowrap; }
+
+/* ---------- Overview: mini boxes ---------- */
+.overview { position: relative; display: grid; grid-template-columns: repeat(3, max-content); gap: 28px 24px; }
+.panel { border: 2px solid var(--c); border-radius: 10px; padding: 10px 12px 14px; background: rgba(255,255,255,.6); }
+.panel h3 { margin: 0 0 10px; font-size: 0.875rem; color: var(--ct); }
+.panel .cols { position: relative; display: flex; gap: 24px; align-items: flex-start; padding-top: 16px; }
+.panel .mcol { display: flex; flex-direction: column; gap: 16px; width: 7.5rem; }
+.mini { background: #fff; border-radius: 6px; border-top: 3px solid var(--c); box-shadow: 0 1px 2px rgba(0,0,0,.08); padding: 5px 7px; font-size: 0.75rem;
+        position: relative; z-index: 1; }
+.mini b { display: block; color: var(--ct); overflow-wrap: break-word; }  /* long names wrap inside the box */
+.mini span { display: block; color: var(--muted); font-size: 0.6562rem; }
+.mini .out { color: var(--ink); font-size: 0.625rem; margin-top: 2px; }
+
+/* ---------- Later phases (dashed sketches) ---------- */
+/* min(230px, 100%) lets a column shrink below 230px on a 320px phone, so the page never scrolls sideways */
+.later { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(230px, 100%), 1fr)); gap: 16px; }
+.sketch { border: 2px dashed #a9adb8; border-radius: 8px; background: rgba(255,255,255,.7); }
+.sketch .head { padding: 6px 10px; border-bottom: 1px dashed #c8cbd2; }
+.sketch .head small { font-size: 0.625rem; color: var(--muted); letter-spacing: .6px; }
+.sketch .head b { display: block; font-size: 0.875rem; }
+.sketch .row { font-size: 0.75rem; padding: 3px 10px; border-top: 0; align-items: flex-start; }
+.sketch .row .ty { white-space: normal; text-align: right; overflow-wrap: anywhere; min-width: 0; }  /* wrap long notes inside the box */
+
+/* ---------- Lines + legend ---------- */
+svg.links { position: absolute; inset: 0; pointer-events: none; overflow: visible; z-index: 0; }
+.legend { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 22px; }
+.chip { background: #fff; border: 1px solid var(--line); border-radius: 6px; padding: 6px 10px; font-size: 0.7812rem; }
+.chip b { color: #3b4bb8; }
+nav.toc { display: flex; flex-wrap: wrap; gap: 8px; font-size: 0.8125rem; }
+nav.toc a { color: var(--ink); background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 3px 10px; text-decoration: none; }
+.scroll { overflow-x: auto; }
+.scroll:focus-visible { outline: 2px solid #3b4bb8; outline-offset: 2px; }
+.notes { border-top: 1px solid #f1f2f4; font-size: 0.75rem; padding: 4px 12px 6px; }
+.notes summary { cursor: pointer; color: var(--ink); }
+.notes dl { margin: 4px 0 0; }
+.notes dt { font-weight: 600; margin-top: 4px; }
+.notes dd { margin: 0; color: var(--muted); }
+.top-link { position: fixed; right: 16px; bottom: 16px; z-index: 5; background: #fff; border: 1px solid var(--line); border-radius: 14px;
+            padding: 4px 12px; font-size: 0.8125rem; color: var(--ink); text-decoration: none; box-shadow: 0 1px 3px rgba(0,0,0,.12); }
+section h3 { font-size: 1rem; }
+</style>
+</head>
+<body>
+<main class="page" id="top">
+  <h1>Event Planner — Entity Relationship Diagram</h1>
+  <p class="sub" id="subtitle"></p>
+  <nav class="toc" id="toc" aria-label="Diagram sections"></nav>
+  <div id="app"></div>
+</main>
+<a class="top-link" href="#top">↑ Back to top</a>
+
+<script src="erd_data.js"></script>
+<script>
+/* ---------- helpers ---------- */
+const slug = (name) => name.replace('.', '-');
+const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+const tableArea = (name) => ERD.tables[name].area;
+const areaTitle = Object.fromEntries(ERD.areas.map(a => [a.id, a.title]));
+
+/* How a foreign-key column is shown inside an area diagram:
+   'line' = draw a line (target in the same area), otherwise a small tag. */
+function linkKind(table, col) {
+  if (!col.fk) return null;
+  if (col.fk === table.name) return 'self';
+  if (tableArea(col.fk) === table.area) return 'line';
+  return 'tag';
+}
+
+/* ---------- full card ---------- */
+/* A column's meaning (some primary keys have no comment in schema.sql, so give them one). */
+const colNote = (c) => c.comment || (c.pk ? 'Primary key: a unique id for each row' : '');
+
+/* Link to this table's section in data_dictionary.md (GitHub-style anchor: lowercase, dots removed). */
+const dictLink = (name) => `data_dictionary.md#${name.toLowerCase().replace(/[^a-z0-9_ -]/g, '')}`;
+
+function card(t) {
+  const rows = t.columns.map(c => {
+    const kind = linkKind(t, c);
+    const ico = c.pk ? '⚷' : c.fk ? '✳' : '';
+    const badges = [
+      c.unique && !c.pk ? '<span class="badge">UNIQUE</span>' : '',
+      // every foreign key gets a text tag, so the link is readable without seeing the line
+      kind === 'tag' || kind === 'line' ? `<span class="tag">→ ${esc(c.fk)}</span>` : '',
+      kind === 'self' ? '<span class="tag">↺ self</span>' : '',
+    ].join('');
+    return `<div class="row ${c.pk ? 'pk' : ''}" data-col="${c.name}" title="${esc(colNote(c))}">
+      <span class="ico" aria-hidden="true">${ico}</span><span class="nm">${c.name}</span>${badges}<span class="ty">${esc(c.type)}</span></div>`;
+  }).join('');
+  // Column notes are also in a <details> box, so keyboard and touch users can read them (hover titles alone are mouse-only).
+  const notes = `<details class="notes"><summary>Column notes</summary><dl>${t.columns.map(c =>
+    `<dt>${c.name}</dt><dd>${esc(colNote(c)) || '—'}</dd>`).join('')}</dl></details>`;
+  return `<div class="card a-${t.area}" id="c-${slug(t.name)}" title="${esc(t.description)}">
+    <div class="head">${t.external ? '<small>SUPABASE AUTH</small>' : ''}<b>${t.name}</b>
+      <a href="${dictLink(t.name)}">data dictionary ↗</a></div>${rows}${notes}</div>`;
+}
+
+/* ---------- drawing lines (crow's foot) ----------
+   Lines are drawn in box coordinates. Vertical segments always run in the empty GAP between
+   columns. A horizontal segment that would cross a card in a middle column is avoided:
+   we try (1) turning down in the gap next to the source, (2) in the gap next to the target,
+   and if both cross a card, (3) climb to the free channel above all cards (the box's top padding). */
+function drawLink(svg, box, from, to, color, oneToOne, i) {
+  const B = box.getBoundingClientRect();
+  const rel = (r) => ({ left: r.left - B.left, right: r.right - B.left, top: r.top - B.top, bottom: r.bottom - B.top });
+  const a = rel(from.getBoundingClientRect()), b = rel(to.getBoundingClientRect());
+  const ya = (a.top + a.bottom) / 2, yb = (b.top + b.bottom) / 2;
+  const css = getComputedStyle(box);
+  const gap = parseFloat(css.columnGap) || 24;          // space between columns
+  const step = Math.min(7, (gap / 2 - 2) / 2);          // keeps the spread under gap/2, so lines stay in the gap
+  const jitter = ((i % 5) - 2) * step;                  // spread parallel lines apart
+
+  // Every card/box in this diagram except the two being joined = obstacles for horizontal segments.
+  const ends = [from.closest('.card, .mini'), to.closest('.card, .mini')];
+  const obstacles = [...box.querySelectorAll('.card, .mini')].filter(el => !ends.includes(el)).map(el => rel(el.getBoundingClientRect()));
+  const hits = (y, xa, xb) => obstacles.some(o => y > o.top - 2 && y < o.bottom + 2 && Math.max(xa, xb) > o.left && Math.min(xa, xb) < o.right);
+
+  let x1, x2, d1, d2, path;
+  if (a.right < b.left || a.left > b.right) {           // target in another column
+    const right = a.right < b.left;
+    x1 = right ? a.right : a.left; x2 = right ? b.left : b.right;
+    d1 = right ? 1 : -1; d2 = -d1;
+    const nearSource = x1 + d1 * gap / 2 + jitter, nearTarget = x2 - d1 * gap / 2 + jitter;
+    if (!hits(yb, nearSource, x2)) {
+      path = `M${x1},${ya} H${nearSource} V${yb} H${x2}`;
+    } else if (!hits(ya, x1, nearTarget)) {
+      path = `M${x1},${ya} H${nearTarget} V${yb} H${x2}`;
+    } else {
+      const channel = parseFloat(css.paddingTop) / 2 + ((i % 3) - 1) * 3;
+      path = `M${x1},${ya} H${nearSource} V${channel} H${nearTarget} V${yb} H${x2}`;
+    }
+  } else {                                               // same column: small loop in the gap on the right
+    x1 = a.right; x2 = b.right; d1 = 1; d2 = 1;
+    const mx = Math.max(x1, x2) + gap * 0.3 + (i % 4) * gap * 0.1;   // max 0.6 × gap: never reaches the next column
+    path = `M${x1},${ya} H${mx} V${yb} H${x2}`;
+  }
+  const g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+  g.setAttribute('stroke', color); g.setAttribute('fill', 'none'); g.setAttribute('stroke-width', '1.6');
+  const seg = (x1, y1, x2, y2) => `<line x1="${x1}" y1="${y1}" x2="${x2}" y2="${y2}"/>`;
+  const bars = (x, y, d) => seg(x + d * 6, y - 7, x + d * 6, y + 7) + seg(x + d * 10, y - 7, x + d * 10, y + 7);
+  const crow = (x, y, d) => seg(x + d * 14, y, x, y - 7) + seg(x + d * 14, y, x, y) + seg(x + d * 14, y, x, y + 7);
+  g.innerHTML = `<path d="${path}"/>` + (oneToOne ? bars(x1, ya, d1) : crow(x1, ya, d1)) + bars(x2, yb, d2);
+  svg.appendChild(g);
+}
+
+function freshSvg(box) {
+  box.querySelector(':scope > svg.links')?.remove();
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.classList.add('links');
+  svg.setAttribute('aria-hidden', 'true');   // decoration only: every link is also written as a "→ table" tag
+  svg.setAttribute('focusable', 'false');
+  box.prepend(svg);
+  return svg;
+}
+
+function areaColor(id) {
+  return getComputedStyle(document.querySelector('.a-' + id)).getPropertyValue('--c').trim();
+}
+
+/* Lines inside one area diagram: FK row → the target table's primary-key row */
+function drawArea(area) {
+  const box = document.getElementById('d-' + area.id);
+  const svg = freshSvg(box);
+  let i = 0;
+  for (const name of area.columns.flat()) {
+    const t = ERD.tables[name];
+    for (const c of t.columns) {
+      if (linkKind(t, c) !== 'line') continue;
+      const from = box.querySelector(`#c-${slug(name)} .row[data-col="${c.name}"]`);
+      const to = box.querySelector(`#c-${slug(c.fk)} .row.pk`);
+      drawLink(svg, box, from, to, areaColor(area.id), c.unique || c.pk, i++);
+    }
+  }
+}
+
+/* Overview links worth showing: skip business_id → businesses (every table has it)
+   and → auth.users outside Identity (who created/sent something). */
+function overviewLinks(t) {
+  return t.columns.filter(c => c.fk && c.fk !== t.name && c.name !== 'business_id'
+                               && !(c.fk === 'auth.users' && t.area !== 'identity'));
+}
+
+/* Tables this one points to in OTHER areas, shown as a tag on its mini box. */
+function crossTargets(t) {
+  return [...new Set(overviewLinks(t).filter(c => tableArea(c.fk) !== t.area).map(c => c.fk))];
+}
+
+/* Overview: lines only inside each panel (one per table pair); other areas = tags. */
+function drawOverview() {
+  let total = 0;
+  for (const area of ERD.areas) {
+    const box = document.getElementById('o-' + area.id);
+    const svg = freshSvg(box);
+    const seen = new Set();
+    for (const name of area.columns.flat()) {
+      const t = ERD.tables[name];
+      for (const c of overviewLinks(t)) {
+        if (tableArea(c.fk) !== area.id || seen.has(name + '>' + c.fk)) continue;
+        seen.add(name + '>' + c.fk);
+        drawLink(svg, box, document.getElementById('m-' + slug(name)), document.getElementById('m-' + slug(c.fk)),
+                 areaColor(area.id), c.unique || c.pk, seen.size);
+      }
+    }
+    total += seen.size;
+  }
+  return total;
+}
+
+/* "How the areas connect" chips: Sales → Identity & tenancy: clients */
+function areaConnections() {
+  const pairs = {};
+  for (const t of Object.values(ERD.tables)) {
+    for (const target of crossTargets(t)) {
+      const key = t.area + '>' + tableArea(target);
+      (pairs[key] ||= new Set()).add(target);
+    }
+  }
+  return Object.entries(pairs).map(([key, targets]) => {
+    const [from, to] = key.split('>');
+    return `<span class="chip"><b>${areaTitle[from]}</b> → ${areaTitle[to]}: ${[...targets].join(', ')}</span>`;
+  }).join('');
+}
+
+/* ---------- page ---------- */
+function render() {
+  const tables = Object.values(ERD.tables);
+  const cols = tables.reduce((n, t) => n + t.columns.length, 0);
+  document.getElementById('subtitle').textContent =
+    `Supabase Postgres · RLS on every table · ${tables.length - 1} Phase 1 tables + auth.users · ${cols} columns · ` +
+    `SQL in app_outline/erd/schema.sql (verified on Postgres 18) · column details in data_dictionary.md · open "Column notes" on any table (or hover a column) for its meaning`;
+  document.getElementById('toc').innerHTML = ['<a href="#sec-overview">Overview</a>']
+    .concat(ERD.areas.map(a => `<a href="#sec-${a.id}">${a.title}</a>`), ['<a href="#sec-later">Later phases</a>']).join('');
+
+  const overview = `<section id="sec-overview"><h2>Overview</h2>
+    <p class="blurb">Every Phase 1 table, grouped by area. Lines connect tables in the same area; <b>→ name</b> under a table points to another area.
+      Not shown: <b>business_id → businesses</b> (every table has it) and links to <b>auth.users</b> outside Identity.</p>
+    <div class="scroll" role="region" aria-label="Overview diagram (scrolls sideways)" tabindex="0"><div class="overview" id="overview">${ERD.areas.map(a => `
+      <div class="panel a-${a.id}"><h3>${a.title}</h3><div class="cols" id="o-${a.id}">${a.columns.map(col => `
+        <div class="mcol">${col.map(n => { const out = crossTargets(ERD.tables[n]);
+          return `<div class="mini" id="m-${slug(n)}"><b>${n.replace(/_/g, '_<wbr>')}</b><span>${ERD.tables[n].columns.length} columns</span>${out.length ? `<span class="out">→ ${out.join(', ')}</span>` : ''}</div>`; }).join('')}</div>`).join('')}
+      </div></div>`).join('')}
+    </div></div>
+    <h3 style="margin:20px 0 8px">How the areas connect</h3>
+    <div class="legend" style="margin-top:0">${areaConnections()}</div>
+    <div class="legend">
+      <span class="chip">⚷ primary key</span><span class="chip">✳ foreign key</span>
+      <span class="chip"><span class="badge">UNIQUE</span> unique value</span>
+      <span class="chip">─&lt; one-to-many · ═╪═ one-to-one (crow's foot on the "many" side)</span>
+      <span class="chip"><span class="tag">→ events</span> link to a table in another area · <span class="tag">↺ self</span> points to its own table</span>
+      <span class="chip">🏢 <b>multi-tenant</b>: every business table has business_id → businesses · RLS on all ${tables.length - 1} tables</span>
+      <span class="chip">👥 <b>members</b>: is_member() for most tables · money (invoices, installments, payments, change_orders) also needs <b>see_budgets</b></span>
+      <span class="chip">💍 <b>clients</b>: only their own lead, sent proposals and event · planning tables unlock when the deposit is paid (portal_unlocked_at)</span>
+      <span class="chip">🎟 <b>guests</b>: no login, no table access · only guest_household() / guest_submit_rsvp() with households.invite_token</span>
+      <span class="chip">💳 <b>payments</b>: written only by the webhook · idempotency_key + processor_payment_id UNIQUE = no double charges</span>
+      <span class="chip">🔁 <b>domain_events</b>: event-bus outbox (lead.created, rsvp.updated…) · server only</span>
+      <span class="chip">🕓 times are timestamptz · each event stores its own time_zone · deleted_at = 30-day soft delete</span>
+    </div></section>`;
+
+  const areas = ERD.areas.map(a => `<section id="sec-${a.id}"><h2>${a.title}</h2><p class="blurb">${a.blurb}</p>
+    <div class="scroll" role="region" aria-label="${a.title} diagram (scrolls sideways)" tabindex="0"><div class="diagram" id="d-${a.id}">${a.columns.map(col =>
+      `<div class="col">${col.map(n => card(ERD.tables[n])).join('')}</div>`).join('')}</div></div></section>`).join('');
+
+  const later = `<section id="sec-later"><h2>Later phases (sketch)</h2>
+    <p class="blurb">Dashed = not in schema.sql yet. Key columns only, so Phase 1 leaves room for them; refine before each phase starts.</p>
+    ${['P2', 'P3', 'P4'].map(p => `<h3>${{ P2: 'Phase 2 · Event operations', P3: 'Phase 3 · Guest experience', P4: 'Phase 4 · Growth' }[p]}</h3>
+      <div class="later">${ERD.later.filter(t => t.phase === p).map(t => `<div class="sketch"><div class="head"><small>${p}</small><b>${t.name}</b></div>
+        ${t.columns.map(c => { const [n, ...rest] = c.split(' '); const r = rest.join(' ');
+          return `<div class="row"><span class="ico">${n === 'id' ? '⚷' : r.startsWith('→') ? '✳' : ''}</span><span class="nm">${n}</span><span class="ty">${esc(r)}</span></div>`; }).join('')}
+      </div>`).join('')}</div>`).join('')}</section>`;
+
+  document.getElementById('app').innerHTML = overview + areas + later;
+}
+
+function drawAll() {
+  ERD.areas.forEach(drawArea);
+  window.overviewLineCount = drawOverview();
+}
+
+render();
+(document.fonts ? document.fonts.ready : Promise.resolve()).then(drawAll);
+// Opening or closing "Column notes" changes card heights, so redraw the lines.
+document.addEventListener('toggle', () => drawAll(), true);
+let resizeTimer;
+window.addEventListener('resize', () => { clearTimeout(resizeTimer); resizeTimer = setTimeout(drawAll, 150); });
+</script>
+</body>
+</html>

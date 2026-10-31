@@ -1,0 +1,270 @@
+10/13/2026
+
+Project Setup Notes
+Opening Obsidian
+
+- Ubuntu Wsl terminal
+navigate to the folder you want to open the project inside of
+
+- run the code:
+snap run obsidian
+
+--this will open obsidian in a new window
+
+On my current computer - inside the obsidian terminal, create a temporary file, 
+edit the profile, under preset choose zsh: integrated, and name it something you can remember.
+
+Open Claude in this terminal.
+
+To create documentation:
+
+We are going to create the relevant documentation for us to easily understand how our application is working: Tell claude:
+
+Write a README.md file along with a documentation directory holding the findings of the  project-mapper agent.
+-----
+
+---When calling the project-mapper *
+
+Using the project-mapper agent, provide the source code for this project and create a folder named documentation, a README.md and write the output from the agent.
+Do you have any questions?
+
+---------
+
+When calling the qa agent you can paste this into claude:
+----
+Run a comprehensive QA audit of this entire project using the QA Sentinel agent.
+
+Do not limit your inspection to recently changed files. Examine the architecture, source code, dependencies, functions, components, routes, APIs, database interactions, user interfaces, and all relevant workflows.
+
+Use the project's existing tests and create additional meaningful test cases to uncover hidden defects, edge cases, and regression risks.
+
+Use Playwright for browser-based functional, responsive, and end-to-end testing when available. Check the browser console, network failures, broken UI interactions, accessibility issues, and rendering problems.
+
+Attempt to reproduce every suspected bug, determine its root cause, and prioritize findings by severity.
+
+Operating mode: Audit Mode. Do not modify the application's source code without authorization. You may run safe tests and produce a QA report.
+
+Document all confirmed bugs, suspected defects, testing gaps, and recommended corrections in QA_REPORT.md.
+
+Do not declare the project production-ready unless the evidence supports that conclusion.
+
+Be exhaustive, evidence-driven, and systematic.
+
+-------
+
+- good tip given by classmate Saipher Zureti
+
+
+Code for project-mapper.md 
+---
+name: project-mapper
+description: Scans files and generates a roadmap of documentation explaining where features are found within sections of files and how they connect to other pieces. Applying the Single Responsibility Principle to efficiently document a project.
+tools: Read, Grep, Glob
+model: sonnet
+---
+
+You are Technical Lead in charge of this project. It is your task to scan through this codebase and return documentation explaining how the code base is laid out, how components speak to each other, and create analogies that could be understood by team members with no technical background.
+
+
+---------
+
+
+ --- Using the Sub-Agent
+
+
+ 10/15/2026
+ Notes from TA Shawn:
+ ```
+ What I have in my ~/.claude (home directory / .claude/agents AND .claude/skills)
+~/.claude
+    /agents (ill paste in the separate markdown files)
+        frontend.md
+        project-mapper.md
+        quality-assurance.md
+/skills (run this installation from Kevin) 
+curl -fsSL https://kabeier.github.io/SPAs-and-Claude/lecture-2-building-spas/demo-kit/setup-skills.sh | bash
+
+```
+
+10/23/2026
+Claude Code is our coding agent
+
+if installing claude for the first time on the machine:
+follow the curriculum:
+https://codeplatoon.github.io/se-curriculum/phase-III/08-Agents-as-Tools/2-coding-assistants/2-installing-claude/
+
+curl -fsSL https://claude.ai/install.sh | bash
+
+open claude in the same folder .claude file is in.
+check that skills and mcp are installed.
+/skills
+esc key to get out
+
+MCP servers in curriculum: 
+
+https://codeplatoon.github.io/se-curriculum/phase-III/08-Agents-as-Tools/3-claude-in-action/2-review-process/
+
+Installing Playwright MCP
+Exit your current Claude Code Session and execute the following command in your terminal:
+
+claude mcp add playwright npx @playwright/mcp@latest
+
+This will install PlayWright globally so it should only need to happen once and all sessions will have it available to them.
+open claude code and run:
+/mcp
+esc key to get out
+**this is what helps our qa agent run.
+
+Planning stage
+What Defines a GOOD vs BAD Prompt?
+Good prompts share four properties. Think of the acronym CREF:
+
+Property	What it means
+C — Clarity	The task is specific and unambiguous. The model knows exactly what you're asking for.
+R — Role / Context	You've told the model who it is, what background the user has, or what constraints apply.
+E — Examples	When format or style matters, you've shown the model what good looks like (few-shot prompting).
+F — Format	You've specified what shape the output should take: a list, a paragraph, JSON, code, a table.
+Anatomy of a Good Prompt
+
+[Role / Persona]
+You are a software engineering instructor teaching junior developers.
+
+[Context]
+The student just learned about for loops in Python and is now seeing list 
+comprehensions for the first time.
+
+[Task]
+Explain list comprehensions step by step, starting from the equivalent for loop,
+and then showing the compressed syntax.
+
+[Format]
+Use a code block for each example. Keep the explanation under 200 words.
+
+[Constraint]
+Do not use lambda functions or any concepts beyond basic iteration.
+Not every prompt needs all five components — but every prompt should have at least Clarity and Context. The more your task requires consistency or formatting, the more the other components matter. 
+
+
+In claude code:
+this helps us save the memory of our project.
+
+Initializing CLAUDE.md with /init
+
+Claude will read your project's existing files and generate a CLAUDE.md based on what it finds — structure, configuration, any scripts or conventions it recognizes. Then you customize it.
+
+
+In the Number guessing game, we first manually added a CLAUDE.md with the overview and logic of the game.
+
+
+For this project let's use what we are given from the README.md to create our app_outline:
+user_journey.md
+user_stories.md
+style_guide.md
+app.png 
+pages directory
+--every page should have a wireframe and a user story.
+
+
+next we create a react with vite
+
+npm create vite@latest
+
+# Project name:    liftlog
+# Framework:       React
+# Variant:         JavaScript
+# Linter:          Oxlint (either is fine)
+# Install + start: No
+
+cd liftlog
+npm install
+npm install react-router-dom
+npm run dev
+
+# → http://localhost:5173
+
+----------------
+prompt.md -- copy and paste, repurposed for new projects.
+__________________________________
+
+To create a subagent, reference the curriculum:
+https://codeplatoon.github.io/se-curriculum/phase-III/08-Agents-as-Tools/3-claude-in-action/1-prompt-life-cycle/
+----------------
+Use planning mode in claude code before asking it to run on auto mode.
+
+Example of a good prompt while planning to add a feature:
+
+https://codeplatoon.github.io/se-curriculum/phase-III/08-Agents-as-Tools/3-claude-in-action/2-review-process/
+
+I want to add a feature to this DBZ themed Tic Tac Toe game. Currently when someone wins the game they have to manually click `restart` in order to play the next game and there's no real signal that someone won the game.
+
+I would like you to make it, where when a player wins the game a DBZ themed pop up in the center of the screen populates announcing the winner. Upon the modal closing the game should restart and be ready to start a new round.
+
+From reading the documentation I believe you'll need to interact with these files:
+- @index.html
+- @script.js
+
+Do you have any questions?
+--------------------------
+
+10/24/2026
+
+supabase: nUDNwkq2LBIO47ic
+
+
+cd ~/demos/ticked        # your project: the app from the SPA lectures
+mkdir supabase           # a new folder inside it, just for the database
+cd supabase
+
+# Supabase → Connect → MCP → Claude Code → copy the command. It looks like:
+claude mcp add --scope project --transport http supabase \
+  "https://mcp.supabase.com/mcp?project_ref=<your-ref>&features=..."
+
+claude          # trust the folder → "Use this MCP server"
+/mcp            # supabase → Authenticate → browser → back
+follow instructions in supabase
+
+
+# NEW terminal tab: go to the supabase folder first
+cd ~/demos/ticked/supabase
+curl -fsSL https://kabeier.github.io/Databases-and-Supabase/demo-kit/setup-db-skill.sh | bash
+
+# then inside Claude (still running in tab 1)
+/skills
+
+--- Lands in ticked/supabase/.claude/skills/, next to the Supabase MCP. The app's design skills stay in ticked/.claude/.
+
+Connecting Supabase and Postman
+new request
+headers
+bulk edit:
+apikey:{{publishable_key}}
+Authorization:Bearer {{publishable_key}}
+Content-Type:application/json
+Prefer:return=representation
+
+Add request:
+GET user 
+the url will be:
+{{base_url}}/rest/v1/users
+
+
+-----------
+Cleaning up the code.
+Make sure to save the code first and push up to github so you can undo if anything messes up. 
+
+In your project's root (the folder that has supabase/ inside it), start claude and paste:
+
+Restructure this project into the full-stack layout below. Move files only: don't change any code.
+
+bookworm--ls/
+├── .claude/      skills/ and agents/ from BOTH ./.claude and ./supabase/.claude, merged
+├── .mcp.json     moved up from supabase/
+├── front-end/    everything that belongs to the React app (src, public, app_outline, index.html, package files, vite and lint config, .gitignore, node_modules)
+├── supabase/     my database files (schema.sql, user_stories.md, ERD screenshot, api_notes.md)
+├── CLAUDE.md     update it to describe both halves
+└── README.md
+
+Show me the plan (what moves where) first and wait for my approval.
+
+if no supabase-agent in /agents
+mkdir -p .claude/agents && curl -fsSL https://raw.githubusercontent.com/kabeier/Databases-and-Supabase/main/demo-kit/.claude/agents/supabase-agent.md -o .claude/agents/supabase-agent.md

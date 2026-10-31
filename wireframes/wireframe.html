@@ -1,0 +1,1466 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="icon" href="data:,">  <!-- no favicon file: stops the browser's automatic favicon.ico request (a 404 in the console) -->
+<title>Event Planner Wireframes</title>
+<style>
+/* Hand-drawn fonts are self-hosted in wireframes/fonts/ (SIL Open Font License, see the OFL-*.txt files),
+   so the page works offline and doesn't send visitors' IPs to Google. Latin characters only. */
+@font-face { font-family: 'Architects Daughter'; src: url(fonts/architects-daughter-latin.woff2) format('woff2'); font-display: swap; }
+@font-face { font-family: 'Patrick Hand'; src: url(fonts/patrick-hand-latin.woff2) format('woff2'); font-display: swap; }
+/* =========================================================
+   Phase 1 wireframes — lo-fi on purpose (see app.png).
+   Grayscale inside the screens; color only for annotations.
+   ========================================================= */
+:root {
+  --ink: #2b2b2b;
+  --paper: #faf8f3;
+  --fill: #ececec;
+  --muted: #666;
+  --blue: #d6e5fc;
+  --blue-ink: #2f6fdb;
+  --red: #d64545;
+  --red-fill: #fde6e6;
+  --yellow: #fff1a8;
+  --green: #d3efc6;
+  --sys: #dcecff;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  /* If the font files can't load, fall back to hand-drawn system fonts before the generic 'cursive'. */
+  font-family: 'Architects Daughter', 'Patrick Hand', 'Comic Sans MS', 'Chalkboard SE', 'Comic Neue', 'Segoe Print', 'Bradley Hand', cursive;
+}
+.page { max-width: 1900px; margin: 0 auto; padding: 24px 16px 64px; overflow-x: clip; }  /* clip (not hidden): scrollIntoView can't shift it sideways */
+code { overflow-wrap: anywhere; }  /* long file paths wrap on small phones instead of being cut off */
+/* Jump links to each journey */
+nav.jump { display: flex; flex-wrap: wrap; gap: 8px; margin: 8px 0 4px; font-size: 15px; }
+nav.jump a { color: var(--ink); background: #fff; border: 1.5px solid var(--ink); border-radius: 14px; padding: 1px 10px; text-decoration: none; }
+.top-link { position: fixed; right: 14px; bottom: 14px; z-index: 5; background: #fff; border: 1.5px solid var(--ink); border-radius: 14px; padding: 2px 10px; color: var(--ink); text-decoration: none; font-size: 14px; }
+h1 { font-size: clamp(24px, 4vw, 36px); margin: 8px 0 4px; }
+h2 { font-size: 26px; margin: 0 0 4px; }
+.sub { color: var(--muted); font-size: 16px; margin: 0 0 16px; }
+
+/* ---------- Sticky notes ---------- */
+.sticky-row { display: flex; flex-wrap: wrap; gap: 16px; margin: 16px 0 8px; }
+.sticky {
+  padding: 10px 12px; font-size: 13.5px; line-height: 1.4; width: 210px;
+  box-shadow: 2px 3px 0 rgba(0,0,0,.08); transform: rotate(-1deg);
+}
+.sticky:nth-child(even) { transform: rotate(1deg); }
+.sticky.wide { width: 320px; }
+.sticky.yellow { background: var(--yellow); }
+.sticky.green  { background: var(--green); }
+.sticky.sys    { background: var(--sys); border-left: 4px solid var(--blue-ink); }
+.sticky ul, .sticky ol { margin: 4px 0 0; padding-left: 18px; }
+
+/* ---------- Journey section ---------- */
+.journey {
+  background: var(--paper); padding: 20px 16px 28px; margin-top: 36px;
+  border-top: 3px solid var(--ink);
+}
+.journey .meta { color: var(--muted); font-size: 15px; margin-bottom: 8px; }
+
+/* ---------- Flow row: blue steps + red edge-case diamonds ---------- */
+.flow-wrap { overflow-x: auto; padding: 10px 0 8px; }
+.flow { display: flex; align-items: flex-start; width: max-content; padding: 0 16px; }
+.fcol { width: 130px; display: flex; flex-direction: column; align-items: center; }
+.step {
+  width: 130px; height: 74px; padding: 6px;
+  display: flex; align-items: center; justify-content: center; text-align: center;
+  border: 2px solid var(--blue-ink); background: var(--blue);
+  font-size: 13px; line-height: 1.2;
+  border-radius: 255px 12px 225px 12px / 12px 225px 12px 255px;
+}
+.step.start { border-radius: 50%; }
+.arrow { width: 28px; height: 74px; display: flex; align-items: center; justify-content: center; font-size: 22px; }
+.dline { height: 30px; border-left: 2px dashed var(--red); position: relative; }
+.dline::after { content: '▼'; color: var(--red); position: absolute; left: -6px; bottom: -9px; font-size: 10px; }
+.diamond {
+  flex: none; width: 152px; height: 112px; margin-top: 6px; position: relative;
+  background: var(--red); clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+}
+.diamond > div {
+  position: absolute; inset: 3px;
+  clip-path: polygon(50% 0, 100% 50%, 50% 100%, 0 50%);
+  background: var(--red-fill);
+  display: flex; align-items: center; justify-content: center; text-align: center;
+  padding: 0 26px; font-size: 10.5px; line-height: 1.2;
+}
+
+/* ---------- Screen rows: 3 device frames + notes ---------- */
+.screen-row { display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start; margin: 34px 0 0; }
+h3.screen-head { margin: 0; font-weight: normal; }
+.screen-head { width: 100%; font-size: 19px; display: flex; flex-wrap: wrap; align-items: baseline; gap: 10px; }
+.screen-head .num {
+  display: inline-flex; width: 28px; height: 28px; border: 2px solid var(--ink); border-radius: 50%;
+  align-items: center; justify-content: center; font-size: 15px;
+}
+.screen-head code { font-family: inherit; font-size: 14px; background: var(--fill); padding: 1px 8px; border-radius: 4px; }
+.screen-head .snap { font-size: 13px; color: var(--muted); }
+.screen-head .kind { font-size: 13px; border: 2px solid var(--blue-ink); color: var(--blue-ink); border-radius: 10px; padding: 0 8px; background: #fff; }
+.path { width: 100%; display: flex; flex-wrap: wrap; gap: 6px 24px; font-size: 13.5px; margin-top: -10px; }
+.path span { background: #fff; border: 1.5px dashed var(--blue-ink); border-radius: 6px; padding: 1px 8px; }
+.devices { display: flex; gap: 18px; align-items: flex-start; overflow-x: auto; max-width: 100%; padding-bottom: 6px; }
+/* On narrow windows the 3 device frames don't fit side by side: say so, since the scrollbar is easy to miss. */
+.scroll-hint { display: none; width: 100%; font-size: 13px; color: var(--muted); margin: -12px 0 -10px; }
+@media (max-width: 1240px) { .scroll-hint { display: block; } }
+.notes { display: flex; flex-direction: column; gap: 12px; width: 210px; }
+
+/* Device frames */
+.frame { margin: 0; flex: none; }
+.frame figcaption { font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+.frame figcaption .main-dev { color: var(--ink); font-weight: bold; }
+.bezel { border: 2px solid var(--ink); background: #fff; }
+.desktop .bezel { width: 540px; border-radius: 8px; overflow: hidden; }
+.tablet  .bezel { width: 370px; border-radius: 18px; padding: 12px 10px; }
+.phone   .bezel { width: 230px; border-radius: 28px; padding: 16px 8px 14px; }
+.browser { display: flex; gap: 4px; align-items: center; padding: 4px 6px; border-bottom: 1.5px solid var(--ink); background: #f3f3f3; }
+.browser i { width: 7px; height: 7px; border: 1.2px solid var(--ink); border-radius: 50%; }
+.browser .url { margin-left: 6px; flex: 1; border: 1.2px solid #888; border-radius: 8px; padding: 0 6px; font-size: 9px; background: #fff; }
+.notch { width: 50px; height: 5px; border-radius: 3px; background: var(--ink); margin: -8px auto 6px; }
+
+/* Inside a screen */
+.screen { display: flex; flex-direction: column; font-size: 10.5px; line-height: 1.35; overflow: hidden; background: #fff; }
+.desktop .screen { min-height: 330px; }
+.tablet  .screen { min-height: 440px; border: 1.5px solid var(--ink); }
+.phone   .screen { min-height: 420px; border: 1.5px solid var(--ink); font-size: 10px; }
+.topbar { display: flex; align-items: center; gap: 6px; padding: 6px 8px; border-bottom: 1.5px solid var(--ink); background: var(--fill); font-size: 11.5px; }
+.topbar b { text-transform: uppercase; letter-spacing: .5px; }
+.logo, .avatar { width: 16px; height: 16px; border: 1.5px solid var(--ink); border-radius: 50%; flex: none; }
+.logo { border-radius: 3px; }
+.spacer { flex: 1; }
+.lang { border: 1.2px solid var(--ink); border-radius: 8px; padding: 0 5px; font-size: 9px; }
+.body-side { display: flex; flex: 1; }
+nav.side { width: 92px; flex: none; border-right: 1.5px solid var(--ink); padding: 8px 6px; display: flex; flex-direction: column; gap: 4px; }
+nav.side a { padding: 3px 5px; border-radius: 4px; }
+nav a.on { font-weight: bold; text-decoration: underline; }
+nav.side a.on { background: var(--fill); }
+nav a.locked, .tabbar .locked { color: #aaa; }
+/* "More (n) ▾" = tabs folded away because the strip is wider than the screen (added by foldOverflowingTabs) */
+.screen [hidden] { display: none !important; }
+.more-tab { font-style: italic; }
+.locknote { font-size: 8.5px; color: var(--muted); border-top: 1px dashed #bbb; padding-top: 3px; }
+nav.tabs { display: flex; gap: 10px; padding: 5px 8px; border-bottom: 1.5px solid var(--ink); white-space: nowrap; overflow: hidden; font-size: 10px; }
+.tabbar { display: flex; justify-content: space-around; border-top: 1.5px solid var(--ink); padding: 5px 2px 3px; font-size: 8.5px; }
+.tabbar span { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.tabbar span::before { content: ''; width: 11px; height: 11px; border: 1.2px solid currentColor; border-radius: 3px; }
+.tabbar .on { font-weight: bold; text-decoration: underline; }
+.main { padding: 8px; display: flex; flex-direction: column; gap: 7px; flex: 1; min-width: 0; }
+
+/* Building blocks */
+.ph {
+  border: 1.5px solid #888; display: flex; align-items: center; justify-content: center; width: 100%;
+  background:
+    linear-gradient(to top right, transparent calc(50% - .8px), #999 calc(50% - .8px), #999 calc(50% + .8px), transparent calc(50% + .8px)),
+    linear-gradient(to bottom right, transparent calc(50% - .8px), #999 calc(50% - .8px), #999 calc(50% + .8px), transparent calc(50% + .8px)),
+    var(--fill);
+}
+.ph span { background: var(--fill); padding: 0 4px; font-size: 9.5px; }
+.lines { display: flex; flex-direction: column; gap: 4px; }
+.lines i { display: block; height: 5px; background: #d6d6d6; border-radius: 3px; }
+.btn {
+  display: inline-block; border: 1.5px solid var(--ink); border-radius: 5px; padding: 2px 6px;
+  white-space: nowrap; background: #fff; font-size: 10px; text-align: center;
+}
+.btn.primary { background: var(--ink); color: #fff; }
+.field { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.field b { font-weight: normal; font-size: 9.5px; color: var(--muted); }
+.input { border: 1.5px solid #777; border-radius: 4px; padding: 2px 5px; min-height: 18px; background: #fff; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
+.input.tall { min-height: 36px; white-space: normal; }
+.input.sig, .sig { font-family: 'Brush Script MT', cursive; font-size: 16px; }
+.sig { border-bottom: 1.5px solid var(--ink); }
+.card { border: 1.5px solid var(--ink); border-radius: 6px; padding: 6px 7px; display: flex; flex-direction: column; gap: 5px; background: #fff; min-width: 0; }
+.card h4 { margin: 0; font-size: 11px; }
+.card.stack .btn { display: block; }
+.card.dim { border-style: dashed; color: var(--muted); }
+.state { border: 1.5px dashed #777; border-radius: 6px; padding: 7px; background: #f6f6f6; display: flex; flex-direction: column; gap: 5px; align-items: flex-start; }
+.state .tag { font-size: 8.5px; letter-spacing: .6px; text-transform: uppercase; border: 1px solid #777; padding: 0 4px; border-radius: 3px; background: #fff; }
+.state.warn { border-color: var(--ink); border-style: solid; background: #efefef; }
+.g { display: grid; gap: 6px; grid-template-columns: 1fr; }
+.row { display: flex; flex-wrap: wrap; gap: 5px; align-items: center; }
+.tile { border: 1.5px solid var(--ink); border-radius: 6px; padding: 5px; text-align: center; }
+.tile b { display: block; font-size: 15px; }
+.tile small { font-size: 9px; color: var(--muted); }
+.pill { border: 1.5px solid var(--ink); border-radius: 999px; padding: 0 6px; font-size: 9px; white-space: nowrap; }
+.badge { border: 1.5px solid var(--ink); padding: 0 4px; border-radius: 3px; font-size: 8.5px; font-weight: bold; background: #e4e4e4; }
+.list { margin: 0; padding: 0; list-style: none; }
+.list li { padding: 3px 0; border-bottom: 1px dashed #ccc; }
+.list li:last-child { border-bottom: 0; }
+.tbl { width: 100%; border-collapse: collapse; font-size: 9.5px; }
+.tbl td, .tbl th { border-bottom: 1px solid #ccc; padding: 3px 2px; text-align: left; }
+.h { font-size: 12.5px; font-weight: bold; }
+.big { font-size: 17px; font-weight: bold; }
+.muted { color: var(--muted); }
+.center { text-align: center; align-items: center; }
+.col { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.steps { display: flex; gap: 3px; }
+.steps span { flex: 1; border: 1.5px solid var(--ink); border-radius: 4px; text-align: center; font-size: 8.5px; padding: 2px 0; }
+.steps .done { background: #ddd; }
+.steps .on, .seg .on { background: var(--ink); color: #fff; }
+.sw { width: 14px; height: 14px; border-radius: 50%; border: 1.5px solid var(--ink); display: inline-block; }
+.seg { display: flex; gap: 3px; white-space: nowrap; overflow: hidden; }
+.seg span { border: 1.5px solid var(--ink); border-radius: 10px; padding: 1px 6px; font-size: 9px; }
+.lcard { border: 1.5px solid var(--ink); border-radius: 5px; padding: 4px; display: flex; flex-direction: column; gap: 1px; background: #fff; align-items: flex-start; }
+.kcol { display: flex; flex-direction: column; gap: 4px; background: #f6f6f6; padding: 4px; border-radius: 5px; min-width: 0; }
+.kcol h4 { margin: 0; font-size: 9.5px; }
+.kanban { font-size: 8.5px; }
+.kanban .state { padding: 4px; }
+.hubtabs { display: flex; gap: 9px; border-bottom: 1.5px solid var(--ink); white-space: nowrap; overflow: hidden; padding-bottom: 2px; }
+.hubtabs a.on { border-bottom: 2.5px solid var(--ink); font-weight: bold; }
+.pkg { border: 1.5px solid var(--ink); border-radius: 5px; padding: 4px; display: flex; flex-direction: column; gap: 2px; align-items: center; font-size: 9.5px; }
+.pkg.on { outline: 2.5px solid var(--ink); outline-offset: 1px; }
+.doc { border: 1.5px solid #888; padding: 6px; background: #fcfcfc; display: flex; flex-direction: column; gap: 4px; }
+.doc p { margin: 0; }
+.stickybar { display: flex; align-items: center; gap: 4px; border: 1.5px solid var(--ink); border-radius: 6px; padding: 4px 6px; background: var(--fill); }
+.stickybar b { flex: 1; }
+.cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; text-align: center; font-size: 9px; }
+.cal .hd { font-weight: bold; }
+.cal .x { color: #aaa; text-decoration: line-through; }
+.cal .open { border: 1.2px solid var(--ink); border-radius: 50%; }
+.cal .sel { background: var(--ink); color: #fff; border-radius: 50%; }
+.member { display: flex; flex-direction: column; gap: 3px; padding: 3px 0; border-bottom: 1px dashed #ccc; }
+.member:last-child { border-bottom: 0; }
+.mcal { display: grid; grid-template-columns: repeat(7, 1fr); border-top: 1px solid #bbb; border-left: 1px solid #bbb; font-size: 8.5px; }
+.mcal > span { border-right: 1px solid #bbb; border-bottom: 1px solid #bbb; min-height: 34px; padding: 1px 2px; display: flex; flex-direction: column; gap: 1px; }
+.mcal .hd { min-height: 0; font-weight: bold; text-align: center; background: var(--fill); }
+.mcal .ev { border: 1px solid var(--ink); border-radius: 3px; padding: 0 2px; background: #e4e4e4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mcal .ev.hold { border-style: dashed; background: #fff; }
+.chat { display: flex; flex-direction: column; gap: 5px; }
+.bubble { border: 1.5px solid var(--ink); border-radius: 8px; padding: 3px 6px; max-width: 85%; align-self: flex-start; }
+.bubble.me { align-self: flex-end; background: var(--fill); }
+.sysmsg { align-self: center; font-size: 9px; color: var(--muted); border: 1px dashed #999; padding: 1px 6px; border-radius: 8px; }
+.bar { height: 9px; border: 1.5px solid var(--ink); border-radius: 5px; overflow: hidden; }
+.bar i { display: block; height: 100%; background: #999; }
+.file { border: 1.5px solid var(--ink); border-radius: 5px; padding: 4px; display: flex; flex-direction: column; gap: 3px; align-items: flex-start; font-size: 9.5px; min-width: 0; }
+.avatar-ph { width: 44px; height: 44px; flex: none; border-radius: 50%; }
+
+/* Message frames (email / text / push) */
+.emailhead { border-bottom: 1px dashed #bbb; padding-bottom: 4px; }
+.linkcard { border: 1.5px solid var(--ink); border-radius: 8px; overflow: hidden; width: 80%; display: flex; flex-direction: column; }
+.linkcard span { padding: 3px 5px; }
+.notif { border: 1.5px solid var(--ink); border-radius: 8px; padding: 6px; background: #fff; display: flex; gap: 6px; width: 100%; }
+.lock { flex: 1; background: var(--fill); padding: 18px 10px; display: flex; flex-direction: column; gap: 10px; align-items: center; }
+.lock .time { font-size: 28px; font-weight: bold; }
+.toast { position: absolute; top: 16px; right: 16px; width: 240px; }
+
+/* Grid columns per device — this is the "responsive" part of each layout */
+.desktop .g2  { grid-template-columns: 1fr 1fr; }
+.desktop .g3  { grid-template-columns: repeat(3, 1fr); }
+.desktop .g4  { grid-template-columns: repeat(4, 1fr); }
+.desktop .g6  { grid-template-columns: repeat(6, 1fr); }
+.desktop .g21 { grid-template-columns: 2fr 1fr; }
+.desktop .g12 { grid-template-columns: 1fr 2fr; }
+.tablet  .g12 { grid-template-columns: 1fr 2fr; }
+.tablet  .g2  { grid-template-columns: 1fr 1fr; }
+.tablet  .g3  { grid-template-columns: repeat(3, 1fr); }
+.tablet  .g4  { grid-template-columns: repeat(2, 1fr); }
+.phone   .g4  { grid-template-columns: repeat(2, 1fr); }
+.phone   .g3.keep { grid-template-columns: repeat(3, 1fr); }
+
+/* Bottom summary */
+.next { margin-top: 40px; border-top: 3px solid var(--ink); padding-top: 16px; }
+</style>
+</head>
+<body>
+<main class="page" id="top">
+  <h1>Event Planner App: Phase 1 User Journeys + Wireframes</h1>
+  <p class="sub">Running example: the <b>Rivera wedding</b>, Sat Jun 12, 2027 · 120 guests · photo booth, karaoke, honeymoon fund. Source: <code>app_outline/user_journeys.md</code> · Walkthrough log: <code>wireframes/walkthrough_rivera.md</code></p>
+
+  <div class="sticky-row">
+    <div class="sticky yellow">Lo-fi on purpose! Boxes + labels. No colors or fonts yet. That's the style guide's job.</div>
+    <div class="sticky green">Every screen shows:
+      <ul><li>info</li><li>actions/buttons</li><li>navigation</li><li>empty/error state</li></ul></div>
+    <div class="sticky green">Every screen is drawn 3 ways: <b>Desktop · Tablet · Phone</b>. The role's <b>main device</b> is drawn first and in bold.</div>
+    <div class="sticky yellow">How to read:
+      <ul><li>Blue box = a step</li><li>Red diamond = edge case</li><li>Dashed box in a screen = empty/error/edge state</li><li>Blue note = <b>→ System</b> (a backend job to build)</li><li>✉ 💬 🔔 rows = an email, text or push that links two screens</li></ul></div>
+    <div class="sticky green">Under each title: <b>⬅ Arrives from</b> and <b>➡ Next</b>. That's the click path. If either one were blank, it would be a dead end.</div>
+    <div class="sticky yellow">Links and buttons <i>inside</i> a screen are pictures, not real links. Follow <b>⬅ Arrives from / ➡ Next</b> to move between screens. <b>More (n) ▾</b> = tabs that don't fit on that device.</div>
+  </div>
+
+  <!-- Jump links to each journey (filled in by the script below) -->
+  <nav class="jump" id="jump" aria-label="Journeys"></nav>
+
+  <!-- Journeys are rendered here by the script below -->
+  <div id="app"></div>
+
+  <div class="next">
+    <h2>Rivera walkthrough: what changed</h2>
+    <div class="sticky-row">
+      <div class="sticky green wide">Walked the Rivera wedding end to end and fixed 15 issues. Full log: <code>wireframes/walkthrough_rivera.md</code>.
+        <ul>
+          <li>New: Events list, Invitations, Website &amp; RSVP settings, Questionnaire, Portal › Approvals</li>
+          <li>New: 8 email / text / push frames</li>
+          <li>Ana signs and pays the deposit in one sitting; planner countersigns after</li>
+          <li>Portal pages stay locked until the deposit is paid</li>
+          <li>One consistent timeline (Oct 28 inquiry → Jun 12 wedding)</li>
+        </ul></div>
+      <div class="sticky green wide">Round 3 (gaps found while building <code>app_outline/pages/</code>): Reschedule event, Cancel event, Portal › Mood Board (now in the portal menu), Portal › Cancel or postpone, and the one-week guest reminder.</div>
+      <div class="sticky yellow">Coming in Phase 2, planner: <b>Vendors, Budget, Timeline, Staff Schedule, Equipment, Pack List, Day-of Mode, Close-out, Event Report</b>.</div>
+      <div class="sticky yellow">Coming in Phase 2, staff: <b>My Shifts, Availability, Call Sheet, Day-of Mode, Check-in, Gear Check-in, Timesheet</b>. Vendor portal, client <b>Day-of Info</b>, guest <b>Potluck</b>.</div>
+    </div>
+  </div>
+</main>
+<a class="top-link" href="#top">↑ Top</a>
+
+<script>
+/* =========================================================
+   Small helpers that print lo-fi building blocks.
+   Each returns an HTML string; screens are built from them.
+   ========================================================= */
+const X      = (h, label = '') => `<div class="ph" style="height:${h}px"><span>${label}</span></div>`;
+const lines  = (n) => `<div class="lines">${Array.from({ length: n }, (_, i) => `<i style="width:${[100, 92, 97, 70][i % 4]}%"></i>`).join('')}</div>`;
+const btn    = (text, kind = '') => `<span class="btn ${kind}">[ ${text} ]</span>`;
+const field  = (label, value = '', kind = '') => `<label class="field"><b>${label}</b><span class="input ${kind}">${value}</span></label>`;
+const select = (label, value) => field(label, `${value} ▾`);
+const chk    = (text, on = false) => `<div>${on ? '☑' : '☐'} ${text}</div>`;
+const card   = (title, body, cls = '') => `<div class="card ${cls}">${title ? `<h4>${title}</h4>` : ''}${body}</div>`;
+const state  = (tag, body, cls = '') => `<div class="state ${cls}"><span class="tag">${tag}</span><div>${body}</div></div>`;
+const grid   = (cols, items, cls = '') => `<div class="g g${cols} ${cls}">${items.join('')}</div>`;
+const row    = (...items) => `<div class="row">${items.join('')}</div>`;
+const tile   = (big, small) => `<div class="tile"><b>${big}</b><small>${small}</small></div>`;
+const pill   = (text) => `<span class="pill">${text}</span>`;
+const list   = (items) => `<ul class="list">${items.map(i => `<li>${i}</li>`).join('')}</ul>`;
+const seg    = (items, on = 0) => `<div class="seg">${items.map((t, i) => `<span class="${i === on ? 'on' : ''}">${t}</span>`).join('')}</div>`;
+const steps  = (names, on) => `<div class="steps">${names.map((s, i) => `<span class="${i < on ? 'done' : i === on ? 'on' : ''}">${i < on ? '✓' : i + 1} ${s}</span>`).join('')}</div>`;
+
+/* Navigation per role. Desktop = sidebar, Tablet = top tabs, Phone = bottom tab bar. */
+const NAV = {
+  planner: ['Dashboard', 'Leads', 'Calendar', 'Events', 'Settings'],
+  client:  ['Home', 'Proposal', 'Payments', 'Guests', 'Mood Board', 'Approvals', 'Messages'],
+  staff:   ['My Shifts', 'Day-of', 'Chat', 'Profile'],
+};
+
+/* Page frame for an app screen.
+   locked: nav items shown grayed out (e.g. portal before the deposit). */
+function shell(d, { nav, active, title, brand = '', right = '', locked = [], lockNote = '' }, body) {
+  const items = NAV[nav];
+  const top = `<div class="topbar">${brand ? `<span class="logo"></span>${brand} ·` : ''} <b>${title}</b><span class="spacer"></span>${right}${items ? '<span class="avatar"></span>' : ''}</div>`;
+  const cls = (i) => (i === active ? 'on' : locked.includes(i) ? 'locked' : '');
+  const links = (list) => list.map(i => `<a class="${cls(i)}">${i}${locked.includes(i) ? ' (locked)' : ''}</a>`).join('');
+  const note = lockNote ? `<span class="locknote">${lockNote}</span>` : '';
+  const main = `<div class="main">${body}</div>`;
+
+  if (!items) return top + main;  // public pages: no app navigation
+  if (d === 'desktop') return top + `<div class="body-side"><nav class="side">${links(items)}${note}</nav>${main}</div>`;
+  if (d === 'tablet')  return top + `<nav class="tabs">${links(items)}</nav>` + main;
+  // Phone tab bar fits 4 items + More. Keep the active item visible: it takes the 4th slot if needed.
+  const firstFour = items.slice(0, 4);
+  if (items.indexOf(active) >= 4) firstFour[3] = active;
+  const phoneItems = items.length > 4 ? [...firstFour, 'More'] : items;
+  return top.replace('<div class="topbar">', '<div class="topbar">☰ ') + main +
+    `<div class="tabbar">${phoneItems.map(i => `<span class="${cls(i)}">${i}</span>`).join('')}</div>`;
+}
+
+const hubTabs = (active) =>
+  `<nav class="hubtabs">${['Overview', 'Tasks', 'Guests', 'Money', 'Files', 'Messages'].map(t => `<a class="${t === active ? 'on' : ''}">${t}</a>`).join('')}</nav>`;
+
+const guestSubTabs = (active) => seg(['Guest list', 'Invitations', 'Website & RSVP'], ['Guest list', 'Invitations', 'Website & RSVP'].indexOf(active));
+
+const leadCard = (title, when, money, flag = '') =>
+  `<div class="lcard"><b>${title}</b><span>${when}</span><span class="muted">${money}</span>${flag ? `<span class="badge">${flag}</span>` : ''}</div>`;
+
+const member = (name, attending) =>
+  `<div class="member"><b>${name}</b>${seg(['Attending', 'Not attending'], attending ? 0 : 1)}${attending ? select('Meal', 'Chicken') : ''}</div>`;
+
+/* A message thread: each item is [who, text]; who = 'me' | 'them' | 'sys' */
+const chat = (msgs) => `<div class="chat">${msgs.map(([who, text]) =>
+  who === 'sys' ? `<span class="sysmsg">${text}</span>` : `<div class="bubble ${who === 'me' ? 'me' : ''}">${text}</div>`).join('')}</div>`;
+
+const fileCard = (name, tag) => `<div class="file">${X(34)}<span>${name}</span>${pill(tag)}</div>`;
+
+/* Email, text or push notification, drawn the way that device shows it.
+   m = { type: 'email'|'sms'|'push', from, to, subject, body, cta, foot, when, date, preview } */
+const MSG_TAG = { email: '✉ Email', sms: '💬 Text', push: '🔔 Push' };
+function msg(d, m) {
+  if (m.type === 'email') {
+    const view = `<div class="col">
+      <div class="emailhead"><b>${m.subject}</b><br><span class="muted">From: ${m.from} · To: ${m.to}</span></div>
+      ${row('<span class="logo"></span>', '<b>[Business]</b>')}
+      ${m.body}
+      ${m.cta ? btn(m.cta, 'primary') : ''}
+      ${m.foot ? `<span class="muted">${m.foot}</span>` : ''}</div>`;
+    const top = `<div class="topbar"><b>Mail</b><span class="spacer"></span><span class="muted">${m.to}</span></div>`;
+    if (d === 'desktop') {
+      const inbox = card('Inbox', list([`<b>[Business]</b><br>${m.subject}`, '<span class="muted">Newsletter</span>', '<span class="muted">Bank statement</span>']));
+      return top + `<div class="main">${grid(12, [inbox, card('', view)])}</div>`;
+    }
+    return top + `<div class="main">${d === 'phone' ? '<span class="muted">‹ Inbox</span>' : ''}${view}</div>`;
+  }
+  if (m.type === 'sms') {
+    const convo = `<div class="col"><span class="muted center" style="display:flex;flex-direction:column">${m.from}<br>Text message · ${m.when}</span>
+      ${chat([['them', m.body]])}
+      ${m.preview ? `<div class="linkcard">${X(50)}<span>${m.preview}</span></div>` : ''}</div>`;
+    const top = '<div class="topbar"><b>Messages</b></div>';
+    if (d === 'desktop') {
+      const threads = card('Conversations', list([`<b>${m.from}</b>`, '<span class="muted">Mom</span>', '<span class="muted">Work group</span>']));
+      return top + `<div class="main">${grid(12, [threads, card('', convo)])}</div>`;
+    }
+    return top + `<div class="main">${d === 'phone' ? '<span class="muted">‹ Messages</span>' : ''}${convo}<span class="spacer"></span>${row('<span class="input" style="flex:1">Text message</span>')}</div>`;
+  }
+  // push notification
+  const note = `<div class="notif"><span class="logo"></span><div class="col" style="gap:1px"><span class="muted">${m.from} · now</span><b>${m.subject}</b><span>${m.body}</span></div></div>`;
+  if (d === 'desktop') {
+    return `<div class="topbar"><b>Computer</b><span class="spacer"></span>${m.when}</div>
+      <div class="main" style="position:relative">${X(270, 'whatever app is open')}<div class="toast">${note}</div></div>`;
+  }
+  return `<div class="lock"><span class="time">${m.when}</span><span class="muted">${m.date}</span>${note}<span class="muted">Tap to open</span></div>`;
+}
+
+const P = { nav: 'planner', brand: '[Business]' };
+const C = { nav: 'client', brand: '[Business]' };
+const PRE = { ...C, locked: ['Home', 'Guests', 'Mood Board', 'Approvals'], lockNote: 'Unlocks after your deposit' };  // portal before booking
+const G = { title: 'Ana & Marco', right: '<span class="lang">EN | ES</span>' };
+const BOOK_STEPS = ['Review', 'Sign', 'Pay deposit'];
+
+/* =========================================================
+   JOURNEYS — each has a flow (steps + edge-case diamonds)
+   and screens. render(d) is called once per device:
+   d = 'desktop' | 'tablet' | 'phone'
+   from / next = the click path into and out of the screen.
+   kind = 'email' | 'sms' | 'push' for message frames.
+   ========================================================= */
+const JOURNEYS = [
+
+/* ---------------- PLANNER ---------------- */
+{
+  id: 'planner',
+  title: 'Planner (Owner) journey',
+  meta: 'Goal: inquiry → signed contract + deposit in under 15 minutes, then plan the event. Main device: Desktop (web app); also mobile.',
+  order: ['desktop', 'tablet', 'phone'],
+  flow: [
+    { t: 'Signs up' },
+    { t: 'Onboarding wizard' },
+    { t: 'Dashboard' },
+    { t: '🔔 New lead → Leads' },
+    { t: 'Lead Detail', edge: ['Date booked? → red badge + nearby dates'] },
+    { t: 'Proposal Builder', edge: ['More gear than owned? → reduce / rent / override'] },
+    { t: 'Client signs + pays → planner countersigns', edge: ['Payments not connected? → check/cash only'] },
+    { t: 'Events list → Event Hub' },
+    { t: 'Website & RSVP setup' },
+    { t: 'Sends invitations', edge: ['Bounced / STOP? → show who didn\'t get it'] },
+    { t: 'Locks final headcount' },
+  ],
+  screens: [
+    {
+      name: 'Sign Up', route: 'Sign Up', url: 'app/signup',
+      from: 'Planner\'s marketing site "Start free"', next: 'Create account → Onboarding Wizard',
+      render: d => {
+        const form = `<div class="col">
+          <span class="big">Run your whole event business in one place</span>
+          ${btn('Continue with Google')}${btn('Continue with Apple')}
+          <span class="muted center">or</span>
+          ${field('Email', 'latoya@…')}${field('Password', '••••••••')}
+          ${btn('Create account', 'primary')}
+          <span class="muted">Already have an account? <u>Log in</u> (goes to Dashboard)</span></div>`;
+        return shell(d, { title: '[Business] Planner' }, `
+          ${d === 'phone' ? form : grid(2, [form, X(d === 'desktop' ? 200 : 170, 'product screenshot')])}
+          ${state('Error state', 'That email already has an account. ' + row(btn('Log in'), btn('Reset password')), 'warn')}`);
+      },
+      notes: [
+        { k: 'sys', t: '→ System: creates a tenant (business account) with this user as Owner. Every query is scoped by tenant ID.' },
+        { k: 'yellow', t: 'Owner needs a passkey or 2FA (lost-phone edge case).' },
+      ],
+    },
+    {
+      name: 'Onboarding Wizard', route: 'Onboarding', url: 'app/onboarding/payments',
+      from: 'Sign Up', next: 'Finish or "Skip for now" → Dashboard (resume from its checklist)',
+      render: d => shell(d, { title: 'Set up your business' }, `
+        ${state('Banner until done', '⚠ Payments not connected. Clients can only pay by check/cash. ' + btn('Connect now'), 'warn')}
+        <div class="steps">${['Business', 'Payments', 'Packages', 'Calendar', 'Team', 'Templates']
+          .map((s, i) => `<span class="${i < 1 ? 'done' : i === 1 ? 'on' : ''}">${i + 1}${d === 'phone' ? '' : ' ' + s}</span>`).join('')}</div>
+        <div class="h">Step 2 of 6 · Connect payments</div>
+        ${lines(2)}
+        ${grid(2, [card('Stripe', X(36, 'logo') + btn('Connect Stripe', 'primary')), card('Square', X(36, 'logo') + btn('Connect Square'))])}
+        ${card('✓ Step 1 done: Business', field('Business name', '[Business]') + row('Brand colors:', '<span class="sw"></span><span class="sw" style="background:#999"></span><span class="sw" style="background:#555"></span>'))}
+        ${row(btn('Back'), '<span class="spacer"></span>', btn('Skip for now'), btn('Next →', 'primary'))}`),
+      notes: [
+        { k: 'yellow', t: 'Skippable and resumable. Step 3 (Packages) creates the Silver / Gold / Platinum packages used in proposals.' },
+        { k: 'yellow', t: 'Same forms are reused later in Settings (Business, Branding, Packages, Payments, Calendar, Templates).' },
+      ],
+    },
+    {
+      name: 'Dashboard', route: 'Dashboard', url: 'app/dashboard', snap: 'Snapshot: Thu Nov 5, evening',
+      from: 'Onboarding / log in / sidebar', next: 'Tap an alert → Contract (countersign) or Leads; tap an event → Event Hub',
+      render: d => shell(d, { ...P, active: 'Dashboard', title: 'Dashboard' }, `
+        ${grid(4, [tile('$24,500', 'booked · Nov'), tile('$15,200', 'collected · Nov'), tile('$9,300', 'balance due'), tile('14', 'open tasks')])}
+        ${grid(2, [
+          card('Today & this week', list(['<b>Fri</b> Lee shower · site visit', '<b>Sat</b> Patel reunion · tasting 11 AM', '<b>Sat</b> Gear pickup · 4 PM', '<b>Mon</b> Call: Nguyen (new lead)'])),
+          card('Alerts (4)', list([`⚠ <b>Rivera signed + paid deposit</b> ${btn('Countersign')}`, '🔔 New lead: Nguyen · baby shower', '⚠ Lee: contract unsigned', '⚠ 2 mics not returned'])),
+        ])}
+        ${card('Pipeline', grid(4, [tile('6', 'inquiries'), tile('3', 'proposals sent'), tile('8', 'booked'), tile('21', 'completed')]))}
+        ${state('Empty state', `<b>No events yet? Getting started:</b>${chk('Add packages', true)}${chk('Connect payments')}${chk('Share your inquiry form')}`)}`),
+      notes: [
+        { k: 'yellow', t: 'Answers "what needs me today?", which is success metric #1 in the spec. Every alert links to the screen that fixes it.' },
+      ],
+    },
+    {
+      name: 'Calendar', route: 'Calendar', url: 'app/calendar?view=month',
+      from: 'Sidebar', next: 'Tap an event → Event Hub · tap a hold → Lead Detail · Week/Day = same data, closer zoom',
+      render: d => {
+        // June 2027 starts on a Tuesday (2 blank cells) and has 30 days
+        const events = {
+          5:  ['<span class="ev hold">Hold · Kim (3 days left)</span>'],
+          8:  ['<span class="ev">Site visit · Garza</span>'],
+          12: ['<span class="ev">Rivera wedding</span>'],
+          19: ['<span class="ev">Patel reunion</span>', '<span class="ev">⚠ Garza tasting</span>'],
+          26: ['<span class="ev hold">Hold · Acme</span>'],
+        };
+        const cells = ['', ''].concat(Array.from({ length: 30 }, (_, i) => i + 1))
+          .map(n => `<span>${n}${(events[n] || []).join('')}</span>`).join('');
+        const month = `<div class="mcal">${['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(x => `<span class="hd">${x}</span>`).join('')}${cells}</div>`;
+        const agenda = card('June 2027', list([
+          '<b>Sat 5</b> · Hold · Kim birthday <span class="badge">expires in 3 days</span>',
+          '<b>Tue 8</b> · Site visit · Garza wedding',
+          '<b>Sat 12</b> · Rivera wedding · 4 PM',
+          '<b>Sat 19</b> · Patel reunion · 1 PM',
+          '<b>Sat 19</b> · ⚠ Garza tasting · 3 PM',
+        ]));
+        return shell(d, { ...P, active: 'Calendar', title: 'Calendar' }, `
+          ${row(seg(['Month', 'Week', 'Day', 'List'], d === 'phone' ? 3 : 0), '<span class="spacer"></span>', btn('+ Hold date'), btn('Sync: Google ✓'))}
+          ${d === 'phone' ? agenda : `<b>‹ June 2027 ›</b>${month}`}
+          ${row(pill('Booked'), '<span style="border:1px dashed;padding:0 4px">Hold</span>', pill('Site visit / call'))}
+          ${state('Edge case', '⚠ Jun 19: only 20 min between Patel reunion and Garza tasting, but travel takes 45 min. ' + btn('Move tasting'), 'warn')}`);
+      },
+      notes: [
+        { k: 'yellow', t: 'Real app color-codes by event type and status. Lo-fi uses labels and dashed borders for holds.' },
+        { k: 'sys', t: '→ System: 2-way sync with Google/Apple/Outlook; holds auto-expire; conflict checks for you, staff and travel time.' },
+      ],
+    },
+    {
+      kind: 'push', name: 'New lead notification', route: '🔔 lead.created', snap: 'Wed Oct 28, 9:41 AM',
+      from: 'Ana submits the Inquiry Form (Client journey #1)', next: 'Tap → Lead Detail (Rivera)',
+      render: d => msg(d, { type: 'push', from: '[Business] Planner', subject: 'New lead: Ana Rivera', body: 'Wedding · Sat Jun 12, 2027 · 120 guests · $15–20k', when: '9:41', date: 'Wednesday, October 28' }),
+      notes: [
+        { k: 'sys', t: '→ System (lead.created): push + dashboard card + calendar conflict check + auto-reply to Ana.' },
+      ],
+    },
+    {
+      name: 'Leads (kanban)', route: 'Leads', url: 'app/leads', snap: 'Snapshot: Oct 28',
+      from: 'Sidebar / 🔔 new-lead push / Dashboard alert', next: 'Tap a card → Lead Detail · drag card to change stage',
+      render: d => {
+        const cols = [
+          ['New', [leadCard('Rivera · Wedding', 'Jun 12 · 120 guests', '$15–20k · Instagram'), leadCard('Kim · Birthday', 'Nov 20 · 40 guests', '$2–4k · Referral', '⚠ Date taken')]],
+          ['Contacted', [leadCard('Lee · Shower', 'Dec 5 · 30 guests', '$3k · Google')]],
+          ['Consult booked', [leadCard('Hope Church · Potluck', 'Jan 9 · 200', '$1–2k · Facebook')]],
+          ['Proposal sent', [leadCard('Acme · Holiday', 'Dec 12 · 150', '$12k · The Knot')]],
+          ['Won', [leadCard('Patel · Reunion', 'Mar 3 · 80', '$6k · Referral')]],
+          ['Lost', []],
+        ];
+        const column = ([name, cards]) => `<div class="kcol"><h4>${name} (${cards.length})</h4>${cards.join('') || state('Empty', 'No leads here')}</div>`;
+        let board;
+        if (d === 'phone') {
+          board = seg(cols.map(([n, c]) => `${n} ${c.length}`)) + cols[0][1].join('') + '<span class="muted">← swipe for other stages →</span>';
+        } else if (d === 'tablet') {
+          board = grid(3, cols.slice(0, 3).map(column)) + '<span class="muted">swipe → Proposal sent · Won · Lost</span>';
+        } else {
+          board = grid(6, cols.map(column), 'kanban');
+        }
+        return shell(d, { ...P, active: 'Leads', title: 'Leads' }, `
+          ${row(btn('+ Add lead', 'primary'), btn('Source: All ▾'), btn('Copy inquiry form link'))}
+          ${board}
+          ${state('Empty board', 'No leads yet. Share your inquiry form to get your first one. ' + btn('Copy link'))}`);
+      },
+      notes: [
+        { k: 'yellow', t: 'Cards move automatically: proposal sent → "Proposal sent"; contract signed → "Won".' },
+      ],
+    },
+    {
+      name: 'Lead Detail', route: 'Lead Detail', url: 'app/leads/rivera', snap: 'Snapshot: Oct 28',
+      from: 'Leads card / 🔔 push', next: 'Send booking link → ✉ to Ana · after the consult: Create Proposal → Proposal Builder',
+      render: d => shell(d, { ...P, active: 'Leads', title: 'Lead · Rivera' }, `
+        <span class="muted">Leads › Ana &amp; Marco Rivera</span>
+        ${row(pill('New'), pill('Source: Instagram'), pill('Received Oct 28'))}
+        ${grid(21, [
+          card('Event details', grid(2, [field('Event type', 'Wedding'), field('Date', 'Sat, Jun 12, 2027'), field('Guests', '120'), field('Budget', '$15–20k'), field('Services', 'Photo booth, Karaoke'), field('Venue', 'Hacienda (TBD)')])),
+          card('Next step', btn('Send canned reply ▾') + btn('Hold date · 7 days') + btn('Send booking link') + btn('Create Proposal →', 'primary'), 'stack'),
+        ])}
+        ${state('Edge case', '⚠ <b>If Jun 12 were already booked:</b> red "Date taken" badge (like Kim\'s card) and nearby open dates Jun 5 · Jun 19 · Jun 26 ' + btn('Insert into reply'), 'warn')}
+        ${card('Activity', list(['Oct 28 · Inquiry received from website', 'Oct 28 · Auto-reply sent with booking link', 'Oct 28 · Consult booked: Mon Nov 2, 2 PM']))}`),
+      notes: [
+        { k: 'yellow', t: '"Send canned reply" opens an editable template in Messages. "Create Proposal" carries all lead data over. No retyping.' },
+        { k: 'sys', t: '→ System: a date hold blocks the calendar and auto-expires after X days.' },
+      ],
+    },
+    {
+      name: 'Proposal Builder', route: 'Proposal Builder', url: 'app/proposals/rivera', snap: 'Snapshot: Nov 4 (making v2)',
+      from: 'Lead Detail "Create Proposal" / Ana\'s "Request changes"', next: 'Send → ✉ "Your proposal" email to Ana (Client journey) · lead moves to "Proposal sent"',
+      render: d => {
+        const versions = row(seg(['v1 · sent Nov 2', 'v2 · draft'], 1)) +
+          state('Change request', '<b>Ana, Nov 3:</b> "Can photo magnets be an optional add-on instead of included?"');
+        const pkgs = grid(3, [['Silver', '$8,000'], ['Gold ✓', '$11,000'], ['Platinum', '$15,500']]
+          .map(([n, p], i) => `<div class="pkg ${i === 1 ? 'on' : ''}">${X(d === 'phone' ? 28 : 36)}<b>${n}</b><span>${p}</span></div>`), 'keep');
+        const addons = `<table class="tbl">
+          <tr><th></th><th>Add-on</th><th>Qty</th><th>Price</th></tr>
+          <tr><td>☑</td><td>Photo booth (4 hrs)</td><td>1</td><td>$1,500</td></tr>
+          <tr><td>☑</td><td>Karaoke + KJ (3 hrs)</td><td>1</td><td>$900</td></tr>
+          <tr><td>☑</td><td>Chairs</td><td><span class="input">140</span></td><td>$350</td></tr>
+          <tr><td>◇</td><td>Photo magnets <i>(client can tick)</i></td><td>-</td><td>$600</td></tr>
+          <tr><td>◇</td><td>Extra karaoke hour <i>(client can tick)</i></td><td>-</td><td>$250</td></tr></table>`;
+        const warn = state('Edge case', '⚠ Chairs: you own 120, quoted 140.<br>' + row(btn('Reduce to 120'), btn('Add partner rental'), btn('Override + note')), 'warn');
+        const left = `<div class="col">${versions}<div class="h">1. Pick a package</div>${pkgs}<div class="h">2. Add-ons</div>${addons}${warn}</div>`;
+        const summary = card('Summary', `<table class="tbl">
+          <tr><td>Package</td><td>$11,000</td></tr><tr><td>Add-ons</td><td>$2,750</td></tr>
+          <tr><td>Discount</td><td>$0</td></tr><tr><td>Tax 8%</td><td>$1,100</td></tr>
+          <tr><th>Total</th><th>$14,850</th></tr><tr><td>Deposit 30%</td><td>$4,455</td></tr></table>`
+          + btn('Preview as client') + btn('Send v2 to client', 'primary'), 'stack');
+        const opts = { ...P, active: 'Leads', title: 'Proposal · Rivera' };
+        if (d === 'phone') return shell(d, opts, left + `<div class="stickybar"><b>Total $14,850</b>${btn('Preview')}${btn('Send', 'primary')}</div>`);
+        return shell(d, opts, grid(21, [left, summary]));
+      },
+      notes: [
+        { k: 'yellow', t: '◇ = optional upgrade the client can tick in their portal. Totals exclude unticked upgrades.' },
+        { k: 'sys', t: '→ System: checks gear availability on Jun 12; keeps every version; the client always sees the latest.' },
+      ],
+    },
+    {
+      name: 'Contract (countersign)', route: 'Contract', url: 'app/contracts/rivera', snap: 'Snapshot: Nov 5, 4:30 PM',
+      from: 'Dashboard alert "Rivera signed + paid deposit"', next: 'Countersign → event becomes Booked → Go to Event Hub (or Invoice)',
+      render: d => shell(d, { ...P, active: 'Leads', title: 'Contract · Rivera' }, `
+        ${row(pill('Client signed ✓'), pill('Deposit paid ✓ $4,455'), pill('Waiting for you'))}
+        <div class="doc">
+          <b>Event Services Agreement</b>
+          <p>Between <u>[Business]</u> and <u>Ana Rivera</u> for a wedding on <u>Jun 12, 2027</u> at <u>Hacienda Venue</u>. Total <u>$14,850</u>; deposit <u>$4,455</u>.</p>
+          ${lines(3)}
+          <b>Cancellation policy</b>${lines(2)}
+        </div>
+        <span class="muted"><u>underlined</u> = merge fields filled from proposal v2</span>
+        ${grid(2, [
+          card('Client', '<span class="sig">Ana Rivera</span><span class="muted">Signed Nov 5 · 4:12 PM</span>'),
+          card('You', '<div class="input tall muted">Sign here</div>' + btn('Countersign', 'primary')),
+        ])}
+        ${state('After countersigning', '✓ Rivera wedding is <b>Booked</b>. ' + row(btn('Go to Event Hub →', 'primary'), btn('View invoice')))}`),
+      notes: [
+        { k: 'sys', t: '→ System (contract.countersigned): Event → Booked, hold → booking, gear reserved, checklist applied, welcome email. (Invoice + deposit already happened when Ana signed.)' },
+        { k: 'yellow', t: 'Signed PDF stored with timestamps for both parties.' },
+      ],
+    },
+    {
+      name: 'Invoice', route: 'Invoice', url: 'app/invoices/1042', snap: 'Snapshot: Nov 5, after the deposit',
+      from: 'Contract "View invoice" / Event Hub › Money "Open invoice"', next: 'Send reminder / Record payment · back → Event Hub › Money',
+      render: d => shell(d, { ...P, active: 'Events', title: 'Invoice #1042' }, `
+        ${row('<b>Rivera wedding</b>', pill('Partially paid'))}
+        ${grid(21, [
+          card('Payment schedule', `<table class="tbl"><tr><th>Payment</th><th>Due</th><th>Amount</th><th>Status</th></tr>
+            <tr><td>Deposit 30%</td><td>Nov 5</td><td>$4,455</td><td>✓ Paid</td></tr>
+            <tr><td>Payment 2 · 40%</td><td>Apr 13</td><td>$5,940</td><td>Due</td></tr>
+            <tr><td>Final · 30%</td><td>May 29</td><td>$4,455</td><td>Due</td></tr></table>`),
+          card('Totals', `<table class="tbl"><tr><td>Total</td><td>$14,850</td></tr><tr><td>Paid</td><td>$4,455</td></tr><tr><th>Balance</th><th>$10,395</th></tr></table>`
+            + btn('Send reminder') + btn('Record payment', 'primary') + btn('Refund / credit'), 'stack'),
+        ])}
+        ${card('Payments received', list(['Nov 5 · Visa ••4242 · $4,455 · receipt sent ✓']) + '<span class="muted">Record manually: cash · check · Venmo · Zelle · Cash App</span>')}
+        ${grid(3, [chk('Client autopay on', true), chk('Pass card fee to client'), chk('Late fee (if contract allows)')])}
+        ${state('Edge case', 'Payments not connected → only "Record cash / check" shows. ' + btn('Connect Stripe'), 'warn')}`),
+      notes: [
+        { k: 'sys', t: '→ System (contract.client_signed): invoice + schedule created when Ana signs. Reminders 7 days and 1 day before each due date.' },
+        { k: 'yellow', t: 'Payment status always comes from Stripe/Square webhooks, never from the browser.' },
+      ],
+    },
+    {
+      name: 'Events list', route: 'Events', url: 'app/events', snap: 'Snapshot: Nov 5, after countersigning',
+      from: 'Sidebar "Events"', next: 'Tap an event → Event Hub › Overview · "+ New event" for events without a lead',
+      render: d => {
+        const evts = [
+          ['Rivera wedding', 'Sat Jun 12, 2027', 'Booked', '$10,395', '12'],
+          ['Acme holiday party', 'Sat Dec 12', 'In planning', '$3,600', '5'],
+          ['Hope Church potluck', 'Sat Jan 9', 'Booked', '$0', '3'],
+          ['Patel reunion', 'Wed Mar 3', 'Booked', '$4,200', '8'],
+        ];
+        const body = d === 'phone'
+          ? list(evts.map(([n, dt, s, bal, t]) => `<b>${n}</b> ${pill(s)}<br><span class="muted">${dt} · balance ${bal} · ${t} tasks</span>`))
+          : `<table class="tbl"><tr><th>Event</th><th>Date</th><th>Status</th><th>Balance</th><th>Open tasks</th></tr>${evts.map(([n, dt, s, bal, t]) =>
+              `<tr><td><b>${n}</b></td><td>${dt}</td><td>${pill(s)}</td><td>${bal}</td><td>${t}</td></tr>`).join('')}</table>`;
+        return shell(d, { ...P, active: 'Events', title: 'Events' }, `
+          ${row(seg(['Upcoming', 'Past', 'All'], 0), btn('Status: All ▾'), '<span class="spacer"></span>', btn('+ New event', 'primary'))}
+          ${body}
+          ${state('Empty state', 'No events yet. Events are created when a contract is signed, or ' + btn('+ New event'))}`);
+      },
+      notes: [
+        { k: 'yellow', t: 'Was missing in round 1: the "Events" sidebar item led nowhere. Sorted by date; Calendar shows the same events.' },
+      ],
+    },
+    {
+      name: 'Event Hub › Overview', route: 'Event Hub › Overview', url: 'app/events/rivera', snap: 'Snapshot: mid-April 2027, 8 weeks out',
+      from: 'Events list / Contract "Go to Event Hub" / Calendar', next: 'Tabs: Tasks · Guests · Money · Files · Messages · Change date → Reschedule · Cancel event → Cancel',
+      render: d => shell(d, { ...P, active: 'Events', title: 'Rivera Wedding' }, `
+        ${row('<b>Sat, Jun 12, 2027 · Hacienda Venue</b>', pill('In planning'), '<span class="spacer"></span>', btn('Change date'), btn('Cancel event'))}
+        ${hubTabs('Overview')}
+        ${grid(4, [tile('58', 'days to go'), tile('$4,455', 'balance due'), tile('75/120', 'RSVPs in'), tile('6', 'open tasks · 1 late')])}
+        ${grid(2, [
+          card('Next 3 deadlines', list(['May 1 · RSVP cutoff', 'May 29 · Final payment $4,455', 'Jun 5 · Lock final headcount'])),
+          card('Venue', X(d === 'phone' ? 46 : 56, 'map') + '<span class="muted">Load-in: side door · Wi-Fi on file</span>'),
+        ])}
+        ${grid(2, [
+          card('Questionnaire', '✓ "Wedding details" received Nov 12 ' + btn('View answers')),
+          card('Approvals', list(['✓ Invitation wording · Ana', '⚠ Menu v2 · Ana ✓ / Marco: changes'])),
+        ])}`),
+      notes: [
+        { k: 'yellow', t: 'Status path: Inquiry → Proposal → Booked → In planning → Final week → Event day → Wrap-up → Closed.' },
+        { k: 'yellow', t: 'Phase 2 tabs (Timeline, Vendors, Equipment…) slot into this same tab bar later.' },
+      ],
+    },
+    {
+      name: 'Reschedule event', route: 'Event Hub › Reschedule', url: 'app/events/rivera/reschedule', snap: 'Example: moving the wedding to Sat Jul 3 (mid-April)',
+      from: 'Event Hub › Overview "Change date" / client\'s postpone request (Portal › Cancel or postpone)', next: 'Confirm → Event Hub › Overview with the new date · ✉ change notices to everyone checked',
+      render: d => shell(d, { ...P, active: 'Events', title: 'Reschedule · Rivera' }, `
+        ${steps(['New date', 'Check', 'Review', 'Notify'], 2)}
+        ${grid(2, [
+          card('New date', field('From', 'Sat, Jun 12, 2027') + field('To', 'Sat, Jul 3, 2027') + '<span class="muted">Everything shifts +21 days</span>'),
+          card('Availability check', list(['✓ Your calendar: free', '✓ Venue hold: confirm with Hacienda', '⚠ Staff: Jo Kim unavailable ' + btn('Find replacement'), '✓ Gear: Photo Booth Kit A free'])),
+        ])}
+        ${card('Dates that move', `<table class="tbl"><tr><th>Item</th><th>Was</th><th>Now</th></tr>
+          <tr><td>RSVP cutoff</td><td>May 1</td><td>May 22</td></tr>
+          <tr><td>Final payment $4,455</td><td>May 29</td><td>Jun 19</td></tr>
+          <tr><td>Lock headcount</td><td>Jun 5</td><td>Jun 26</td></tr>
+          <tr><td>12 open tasks</td><td colspan="2">each +21 days</td></tr></table>`)}
+        ${card('Notify', grid(2, [chk('Ana &amp; Marco', true), chk('3 vendors', true), chk('2 staff', true), chk('120 guests (change notice)', true)]))}
+        ${row(btn('Back'), '<span class="spacer"></span>', btn('Confirm reschedule', 'primary'))}
+        ${state('Edge case', '⚠ Jun 19 is taken (Patel reunion). Pick another date or ' + btn('See open Saturdays'), 'warn')}`),
+      notes: [
+        { k: 'yellow', t: 'Was a gap in round 2. Nothing changes until "Confirm"; every change is logged on the event.' },
+        { k: 'sys', t: '→ System (event.rescheduled): relative task and payment dates shift; staff, gear, vendors rechecked; everyone checked is notified.' },
+      ],
+    },
+    {
+      name: 'Cancel event', route: 'Event Hub › Cancel', url: 'app/events/rivera/cancel', snap: 'Example: cancelled Sat Apr 10, 2027 (63 days out)',
+      from: 'Event Hub › Overview "Cancel event" / client\'s cancel request (Portal › Cancel or postpone)', next: 'Confirm → event archived (restorable 30 days) · refund on Invoice · Events list',
+      render: d => shell(d, { ...P, active: 'Events', title: 'Cancel · Rivera' }, `
+        ${state('Client request', '<b>Ana, Apr 10:</b> "We need to cancel. Family emergency." (from Portal › Cancel or postpone)')}
+        ${card('Cancellation policy (from the signed contract)', list(['Deposit is non-refundable', '60+ days out: 50% of later payments refunded', 'Under 60 days: no refund']))}
+        ${card('Refund (63 days out)', `<table class="tbl">
+          <tr><td>Paid so far</td><td>$10,395</td></tr><tr><td>Deposit (non-refundable)</td><td>−$4,455</td></tr>
+          <tr><td>Payment 2: 50% kept</td><td>−$2,970</td></tr><tr><th>Refund to Ana</th><th>$2,970</th></tr></table>`)}
+        ${card('Also', grid(2, [chk('Release Photo Booth Kit A', true), chk('Release 2 staff shifts', true), chk('Cancel 4 reminders', true), chk('Notify 3 vendors', true)]))}
+        ${field('Type CANCEL to confirm', '')}
+        ${row(btn('Keep event'), '<span class="spacer"></span>', btn('Cancel event + refund $2,970', 'primary'))}
+        ${state('After cancelling', 'Event archived (restore within 30 days). Refund sent via Stripe; Invoice shows the credit.')}`),
+      notes: [
+        { k: 'yellow', t: 'Was a gap in round 2. Destructive, so it asks you to type CANCEL (NFR-13).' },
+        { k: 'sys', t: '→ System: refund through the processor; gear, staff and reminders released; event archived.' },
+      ],
+    },
+    {
+      name: 'Event Hub › Tasks', route: 'Event Hub › Tasks', url: 'app/events/rivera/tasks', snap: 'Snapshot: mid-April 2027',
+      from: 'Hub tab / Overview "open tasks"', next: '"Send" on a questionnaire task → ✉ to Ana → Portal › Questionnaire',
+      render: d => {
+        const tasks = [
+          ['⚠ Confirm caterer tasting', 'You', 'Apr 10 · late'],
+          [`Send "Final details" questionnaire ${btn('Send')}`, 'You', 'May 13'],
+          ['Send COI', 'Florist', 'Apr 30'],
+          ['Order cake <span class="muted">(2 subtasks)</span>', 'You', '30 days before · May 13'],
+          ['☑ <s>Send "Wedding details" questionnaire</s>', 'You', 'done Nov 10'],
+        ];
+        const box = (t) => (t.startsWith('☑') ? '' : '☐ ') + t;
+        const body = d === 'phone'
+          ? list(tasks.map(([t, who, due]) => `${box(t)}<br><span class="muted">${who} · ${due}</span>`))
+          : `<table class="tbl"><tr><th>Task</th><th>Assigned</th><th>Due</th></tr>${tasks.map(([t, who, due]) =>
+              `<tr><td>${box(t)}</td><td>${who}</td><td>${due}</td></tr>`).join('')}</table>`;
+        return shell(d, { ...P, active: 'Events', title: 'Rivera Wedding' }, `
+          ${hubTabs('Tasks')}
+          ${row(btn('+ Add task', 'primary'), seg(['All', 'Mine', 'Client', 'Vendor'], 0), btn('Template: Wedding ▾'))}
+          ${body}
+          ${state('Empty state', 'No tasks yet. ' + btn('Apply checklist template'))}`);
+      },
+      notes: [
+        { k: 'yellow', t: 'Due dates are relative to the event ("30 days before"). Client-assigned tasks show up in Ana\'s "Needs your action".' },
+        { k: 'sys', t: '→ System (event.rescheduled): every relative due date shifts when the event date moves.' },
+      ],
+    },
+    {
+      name: 'Event Hub › Guests', route: 'Event Hub › Guests', url: 'app/events/rivera/guests', snap: 'Snapshot: mid-April 2027',
+      from: 'Hub tab', next: 'Sub-tabs → Invitations / Website & RSVP · Lock final headcount (Jun 5, after Ana approves)',
+      render: d => {
+        const rows = [
+          ['Rivera family (+1)', '4', '✓ Attending', 'Chicken ×2, Veg ×2'],
+          ['Garcia, Luis (+1)', '2', '… No reply', '-'],
+          ['Chen household', '3', '✗ Declined', '-'],
+          ['Ortiz, Maria', '1', '? Maybe', 'Fish · ⚠ nuts'],
+        ];
+        const table = `<table class="tbl"><tr><th>Household</th><th>#</th><th>RSVP</th><th>Meals</th></tr>${rows.map(r => `<tr>${r.map(c => `<td>${c}</td>`).join('')}</tr>`).join('')}</table>`;
+        const cards = list(rows.map(r => `<b>${r[0]}</b> · ${r[1]}<br><span class="muted">${r[2]} · ${r[3]}</span>`));
+        return shell(d, { ...P, active: 'Events', title: 'Rivera Wedding' }, `
+          ${hubTabs('Guests')}
+          ${guestSubTabs('Guest list')}
+          ${grid(4, [tile('64', 'attending'), tile('8', 'declined'), tile('3', 'maybe'), tile('45', 'no reply')])}
+          ${row('Meals:', pill('Chicken 30'), pill('Fish 20'), pill('Veg 14'), pill('⚠ Allergies 5'))}
+          ${row(btn('+ Add guest'), btn('Import CSV'), btn('Remind 45 non-responders'), btn('Lock final headcount', 'primary'))}
+          ${d === 'phone' ? cards : table}
+          ${state('After locking (Jun 5)', '🔒 Headcount locked at 112, approved by Ana. RSVPs closed; caterer notified.')}
+          ${state('Empty state', 'No guests yet. ' + btn('Import CSV') + ' or let the client add them in their portal.')}`);
+      },
+      notes: [
+        { k: 'sys', t: '→ System (rsvp.updated / headcount.locked): counts update live; locking closes RSVPs and notifies vendors.' },
+        { k: 'yellow', t: 'Plus-ones are set per household here, e.g. "(+1)". Allergies are never dropped on import/export.' },
+      ],
+    },
+    {
+      name: 'Event Hub › Guests › Website & RSVP', route: 'Event Hub › Guests › Website & RSVP', url: 'app/events/rivera/guests/website', snap: 'Snapshot: Feb 2027, before invitations',
+      from: 'Guests sub-tab', next: 'Preview as guest → Event Website · Save → Invitations sub-tab',
+      render: d => shell(d, { ...P, active: 'Events', title: 'Rivera Wedding' }, `
+        ${hubTabs('Guests')}
+        ${guestSubTabs('Website & RSVP')}
+        ${grid(2, [
+          card('Event website', chk('Schedule', true) + chk('Dress code: Garden formal', true) + chk('Hotel block: Riverwalk Inn', true) + chk('FAQ', true)
+            + field('Registry / fund link (opens in new tab)', 'honeyfund.com/rivera')),
+          card('RSVP form', field('RSVP cutoff', 'Sat, May 1, 2027') + row('Meals:', pill('Chicken'), pill('Fish'), pill('Vegetarian'), btn('+ Add'))
+            + chk('Ask allergies / dietary needs', true) + chk('Song request', true) + btn('+ Custom question')),
+        ])}
+        ${card('Plus-ones & privacy', field('Default plus-ones per household', '0 (override per household in Guest list)')
+          + seg(['Private link', 'Password', 'Public'], 0) + chk('Allow late RSVPs after cutoff'))}
+        ${row(btn('Preview as guest'), btn('Save', 'primary'))}
+        ${state('Edge case', 'Public mode: unknown visitors give name + contact and become guests. Private mode: they see "Ask the host".')}`),
+      notes: [
+        { k: 'yellow', t: 'Was missing in round 1: this is where the RSVP\'s meals, plus-ones, May 1 cutoff and fund link come from.' },
+        { k: 'yellow', t: 'P1: fund = external link. In-app donations/funds come in Phase 4.' },
+      ],
+    },
+    {
+      name: 'Event Hub › Guests › Invitations', route: 'Event Hub › Guests › Invitations', url: 'app/events/rivera/guests/invitations', snap: 'Snapshot: Mar 1, 2027',
+      from: 'Guests sub-tab', next: 'Request client approval → Portal › Approvals · Send → 💬 invitation text (Guest journey)',
+      render: d => shell(d, { ...P, active: 'Events', title: 'Rivera Wedding' }, `
+        ${hubTabs('Guests')}
+        ${guestSubTabs('Invitations')}
+        ${seg(['Save-the-date ✓ Nov 15', 'Invitation', 'Reminder', 'Thank-you'], 1)}
+        ${grid(2, [
+          card('Design + wording', X(d === 'phone' ? 70 : 90, 'basic branded template') + field('Wording', '"Together with their families, Ana & Marco invite you…"', 'tall')
+            + row(pill('✓ Approved by Ana · Feb 20'), btn('Request client approval'))),
+          card('Send', chk('Email', true) + chk('Text (SMS)', true) + chk('Link + QR (print / social)')
+            + select('To', 'Not yet invited · 120 guests') + seg(['Send now', 'Schedule'], 1) + field('When', 'Mon Mar 1, 9:00 AM') + btn('Schedule invitations', 'primary')),
+        ])}
+        ${card('Tracking', grid(4, [tile('117', 'delivered'), tile('98', 'opened'), tile('75', 'responded'), tile('3', 'not delivered')]))}
+        ${state('Edge case', '⚠ 3 not delivered: 2 bounced emails, 1 replied STOP to texts. ' + btn('See who'), 'warn')}`),
+      notes: [
+        { k: 'yellow', t: 'Was missing in round 1. P1 = one simple branded template; the full Invitation Designer is Phase 3.' },
+        { k: 'sys', t: '→ System: tracks delivered / opened / responded per guest; honors STOP opt-outs.' },
+      ],
+    },
+    {
+      name: 'Event Hub › Money', route: 'Event Hub › Money', url: 'app/events/rivera/money', snap: 'Snapshot: mid-April 2027',
+      from: 'Hub tab', next: 'Open invoice → Invoice · Add expense',
+      render: d => shell(d, { ...P, active: 'Events', title: 'Rivera Wedding' }, `
+        ${hubTabs('Money')}
+        ${grid(4, [tile('$14,850', 'client price'), tile('$10,395', 'collected'), tile('$4,455', 'balance due'), tile('$5,750', 'est. profit · owner only')])}
+        ${grid(2, [
+          card('Payments', list(['✓ Deposit · Nov 5 · $4,455', '✓ Payment 2 · Apr 12 · $5,940', 'Final · due May 29 · $4,455']) + btn('Open invoice')),
+          card('Budget: estimated vs actual', `<table class="tbl"><tr><th>Category</th><th>Est.</th><th>Actual</th></tr>
+            <tr><td>Catering</td><td>$4,800</td><td>$4,950 ⚠</td></tr><tr><td>Florist</td><td>$1,200</td><td>$1,150</td></tr>
+            <tr><td>Rentals</td><td>$600</td><td>-</td></tr><tr><td>Staff</td><td>$1,400</td><td>-</td></tr></table>`),
+        ])}
+        ${row(btn('+ Add expense (snap receipt)'), btn('Export'))}
+        ${state('Edge case', 'Client misses a payment → reminders at +1 and +7 days; late fee only if the contract allows. ' + btn('Pause reminders'))}`),
+      notes: [
+        { k: 'yellow', t: 'Hidden from staff unless the owner grants it. Profit is owner-only even then.' },
+      ],
+    },
+    {
+      name: 'Event Hub › Files + Mood Board', route: 'Event Hub › Files', url: 'app/events/rivera/files',
+      from: 'Hub tab', next: 'Request approval → Portal › Approvals · Upload',
+      render: d => shell(d, { ...P, active: 'Events', title: 'Rivera Wedding' }, `
+        ${hubTabs('Files')}
+        ${row(btn('+ Upload', 'primary'), btn('New mood board'), seg(['All', 'Shared', 'Private'], 0))}
+        ${grid(4, [fileCard('Signed contract.pdf', 'Shared'), fileCard('Proposal v2.pdf', 'Shared'),
+                   fileCard('Menu v2.pdf', 'Awaiting approval'), fileCard('Florist COI.pdf', 'Private')])}
+        ${card('Mood board: Garden', grid(4, [X(30), X(30), X(30), X(30)]) + row(pill('sage'), pill('blush'), pill('ivory'))
+          + '<span class="muted">Ana: "Love the peonies!"</span>' + btn('Request approval'))}
+        ${state('Empty state', 'No files yet. Drag files here or ' + btn('Upload'))}`),
+      notes: [
+        { k: 'yellow', t: 'Each file is Shared (client sees it) or Private. Client can comment on the mood board and paste Pinterest links.' },
+      ],
+    },
+    {
+      name: 'Event Hub › Messages', route: 'Event Hub › Messages', url: 'app/events/rivera/messages',
+      from: 'Hub tab / 🔔 new-message push', next: 'Reply · change order → Ana approves in Portal › Payments',
+      render: d => {
+        const threads = card('Threads', list(['<b>Ana &amp; Marco</b> (client) · 2 new', 'Bloom Florals (vendor)', 'Taste Catering (vendor)']));
+        const convo = card('Ana & Marco', chat([
+          ['them', 'Can we add an extra hour of karaoke?'],
+          ['me', 'Yes! Sending a change order now.'],
+          ['sys', 'Change order sent · +$250 · waiting for Ana'],
+        ]) + row(btn('+ File'), '<span class="input" style="flex:1">Write a message…</span>', btn('Send', 'primary')));
+        return shell(d, { ...P, active: 'Events', title: 'Rivera Wedding' }, `
+          ${hubTabs('Messages')}
+          ${d === 'phone' ? '<span class="muted">‹ All threads</span>' + convo : grid(12, [threads, convo])}
+          ${state('Edge case', '⚠ Ana opted out of texts (STOP). This message went by email only.', 'warn')}`);
+      },
+      notes: [
+        { k: 'yellow', t: 'One thread with the client, one per vendor. The client never sees vendor threads unless you share.' },
+      ],
+    },
+    {
+      name: 'Settings › Team & roles', route: 'Settings', url: 'app/settings/team',
+      from: 'Sidebar', next: 'Invite staff → 💬 team invite text (Staff journey) · other sections reuse the Onboarding forms',
+      render: d => {
+        const sections = ['Business', 'Branding', 'Packages', 'Payments', 'Calendar sync', 'Team & roles', 'Templates', 'Data export'];
+        const content = `<div class="col">
+          ${row('<b>Team &amp; roles</b>', '<span class="spacer"></span>', btn('+ Invite staff', 'primary'))}
+          <table class="tbl"><tr><th>Name</th><th>Role</th><th>Access</th></tr>
+            <tr><td>You</td><td>Owner</td><td>Everything</td></tr>
+            <tr><td>Jo Kim</td><td>Lead coordinator</td><td>Budgets ✓ Profit ✗</td></tr>
+            <tr><td>Sam Diaz</td><td>Staff · booth</td><td>Assigned events</td></tr></table>
+          ${card('Permissions: Jo Kim', chk('See event budgets', true) + chk('See profit margins') + chk('Take payments (tap-to-pay)', true) + chk('Edit vendors', true))}
+          ${state('Edge case', 'Staff member leaves → ' + btn('Deactivate') + ' revokes their sessions now; history kept for payroll.', 'warn')}</div>`;
+        const nav = d === 'phone' ? seg(sections, 5) : card('', list(sections.map(s => s === 'Team & roles' ? `<b><u>${s}</u></b>` : s)));
+        return shell(d, { ...P, active: 'Settings', title: 'Settings' }, d === 'phone' ? nav + content : grid(12, [nav, content]));
+      },
+      notes: [
+        { k: 'yellow', t: 'Permissions are per person, not just per role (spec: coordinator can see budgets but not profit).' },
+        { k: 'sys', t: '→ System: permissions are checked on the server for every request, not just by hiding buttons.' },
+      ],
+    },
+  ],
+},
+
+/* ---------------- CLIENT (HOST) ---------------- */
+{
+  id: 'client',
+  title: 'Client (Host) journey',
+  meta: 'Goal: the portal always answers "what\'s next and what do I owe?" No password, magic link only. Main device: Desktop web (often opened on a phone).',
+  order: ['desktop', 'tablet', 'phone'],
+  flow: [
+    { t: 'Visits planner\'s website' },
+    { t: 'Inquiry Form' },
+    { t: '✉ Auto-reply → books consult' },
+    { t: '✉ Opens proposal link', edge: ['Link expired? → new link to email on file'] },
+    { t: 'Accepts proposal', edge: ['Wants changes? → comment → new version'] },
+    { t: 'Signs + pays deposit (one sitting)', edge: ['Payment failed? → plain error, retry'] },
+    { t: '✉ Welcome → Portal Home' },
+    { t: 'Questionnaire' },
+    { t: 'Approvals', edge: ['Co-hosts disagree? → planner decides'] },
+    { t: '💬 Reminder → pays over time' },
+  ],
+  screens: [
+    {
+      name: 'Inquiry Form', route: 'Inquiry Form', url: 'events.yourbiz.com/inquire', snap: 'Wed Oct 28',
+      from: 'Planner\'s website / Instagram / Facebook embed', next: 'Send inquiry → ✉ auto-reply with booking link',
+      render: d => shell(d, { brand: '[Business]', title: 'Plan your event' }, `
+        <div class="h">Tell us about your event</div>
+        ${grid(2, [field('Your name', 'Ana Rivera'), field('Email', 'ana@…'), field('Phone', ''), select('Event type', 'Wedding'),
+                   field('Date', '06 / 12 / 2027'), field('Guest count', '120'), select('Budget range', '$15–20k'), select('How did you hear about us?', 'Instagram')])}
+        <b>Services you want</b>
+        ${grid(3, [chk('Full planning', true), chk('Photo booth', true), chk('Karaoke', true), chk('Rentals'), chk('Potluck organizer'), chk('Donations')])}
+        ${field('Anything else?', '', 'tall')}
+        ${btn('Send inquiry', 'primary')}
+        ${state('After submit', '✓ Thanks, Ana! <b>What happens next:</b><br>1. Check your email for a link to book a free consult · 2. Meet us · 3. Get your proposal')}`),
+      notes: [
+        { k: 'yellow', t: 'No account needed. Embeddable on the website, Instagram and Facebook.' },
+        { k: 'sys', t: '→ System (lead.created): creates a Lead, checks the date, sends the auto-reply, pushes to the planner.' },
+      ],
+    },
+    {
+      kind: 'email', name: 'Auto-reply with booking link', route: '✉ Inquiry auto-reply', snap: 'Wed Oct 28, 9:41 AM',
+      from: 'Inquiry Form submitted', next: '"Pick a consult time" → Public Booking Page',
+      render: d => msg(d, { type: 'email', from: '[Business]', to: 'ana@…', subject: 'Thanks for reaching out, Ana!',
+        body: '<span>We\'d love to hear about your wedding on Jun 12. Pick a time for a free 30-min consult:</span>' + lines(2),
+        cta: 'Pick a consult time', foot: 'Questions? Just reply to this email.' }),
+      notes: [
+        { k: 'yellow', t: 'Planner can edit this template in Settings › Templates.' },
+      ],
+    },
+    {
+      name: 'Public Booking Page', route: 'Public Booking Page', url: 'events.yourbiz.com/book', snap: 'Wed Oct 28',
+      from: '✉ auto-reply "Pick a consult time" / Lead Detail "Send booking link"', next: 'Book → confirmation + calendar invite · consult happens Nov 2',
+      render: d => {
+        // November 2026 starts on a Sunday and has 30 days
+        const taken = [3, 4, 7, 8, 14, 15, 21, 22, 26, 27, 28, 29];
+        const days = Array.from({ length: 30 }, (_, i) => {
+          const n = i + 1;
+          const cls = n === 2 ? 'sel' : taken.includes(n) || n === 1 ? 'x' : 'open';
+          return `<span class="${cls}">${n}</span>`;
+        }).join('');
+        const cal = card('November 2026', `<div class="cal">${'SMTWTFS'.split('').map(l => `<span class="hd">${l}</span>`).join('')}${days}</div>`);
+        const slots = card('Mon, Nov 2', `${grid(2, ['10:00 AM', '11:30 AM', '<b>2:00 PM ✓</b>', '4:30 PM'].map(t => `<span class="btn">${t}</span>`))}
+          ${field('Name', 'Ana Rivera')}${field('Email', 'ana@…')}${btn('Book consult', 'primary')}`);
+        return shell(d, { brand: '[Business]', title: 'Book a consult' }, `
+          <div class="h">Book a free 30-min consult</div>
+          ${grid(2, [cal, slots])}
+          ${state('After booking', '✓ You\'re booked: <b>Mon, Nov 2 · 2:00 PM</b> (30 min). ' + btn('Add to calendar') + '<br>A confirmation email is on its way.')}
+          ${state('Empty state', 'No open times this week. ' + btn('See next week →'))}`);
+      },
+      notes: [
+        { k: 'yellow', t: 'Like Calendly: buffer times and daily limits come from the planner\'s settings.' },
+        { k: 'sys', t: '→ System: adds to both calendars; reminders 24h and 1h before.' },
+      ],
+    },
+    {
+      kind: 'email', name: 'Proposal email (magic link)', route: '✉ Your proposal', snap: 'Wed Nov 4 (v2)',
+      from: 'Planner clicks "Send" in Proposal Builder', next: '"View your proposal" → Portal › Proposal (no password)',
+      render: d => msg(d, { type: 'email', from: '[Business]', to: 'ana@…', subject: 'Your proposal from [Business] (updated)',
+        body: '<span>Hi Ana! As you asked, photo magnets are now an optional add-on. Total: <b>$14,850</b>.</span>' + X(d === 'phone' ? 50 : 60, 'event photo'),
+        cta: 'View your proposal', foot: 'This private link expires in 7 days.' }),
+      notes: [
+        { k: 'sys', t: '→ System: magic link = signed one-time token; tracks when the proposal is opened.' },
+      ],
+    },
+    {
+      name: 'Portal › Proposal', route: 'Portal › Proposal', url: 'events.yourbiz.com/portal/proposal', snap: 'Thu Nov 5',
+      from: '✉ proposal email', next: 'Accept → Portal › Contract · Request changes → planner\'s Proposal Builder · Ask a question → Messages',
+      render: d => shell(d, { ...PRE, active: 'Proposal', title: 'Your proposal' }, `
+        ${steps(BOOK_STEPS, 0)}
+        ${row(pill('v2 · updated Nov 4'), '<span class="muted">from [Business]</span>')}
+        ${X(d === 'phone' ? 60 : 70, 'event photo')}
+        ${grid(2, [
+          card('Gold package · $11,000', lines(2) + grid(3, [X(28), X(28), X(28)], 'keep')),
+          card('Included add-ons', list(['Photo booth (4 hrs) · $1,500', 'Karaoke + KJ (3 hrs) · $900', '140 chairs · $350'])),
+        ])}
+        ${card('Optional upgrades', chk('Photo magnets +$600') + chk('Extra karaoke hour +$250'))}
+        ${row('<span class="big">Total $14,850</span>', '<span class="muted">incl. 8% tax</span>')}
+        ${row(btn('Ask a question'), btn('Request changes'), btn('Accept proposal', 'primary'))}
+        ${state('Error state', 'This link has expired. ' + btn('Send me a new link') + '<br><span class="muted">We only send it to the email on file.</span>', 'warn')}`),
+      notes: [
+        { k: 'yellow', t: 'Before the deposit, Home / Guests / Approvals are shown locked so Ana sees what\'s coming. Messages stays open.' },
+        { k: 'sys', t: '→ System (proposal.accepted): contract generated from the template with merge fields filled.' },
+      ],
+    },
+    {
+      name: 'Portal › Contract', route: 'Portal › Contract', url: 'events.yourbiz.com/portal/contract', snap: 'Thu Nov 5, 4:12 PM',
+      from: 'Accept on Portal › Proposal', next: 'Sign → "Continue to payment" → Portal › Pay (same sitting)',
+      render: d => shell(d, { ...PRE, active: 'Proposal', title: 'Sign your contract' }, `
+        ${steps(BOOK_STEPS, 1)}
+        <div class="doc"><b>Event Services Agreement</b>${lines(4)}<b>Cancellation policy</b>${lines(2)}${btn('Download PDF')}</div>
+        ${chk('I agree to sign electronically')}
+        ${seg(['Type', 'Draw'], 0)}
+        ${field('Type your full name', 'Ana Rivera', 'sig')}
+        ${btn('Sign contract', 'primary')}
+        ${state('After signing', '✓ Signed! Last step: pay your <b>$4,455</b> deposit to lock your date. ' + btn('Continue to payment →', 'primary'))}
+        ${state('Small screen', 'Typed signature is the default on phones. Tap <b>Draw</b> to switch to landscape draw mode.')}`),
+      notes: [
+        { k: 'sys', t: '→ System (contract.client_signed): stores signed PDF, creates invoice + payment schedule, asks planner to countersign.' },
+      ],
+    },
+    {
+      name: 'Portal › Pay', route: 'Portal › Pay', url: 'events.yourbiz.com/portal/pay', snap: 'Thu Nov 5, 4:14 PM',
+      from: 'Contract "Continue to payment" / 💬 payment reminder / Payments "Pay"', next: 'Pay → ✉ receipt + welcome → portal unlocks',
+      render: d => shell(d, { ...PRE, active: 'Payments', title: 'Pay deposit' }, `
+        ${steps(BOOK_STEPS, 2)}
+        ${card('Deposit due today', '<span class="big">$4,455</span>')}
+        <table class="tbl"><tr><th>Payment</th><th>Due</th><th>Amount</th></tr>
+          <tr><td>Deposit 30%</td><td>Today</td><td>$4,455</td></tr>
+          <tr><td>Payment 2 · 40%</td><td>Apr 13</td><td>$5,940</td></tr>
+          <tr><td>Final · 30%</td><td>May 29</td><td>$4,455</td></tr></table>
+        ${seg(['Card', 'Apple Pay', 'Bank (ACH)'], 0)}
+        ${grid(2, [field('Card number', '•••• •••• •••• ____'), field('Exp · CVC', '__/__ · ___')])}
+        ${chk('Turn on autopay for future payments')}
+        ${btn('Pay $4,455', 'primary')}
+        ${state('After paying', '✓ Paid $4,455. Your date is locked! Receipt emailed. ' + btn('Go to your portal →', 'primary'))}
+        ${state('Error state', '✗ Your card was declined. Nothing was charged. ' + row(btn('Try again'), btn('Use another method')), 'warn')}`),
+      notes: [
+        { k: 'yellow', t: 'Payments not connected? Only "pay by check/cash" shows here.' },
+        { k: 'sys', t: '→ System (payment.succeeded): receipt email, planner alerted to countersign, portal unlocks. Planner alerted after 2 failures.' },
+      ],
+    },
+    {
+      kind: 'email', name: 'Receipt + welcome', route: '✉ Your date is locked', snap: 'Thu Nov 5, 4:15 PM',
+      from: 'Deposit paid', next: '"Open your portal" → Portal › Home (first visit: 3-screen tour)',
+      render: d => msg(d, { type: 'email', from: '[Business]', to: 'ana@…', subject: 'Your date is locked! Receipt for $4,455',
+        body: list(['Deposit: $4,455 · Visa ••4242', 'Next payment: $5,940 on Apr 13', 'Your planning portal is now open']),
+        cta: 'Open your portal', foot: 'Tip: set up a passkey so you can skip email links next time (optional).' }),
+      notes: [
+        { k: 'yellow', t: 'Ana\'s first portal visit shows a 3-screen tour.' },
+      ],
+    },
+    {
+      name: 'Portal › Home', route: 'Portal › Home', url: 'events.yourbiz.com/portal', snap: 'Snapshot: Tue Nov 10',
+      from: '✉ welcome email / any portal link', next: 'Each action item → Questionnaire / Approvals / Guests · Pay now → Pay',
+      render: d => shell(d, { ...C, active: 'Home', title: 'Home' }, `
+        ${grid(2, [tile('214', 'days until your wedding'), card('Next payment', '$5,940 · Apr 13 ' + btn('Pay now'))])}
+        ${card('Needs your action (3)', list([`☐ Fill "Wedding details" questionnaire ${btn('Start')}`, `☐ Approve save-the-date wording ${btn('Review')}`, `☐ Add your guests ${btn('Add')}`]))}
+        ${card('Messages', '<span><b>[Business]:</b> Tasting is set for Sat Nov 14!</span>' + btn('Reply'))}
+        ${state('Empty state', '✓ You\'re all caught up. Nothing needs you right now.')}`),
+      notes: [
+        { k: 'yellow', t: 'Answers "what\'s next and what do I owe?" Every action item links straight to the screen that finishes it.' },
+      ],
+    },
+    {
+      name: 'Portal › Questionnaire', route: 'Portal › Questionnaire', url: 'events.yourbiz.com/portal/questionnaire/wedding-details', snap: 'Snapshot: Nov 12',
+      from: 'Home "Needs your action" / ✉ "Please fill this out" from planner (Tasks "Send")', next: 'Submit → back to Home · answers appear on the planner\'s Event Hub Overview',
+      render: d => shell(d, { ...C, active: 'Home', title: 'Wedding details' }, `
+        ${steps(['Couple', 'Ceremony', 'Music', 'Vendors'], 1)}
+        <div class="h">Section 2 of 4 · Ceremony</div>
+        ${grid(2, [field('Ceremony start', '4:00 PM'), field('Officiant', 'Rev. Lopez'), field('Processional song', 'Canon in D'), field('Readers', 'Lucia, Jorge')])}
+        ${field('Anything we should know?', 'Abuela uses a wheelchair, so front row aisle seat please', 'tall')}
+        ${row(btn('Save & finish later'), '<span class="spacer"></span>', btn('Next section →', 'primary'))}
+        ${state('After submit', '✓ Sent to [Business]. Your answers fill in your event details. ' + btn('Back to Home'))}`),
+      notes: [
+        { k: 'yellow', t: 'Was missing in round 1. Saves after every field, so Ana can stop and come back.' },
+        { k: 'sys', t: '→ System: answers populate event fields (ceremony time, music lists…) and mark the planner\'s task done.' },
+      ],
+    },
+    {
+      name: 'Portal › Mood Board', route: 'Portal › Mood Board', url: 'events.yourbiz.com/portal/mood-board', snap: 'Snapshot: Nov 20',
+      from: 'Sidebar "Mood Board" / ✉ "New ideas on your mood board" email', next: 'Comment or upload → planner sees it in Event Hub › Files · Approve board → Approvals log',
+      render: d => shell(d, { ...C, active: 'Mood Board', title: 'Mood Board' }, `
+        ${row('<b>Garden</b>', pill('Awaiting your approval'), '<span class="spacer"></span>', btn('+ Upload photo'), btn('+ Pinterest link'))}
+        ${row('Colors:', pill('sage'), pill('blush'), pill('ivory'))}
+        ${grid(3, [
+          card('', X(50, 'peony centerpiece') + '<span class="muted">[Business]: centerpiece idea</span><span><b>Ana:</b> Love these!</span>'),
+          card('', X(50, 'arch') + '<span class="muted">[Business]: ceremony arch</span>' + btn('Comment')),
+          card('', X(50, 'pinterest pin') + '<span class="muted">Ana: from Pinterest ↗</span>' + btn('Comment')),
+        ])}
+        ${row(btn('Approve board', 'primary'), btn('Request changes'))}
+        ${state('Empty state', 'No ideas yet. Add a photo or paste a Pinterest link to get started.')}`),
+      notes: [
+        { k: 'yellow', t: 'Was a gap in round 2: the portal menu had no Mood Board. Added to the menu (locked before the deposit).' },
+        { k: 'sys', t: '→ System: comments and uploads show up on the planner\'s Event Hub › Files board; approval is logged.' },
+      ],
+    },
+    {
+      name: 'Portal › Approvals', route: 'Portal › Approvals', url: 'events.yourbiz.com/portal/approvals', snap: 'Snapshot: mid-April 2027',
+      from: 'Sidebar / Home "Needs your action" / ✉ "Please approve" email', next: 'Approve / Request changes → logged; planner notified',
+      render: d => shell(d, { ...C, active: 'Approvals', title: 'Approvals' }, `
+        ${card('Waiting on you', `<div class="member"><b>Menu v2</b><span class="muted">Ana ✓ approved · Marco requested changes: "more veg options"</span>
+          ${row(btn('Approve', 'primary'), btn('Request changes'))}</div>`)}
+        ${card('Done', list(['✓ Save-the-date wording · Ana · Nov 12', '✓ Invitation wording · Ana · Feb 20', '✓ Timeline draft · Marco · Mar 30']))}
+        ${card('Coming up', list(['🔒 Final headcount · opens Jun 5']), 'dim')}
+        ${state('Edge case', 'Co-hosts disagree on Menu v2 → [Business] decides. Nothing moves forward automatically.')}`),
+      notes: [
+        { k: 'yellow', t: 'Split out of Home in this round (it\'s its own screen in the P1 inventory).' },
+        { k: 'sys', t: '→ System: logs who approved what and when.' },
+      ],
+    },
+    {
+      kind: 'sms', name: 'Payment reminder', route: '💬 Payment 2 reminder', snap: 'Tue Apr 6 (7 days before)',
+      from: 'Automatic: 7 days and 1 day before each due date', next: 'Tap link → Portal › Pay (Payment 2)',
+      render: d => msg(d, { type: 'sms', from: '[Business]', when: 'Apr 6, 10:00 AM',
+        body: 'Hi Ana! Payment 2 ($5,940) for your Jun 12 wedding is due Apr 13. Pay here: yourbiz.link/p/rv2 · Reply STOP to opt out' }),
+      notes: [
+        { k: 'yellow', t: 'Also sent by email. Autopay clients get a "we\'ll charge your card on Apr 13" notice instead.' },
+      ],
+    },
+    {
+      name: 'Portal › Payments', route: 'Portal › Payments', url: 'events.yourbiz.com/portal/payments', snap: 'Snapshot: mid-April 2027',
+      from: 'Sidebar / Home "Next payment" / change order in Messages', next: 'Pay → Portal › Pay · Approve change order → invoice updates',
+      render: d => shell(d, { ...C, active: 'Payments', title: 'Payments' }, `
+        ${card('Balance', '<span><span class="big">$4,455</span> left of $14,850</span><div class="bar"><i style="width:70%"></i></div><span class="muted">70% paid</span>')}
+        <table class="tbl"><tr><th>Payment</th><th>Due</th><th>Amount</th><th></th></tr>
+          <tr><td>Deposit</td><td>Nov 5</td><td>$4,455</td><td>✓ <u>Receipt</u></td></tr>
+          <tr><td>Payment 2</td><td>Apr 13</td><td>$5,940</td><td>✓ <u>Receipt</u></td></tr>
+          <tr><td>Final</td><td>May 29</td><td>$4,455</td><td>${btn('Pay')}</td></tr></table>
+        ${row(btn('Pay full balance', 'primary'), btn('Pay ahead'), chk('Autopay on', true))}
+        ${card('Change order: +1 hr karaoke · +$250', row(btn('Approve', 'primary'), btn('Decline')) + '<span class="muted">Approving adds $250 to your final payment.</span>')}
+        ${row('<span class="muted">Need to cancel or postpone?</span>', btn('Request a change'))}
+        ${state('Edge case', 'Missed a payment? We remind you at +1 and +7 days. Questions? ' + btn('Message [Business]'))}`),
+      notes: [
+        { k: 'sys', t: '→ System: an approved change order updates the invoice and the final payment.' },
+      ],
+    },
+    {
+      name: 'Portal › Cancel or postpone', route: 'Portal › Cancel or postpone', url: 'events.yourbiz.com/portal/change-request', snap: 'Example: Sat Apr 10, 2027',
+      from: 'Portal › Payments "Request a change"', next: 'Send request → planner handles it in Reschedule event or Cancel event · back to Home',
+      render: d => shell(d, { ...C, active: 'Payments', title: 'Cancel or postpone' }, `
+        ${seg(['Postpone', 'Cancel'], 1)}
+        ${card('If you cancel today (63 days before)', `<table class="tbl">
+          <tr><td>You've paid</td><td>$10,395</td></tr><tr><td>Deposit (non-refundable)</td><td>−$4,455</td></tr>
+          <tr><td>Payment 2: 50% kept</td><td>−$2,970</td></tr><tr><th>Estimated refund</th><th>$2,970</th></tr></table>
+          <span class="muted">From your contract's cancellation policy. ${btn('Read policy')}</span>`)}
+        ${field('Tell [Business] what happened (optional)', 'Family emergency', 'tall')}
+        ${btn('Send cancellation request', 'primary')}
+        ${card('Postpone instead?', 'Pick preferred new dates; your payment dates move with the event. ' + btn('Switch to postpone'), 'dim')}
+        ${state('After sending', '✓ Request sent. [Business] will reply within 2 business days. <b>Nothing changes until they confirm.</b>')}`),
+      notes: [
+        { k: 'yellow', t: 'Was a gap in round 2. The refund is an estimate shown before submitting; the planner confirms it.' },
+        { k: 'sys', t: '→ System: creates a request on the planner\'s Dashboard alerts, linked to Reschedule / Cancel event.' },
+      ],
+    },
+    {
+      name: 'Portal › Guests', route: 'Portal › Guests', url: 'events.yourbiz.com/portal/guests',
+      from: 'Sidebar / Home "Add your guests"', next: 'Guests appear in the planner\'s Guest list → planner sends invitations',
+      render: d => shell(d, { ...C, active: 'Guests', title: 'Guests' }, `
+        ${grid(4, [tile('64', 'attending'), tile('8', 'declined'), tile('3', 'maybe'), tile('45', 'no reply')])}
+        ${row(btn('+ Add guest', 'primary'), btn('Import CSV'), btn('Invite co-host'))}
+        ${card('Households', list([
+          '<b>Rivera family</b> · 4 · +1 · ✓ Attending',
+          '<b>Garcia, Luis</b> · +1 · no reply',
+          '<b>Chen household</b> · 3 · Declined',
+        ]))}
+        ${state('Error state', '<b>Import preview:</b> 118 rows OK · 2 need fixes<br>Row 14: missing name · Row 57: bad email<br>'
+          + row(btn('Fix inline'), btn('Import 118 valid rows', 'primary')), 'warn')}`),
+      notes: [
+        { k: 'yellow', t: 'Co-host (partner or parent) can get the same or limited access.' },
+        { k: 'sys', t: '→ System: imports of 1,000+ rows run as a background job with a progress bar.' },
+      ],
+    },
+    {
+      name: 'Portal › Messages', route: 'Portal › Messages', url: 'events.yourbiz.com/portal/messages',
+      from: 'Sidebar / "Ask a question" on Proposal / ✉ new-message email', next: 'Reply · "Review" on a change order → Portal › Payments',
+      render: d => shell(d, { ...C, active: 'Messages', title: 'Messages' }, `
+        ${card('[Business]', chat([
+          ['them', 'Tasting is set for Sat Nov 14!'],
+          ['me', 'Can we add an extra hour of karaoke?'],
+          ['them', 'Yes! Sending a change order now.'],
+          ['sys', 'Change order: +$250 · ' + btn('Review')],
+        ]))}
+        ${row(btn('+ File'), '<span class="input" style="flex:1">Write a message…</span>', btn('Send', 'primary'))}
+        ${state('Edge case', 'Opened your link on a new device? We text a one-time code to the phone on file first.')}`),
+      notes: [
+        { k: 'yellow', t: 'One thread with the planner. Open even before booking, so Ana can ask questions about the proposal.' },
+      ],
+    },
+  ],
+},
+
+/* ---------------- GUEST ---------------- */
+{
+  id: 'guest',
+  title: 'Guest journey',
+  meta: 'Goal: RSVP fast. No account, no app download; a unique token in the link identifies them. Main device: Phone (mobile web).',
+  order: ['phone', 'tablet', 'desktop'],
+  flow: [
+    { t: '💬 Gets invitation text / email / QR' },
+    { t: 'Invitation' },
+    { t: 'Event Website', edge: ['Not on the list? → public: ask name; private: "Ask the host"'] },
+    { t: 'RSVP form', edge: ['Too many plus-ones? → blocked, polite note'] },
+    { t: 'Confirmation' },
+    { t: '✉ Confirmation email (edit link)', edge: ['After cutoff? → "RSVPs closed" + message host'] },
+    { t: '✉ One week to go reminder' },
+  ],
+  screens: [
+    {
+      kind: 'sms', name: 'Invitation text', route: '💬 Invitation', snap: 'Mon Mar 1, 9:00 AM',
+      from: 'Planner schedules invitations (Event Hub › Guests › Invitations)', next: 'Tap link → Invitation',
+      render: d => msg(d, { type: 'sms', from: '[Business] for Ana & Marco', when: 'Mar 1, 9:00 AM',
+        body: 'Lucia, you\'re invited to Ana & Marco\'s wedding on Sat, June 12! Details & RSVP: yourbiz.link/i/abc123',
+        preview: 'Ana &amp; Marco · June 12, 2027' }),
+      notes: [
+        { k: 'yellow', t: 'Same invite also goes by email; paper invites carry a QR to the same link.' },
+        { k: 'sys', t: '→ System: the link carries Lucia\'s guest token (no login). Tracks delivered / opened.' },
+      ],
+    },
+    {
+      name: 'Invitation (basic, P1)', route: 'Invitation', url: 'events.yourbiz.com/i/abc123',
+      from: '💬 invitation text / email / QR on paper invite', next: '"View details & RSVP" → Event Website',
+      render: d => {
+        const photo = X(d === 'phone' ? 110 : 150, 'couple photo');
+        const text = `<div class="col center">
+          <span class="muted">Together with their families</span>
+          <span class="big">Ana &amp; Marco</span>
+          <span>invite you to celebrate their wedding</span>
+          <b>Saturday, June 12, 2027 · 4 PM</b>
+          <span>Hacienda Venue · San Antonio, TX</span>
+          ${btn('View details & RSVP', 'primary')}
+          <span class="muted">Please reply by May 1</span></div>`;
+        return shell(d, G, d === 'desktop' ? grid(2, [photo, text]) : photo + text);
+      },
+      notes: [
+        { k: 'yellow', t: 'P1 = simple branded template. P3 adds the designer, animated envelope and music (with Skip).' },
+      ],
+    },
+    {
+      name: 'Event Website', route: 'Event Website', url: 'events.yourbiz.com/rivera',
+      from: 'Invitation "View details & RSVP" / planner "Preview as guest"', next: 'RSVP → RSVP form · Honeyfund ↗ opens in a new tab',
+      render: d => {
+        const cards = [
+          card('When & where', 'Sat, Jun 12 · 4 PM<br>Hacienda Venue' + X(46, 'map') + row(btn('Add to calendar'), btn('Directions'))),
+          card('Schedule', list(['4:00 Ceremony', '5:00 Cocktails + photo booth', '6:30 Dinner', '8:30 Karaoke'])),
+          card('Dress code', 'Garden formal'),
+          card('Hotel block', 'Riverwalk Inn · code RIVERA ' + btn('Book')),
+          card('FAQ', lines(3)),
+          card('Honeymoon fund', '<span class="muted">Opens Honeyfund in a new tab</span>' + btn('Honeyfund ↗')),
+        ];
+        return shell(d, G, `
+          ${d === 'phone' ? '' : '<nav class="hubtabs"><a class="on">Details</a><a>Schedule</a><a>Travel</a><a>FAQ</a><a>Fund</a></nav>'}
+          ${grid(2, cards)}
+          ${d === 'phone' ? `<div class="stickybar"><b>Reply by May 1</b>${btn('RSVP', 'primary')}</div>` : row(btn('RSVP now', 'primary'), '<span class="muted">Reply by May 1</span>')}
+          ${state('Edge case', 'Opened from a public link and not on the list? Private event → "Ask the host". Public event → RSVP asks name + contact.')}`);
+      },
+      notes: [
+        { k: 'yellow', t: 'Sections and fund link come from the planner\'s Website & RSVP settings. Under 2 seconds on a phone; WCAG 2.1 AA; EN/ES.' },
+      ],
+    },
+    {
+      name: 'RSVP', route: 'RSVP', url: 'events.yourbiz.com/rivera/rsvp?t=abc123',
+      from: 'Event Website "RSVP" / ✉ confirmation "Change my RSVP"', next: 'Submit → Confirmation',
+      render: d => shell(d, G, `
+        <div class="h">Hi, Rivera household!</div>
+        <span class="muted">Please reply by May 1</span>
+        ${grid(2, [
+          card('Who\'s coming?', member('Lucia Rivera', true) + member('Jorge Rivera', false)),
+          card('Plus-one (1 allowed)', field('Guest name', 'Sam Torres') + select('Meal', 'Vegetarian')),
+        ])}
+        ${field('Allergies / dietary needs', 'Sam: tree nuts')}
+        ${field('Song request', '"September" by Earth, Wind & Fire')}
+        ${btn('Submit RSVP', 'primary')}
+        ${state('Error state', 'You can bring 1 guest. Need more? ' + btn('Message the host'), 'warn')}
+        ${state('Error state', 'RSVPs closed on May 1. ' + btn('Message the host'), 'warn')}`),
+      notes: [
+        { k: 'yellow', t: 'Name is prefilled from the link token. Meals, plus-ones and cutoff come from the planner\'s Website & RSVP settings.' },
+        { k: 'yellow', t: 'Forwarded link? RSVP stays tied to the original guest; host sees a flag.' },
+      ],
+    },
+    {
+      name: 'RSVP Confirmation', route: 'RSVP › Confirmation', url: 'events.yourbiz.com/rivera/rsvp/done',
+      from: 'Submit RSVP', next: 'Add to calendar · Honeyfund ↗ · ✉ confirmation email arrives',
+      render: d => shell(d, G, `
+        <div class="col center"><span class="big">✓ You're coming!</span><span>See you Saturday, June 12.</span></div>
+        ${card('Your reply', list(['Lucia · Attending · Chicken', 'Jorge · Not attending', 'Sam (guest) · Vegetarian · tree nuts']))}
+        ${row(btn('Add to calendar', 'primary'), btn('Directions'))}
+        ${grid(2, [
+          card('Honeymoon fund', 'Want to contribute? ' + btn('Honeyfund ↗')),
+          card('Bring a dish?', 'Only shows when potluck is on (Phase 2). ' + btn('Sign up'), 'dim'),
+        ])}
+        <span class="muted">Need to change something? Use the link in your confirmation email until May 1.</span>`),
+      notes: [
+        { k: 'sys', t: '→ System (rsvp.updated): headcount, meals, seating pool and potluck targets update; confirmation email/text; host notified if set.' },
+      ],
+    },
+    {
+      kind: 'email', name: 'RSVP confirmation email', route: '✉ RSVP confirmed',
+      from: 'RSVP submitted', next: '"Change my RSVP" → RSVP form (until May 1) · Add to calendar',
+      render: d => msg(d, { type: 'email', from: '[Business] for Ana & Marco', to: 'lucia@…', subject: 'You\'re confirmed for Ana & Marco\'s wedding',
+        body: list(['Lucia · Attending · Chicken', 'Jorge · Not attending', 'Sam (guest) · Vegetarian']) + btn('Add to calendar'),
+        cta: 'Change my RSVP', foot: 'You can change your reply until May 1. A reminder with directions comes 1 week before.' }),
+      notes: [
+        { k: 'yellow', t: 'This email is how a guest gets back to their RSVP later. No account needed.' },
+      ],
+    },
+    {
+      kind: 'email', name: 'Guest reminder (one week to go)', route: '✉ One week to go', snap: 'Sat Jun 5, 9:00 AM',
+      from: 'Automatic: 1 week before (and a short text 1 day before)', next: '"Directions" → maps · "Event details" → Event Website',
+      render: d => msg(d, { type: 'email', from: '[Business] for Ana & Marco', to: 'lucia@…', subject: 'One week to go: Ana & Marco\'s wedding',
+        body: '<span>See you <b>Saturday, June 12 at 4 PM</b>!</span>'
+          + list(['Where: Hacienda Venue · parking in Lot B', 'Dress code: Garden formal', 'Ceremony starts at 4:00 PM sharp'])
+          + X(d === 'phone' ? 46 : 56, 'map') + btn('Event details'),
+        cta: 'Directions', foot: 'Day before: a short text reminder. Bringing a potluck dish (Phase 2)? We\'ll say whether to bring it hot or cold.' }),
+      notes: [
+        { k: 'yellow', t: 'Was a gap in round 2. Day-before text: "See you tomorrow at 4 PM! Directions: yourbiz.link/d/rivera".' },
+        { k: 'sys', t: '→ System: scheduled per event; skipped for guests who declined; respects STOP opt-outs.' },
+      ],
+    },
+  ],
+},
+
+/* ---------------- STAFF (Phase 1 part only) ---------------- */
+{
+  id: 'staff',
+  title: 'Staff journey (Phase 1: join the team)',
+  meta: 'Goal: get access with no fuss. Big buttons, few choices. Main device: Phone (mobile app). The spec says staff are mobile-only; tablet and desktop are drawn for completeness.',
+  order: ['phone', 'tablet', 'desktop'],
+  flow: [
+    { t: '💬 Gets team invite' },
+    { t: 'Downloads the app' },
+    { t: 'Signs in with phone code', edge: ['Lost phone? → owner revokes sessions'] },
+    { t: 'Fills Profile', edge: ['Leaves? → owner deactivates; history kept'] },
+    { t: 'My Shifts (Phase 2)' },
+  ],
+  screens: [
+    {
+      kind: 'sms', name: 'Team invite text', route: '💬 Team invite',
+      from: 'Owner clicks "Invite staff" in Settings › Team & roles', next: 'Tap link → Staff Invite + Sign In',
+      render: d => msg(d, { type: 'sms', from: '[Business]', when: 'Nov 6, 2:00 PM',
+        body: 'Hi Sam! [Business] added you to the team as Photo booth attendant. Join here: yourbiz.link/j/xyz789' }),
+      notes: [
+        { k: 'yellow', t: 'Can also go by email. The link knows which business and role Sam was invited to.' },
+      ],
+    },
+    {
+      name: 'Staff Invite + Sign In', route: 'Invite', url: 'events.yourbiz.com/join/xyz789',
+      from: '💬 team invite text', next: 'Download app → sign in with code → Profile',
+      render: d => shell(d, { title: '[Business] Team' }, `
+        <div class="col center">
+          <span class="big">You're invited!</span>
+          <span>[Business] added you as <b>Photo booth attendant</b>.</span>
+        </div>
+        <div class="h">1. Get the app</div>
+        ${row(btn('Download for iPhone'), btn('Download for Android'))}
+        <div class="h">2. Sign in with your phone</div>
+        ${field('Phone number', '(210) 555-0134')}
+        ${btn('Text me a code', 'primary')}
+        ${field('6-digit code', '_ _ _ _ _ _')}
+        ${state('Error state', 'That code expired or doesn\'t match. ' + btn('Send a new code'), 'warn')}`),
+      notes: [
+        { k: 'sys', t: '→ System: links the staff member to the business with the role the owner set.' },
+        { k: 'yellow', t: 'No password to remember. Phone number + SMS code only.' },
+      ],
+    },
+    {
+      name: 'Staff Profile', route: 'Profile', url: 'app/staff/profile',
+      from: 'First sign-in / tab bar "Profile"', next: 'Save → wait for shifts (My Shifts unlocks in Phase 2)',
+      render: d => {
+        const left = `<div class="col">
+          ${row('<div class="ph avatar-ph"><span>photo</span></div>', `<div class="col" style="flex:1">${field('Name', 'Sam Diaz')}${field('Phone', '(210) 555-0134')}</div>`)}
+          ${field('Role (set by owner)', 'Photo booth attendant (locked)')}
+          ${select('Shirt size', 'M')}</div>`;
+        const right = `<div class="col">
+          ${card('Emergency contact', field('Name', 'Rosa Diaz') + field('Phone', '(210) 555-0188'))}
+          ${card('Skills', grid(2, [chk('Photo booth', true), chk('KJ'), chk('Bartending'), chk('Serving', true), chk('Coordinator')]))}</div>`;
+        return shell(d, { nav: 'staff', active: 'Profile', title: 'My Profile', locked: ['My Shifts', 'Day-of', 'Chat'], lockNote: 'Coming in Phase 2' }, `
+          ${d === 'phone' ? left + right : grid(2, [left, right])}
+          ${btn('Save profile', 'primary')}
+          ${state('Empty state', 'No shifts yet. Your schedule shows up in My Shifts once the owner assigns you (Phase 2).')}`);
+      },
+      notes: [
+        { k: 'yellow', t: 'My Shifts / Day-of / Chat are shown locked: they arrive in Phase 2, so P1 has no dead-end tabs.' },
+        { k: 'yellow', t: 'Staff never see money unless the owner grants it.' },
+      ],
+    },
+  ],
+},
+];
+
+/* =========================================================
+   Render everything into #app
+   ========================================================= */
+const DEVICE_LABEL = { desktop: 'Desktop · 1280px', tablet: 'Tablet · 820px', phone: 'Phone · 390px' };
+
+function frame(d, screen, isMain) {
+  const chrome = d === 'desktop'
+    ? `<div class="browser"><i></i><i></i><i></i><span class="url">${screen.url || (screen.kind === 'email' ? 'mail' : screen.kind === 'sms' ? 'messages' : 'notification')}</span></div>`
+    : d === 'phone' ? '<div class="notch"></div>' : '';
+  const label = isMain ? `<span class="main-dev">★ ${DEVICE_LABEL[d]} (main)</span>` : DEVICE_LABEL[d];
+  // The 3 frames show the same screen; screen readers only need the main one.
+  return `<figure class="frame ${d}"${isMain ? '' : ' aria-hidden="true"'}><figcaption>${label}</figcaption>
+    <div class="bezel">${chrome}<div class="screen">${screen.render(d)}</div></div></figure>`;
+}
+
+function renderJourney(j) {
+  const flow = j.flow.map((s, i) =>
+    (i ? '<div class="arrow">→</div>' : '') +
+    `<div class="fcol"><div class="step ${i === 0 ? 'start' : ''}">${s.t}</div>` +
+    (s.edge || []).map(e => `<div class="dline"></div><div class="diamond"><div>${e}</div></div>`).join('') +
+    '</div>').join('');
+
+  const screens = j.screens.map((s, i) => `
+    <div class="screen-row">
+      <h3 class="screen-head"><span class="num">${i + 1}</span>${s.kind ? `<span class="kind">${MSG_TAG[s.kind]}</span>` : ''}${s.name} <code>${s.route}</code>${s.snap ? `<span class="snap">${s.snap}</span>` : ''}</h3>
+      <div class="path"><span>⬅ Arrives from: ${s.from}</span><span>➡ Next: ${s.next}</span></div>
+      <div class="scroll-hint">⇠ scroll sideways to see all 3 devices ⇢</div>
+      <div class="devices">${j.order.map((d, k) => frame(d, s, k === 0)).join('')}</div>
+      <div class="notes">${(s.notes || []).map(n => `<div class="sticky ${n.k}">${n.t}</div>`).join('')}</div>
+    </div>`).join('');
+
+  return `<section class="journey" id="${j.id}">
+    <h2>${j.title}</h2>
+    <div class="meta">${j.meta}</div>
+    <div class="flow-wrap"><div class="flow">${flow}</div></div>
+    ${screens}
+  </section>`;
+}
+
+document.getElementById('app').innerHTML = JOURNEYS.map(renderJourney).join('');
+document.getElementById('jump').innerHTML = JOURNEYS.map(j => `<a href="#${j.id}">${j.title}</a>`).join('');
+
+/* Tab strips on a tablet or phone can be wider than the screen. Instead of silently cutting tabs off,
+   fold the extra ones into a "More (n) ▾" item at the end. The active tab is never folded. */
+function foldOverflowingTabs() {
+  for (const strip of document.querySelectorAll('.screen nav.tabs, .screen .hubtabs, .screen .seg')) {
+    if (strip.scrollWidth <= strip.clientWidth + 1) continue;
+    const more = document.createElement(strip.matches('.seg') ? 'span' : 'a');
+    more.className = 'more-tab';
+    more.textContent = 'More ▾';
+    strip.appendChild(more);
+    const foldable = [...strip.children].filter(el => el !== more && !el.classList.contains('on'));
+    let folded = 0;
+    while (strip.scrollWidth > strip.clientWidth + 1 && foldable.length) {
+      foldable.pop().hidden = true;            // fold from the end
+      more.textContent = `More (${++folded}) ▾`;
+    }
+  }
+}
+// Wait for the fonts, because text width decides what fits.
+(document.fonts ? document.fonts.ready : Promise.resolve()).then(foldOverflowingTabs);
+</script>
+</body>
+</html>

@@ -1,0 +1,951 @@
+[
+  {
+    "journey": "planner",
+    "index": 0,
+    "name": "Sign Up",
+    "route": "Sign Up",
+    "url": "app/signup",
+    "kind": null,
+    "snap": null,
+    "from": "Planner's marketing site \"Start free\"",
+    "next": "Create account → Onboarding Wizard",
+    "notes": [
+      {
+        "kind": "sys",
+        "text": "→ System: creates a tenant (business account) with this user as Owner. Every query is scoped by tenant ID."
+      },
+      {
+        "kind": "yellow",
+        "text": "Owner needs a passkey or 2FA (lost-phone edge case)."
+      }
+    ]
+  },
+  {
+    "journey": "planner",
+    "index": 1,
+    "name": "Onboarding Wizard",
+    "route": "Onboarding",
+    "url": "app/onboarding/payments",
+    "kind": null,
+    "snap": null,
+    "from": "Sign Up",
+    "next": "Finish or \"Skip for now\" → Dashboard (resume from its checklist)",
+    "notes": [
+      {
+        "kind": "yellow",
+        "text": "Skippable and resumable. Step 3 (Packages) creates the Silver / Gold / Platinum packages used in proposals."
+      },
+      {
+        "kind": "yellow",
+        "text": "Same forms are reused later in Settings (Business, Branding, Packages, Payments, Calendar, Templates)."
+      }
+    ]
+  },
+  {
+    "journey": "planner",
+    "index": 2,
+    "name": "Dashboard",
+    "route": "Dashboard",
+    "url": "app/dashboard",
+    "kind": null,
+    "snap": "Snapshot: Thu Nov 5, evening",
+    "from": "Onboarding / log in / sidebar",
+    "next": "Tap an alert → Contract (countersign) or Leads; tap an event → Event Hub",
+    "notes": [
+      {
+        "kind": "yellow",
+        "text": "Answers \"what needs me today?\", which is success metric #1 in the spec. Every alert links to the screen that fixes it."
+      }
+    ]
+  },
+  {
+    "journey": "planner",
+    "index": 3,
+    "name": "Calendar",
+    "route": "Calendar",
+    "url": "app/calendar?view=month",
+    "kind": null,
+    "snap": null,
+    "from": "Sidebar",
+    "next": "Tap an event → Event Hub · tap a hold → Lead Detail · Week/Day = same data, closer zoom",
+    "notes": [
+      {
+        "kind": "yellow",
+        "text": "Real app color-codes by event type and status. Lo-fi uses labels and dashed borders for holds."
+      },
+      {
+        "kind": "sys",
+        "text": "→ System: 2-way sync with Google/Apple/Outlook; holds auto-expire; conflict checks for you, staff and travel time."
+      }
+    ]
+  },
+  {
+    "journey": "planner",
+    "index": 4,
+    "name": "New lead notification",
+    "route": "🔔 lead.created",
+    "url": null,
+    "kind": "push",
+    "snap": "Wed Oct 28, 9:41 AM",
+    "from": "Ana submits the Inquiry Form (Client journey #1)",
+    "next": "Tap → Lead Detail (Rivera)",
+    "notes": [
+      {
+        "kind": "sys",
+        "text": "→ System (lead.created): push + dashboard card + calendar conflict check + auto-reply to Ana."
+      }
+    ]
+  },
+  {
+    "journey": "planner",
+    "index": 5,
+    "name": "Leads (kanban)",
+    "route": "Leads",
+    "url": "app/leads",
+    "kind": null,
+    "snap": "Snapshot: Oct 28",
+    "from": "Sidebar / 🔔 new-lead push / Dashboard alert",
+    "next": "Tap a card → Lead Detail · drag card to change stage",
+    "notes": [
+      {
+        "kind": "yellow",
+        "text": "Cards move automatically: proposal sent → \"Proposal sent\"; contract signed → \"Won\"."
+      }
+    ]
+  },
+  {
+    "journey": "planner",
+    "index": 6,
+    "name": "Lead Detail",
+    "route": "Lead Detail",
+    "url": "app/leads/rivera",
+    "kind": null,
+    "snap": "Snapshot: Oct 28",
+    "from": "Leads card / 🔔 push",
+    "next": "Send booking link → ✉ to Ana · after the consult: Create Proposal → Proposal Builder",
+    "notes": [
+      {
+        "kind": "yellow",
+        "text": "\"Send canned reply\" opens an editable template in Messages. \"Create Proposal\" carries all lead data over. No retyping."
+      },
+      {
+        "kind": "sys",
+        "text": "→ System: a date hold blocks the calendar and auto-expires after X days."
+      }
+    ]
+  },
+  {
+    "journey": "planner",
+    "index": 7,
+    "name": "Proposal Builder",
+    "route": "Proposal Builder",
+    "url": "app/proposals/rivera",
+    "kind": null,
+    "snap": "Snapshot: Nov 4 (making v2)",
+    "from": "Lead Detail \"Create Proposal\" / Ana's \"Request changes\"",
+    "next": "Send → ✉ \"Your proposal\" email to Ana (Client journey) · lead moves to \"Proposal sent\"",
+    "notes": [
+      {
+        "kind": "yellow",
+        "text": "◇ = optional upgrade the client can tick in their portal. Totals exclude unticked upgrades."
+      },
+      {
+        "kind": "sys",
+        "text": "→ System: checks gear availability on Jun 12; keeps every version; the client always sees the latest."
+      }
+    ]
+  },
+  {
+    "journey": "planner",
+    "index": 8,
+    "name": "Contract (countersign)",
+    "route": "Contract",
+    "url": "app/contracts/rivera",
+    "kind": null,
+    "snap": "Snapshot: Nov 5, 4:30 PM",
+    "from": "Dashboard alert \"Rivera signed + paid deposit\"",
+    "next": "Countersign → event becomes Booked → Go to Event Hub (or Invoice)",
+    "notes": [
+      {
+        "kind": "sys",
+        "text": "→ System (contract.countersigned): Event → Booked, hold → booking, gear reserved, checklist applied, welcome email. (Invoice + deposit already happened when Ana signed.)"
+      },
+      {
+        "kind": "yellow",
+        "text": "Signed PDF stored with timestamps for both parties."
+      }
+    ]
+  },
+  {
+    "journey": "planner",
+    "index": 9,
+    "name": "Invoice",
+    "route": "Invoice",
+    "url": "app/invoices/1042",
+    "kind": null,
+    "snap": "Snapshot: Nov 5, after the deposit",
+    "from": "Contract \"View invoice\" / Event Hub › Money \"Open invoice\"",
+    "next": "Send reminder / Record payment · back → Event Hub › Money",
+    "notes": [
+      {
+        "kind": "sys",
+        "text": "→ System (contract.client_signed): invoice + schedule created when Ana signs. Reminders 7 days and 1 day before each due date."
+      },
+      {
+        "kind": "yellow",
+        "text": "Payment status always comes from Stripe/Square webhooks, never from the browser."
+      }
+    ]
+  },
+  {
+    "journey": "planner",
+    "index": 10,
+    "name": "Events list",
+    "route": "Events",
+    "url": "app/events",
+    "kind": null,
+    "snap": "Snapshot: Nov 5, after countersigning",
+    "from": "Sidebar \"Events\"",
+    "next": "Tap an event → Event Hub › Overview · \"+ New event\" for events without a lead",
+    "notes": [
+      {
+        "kind": "yellow",
+        "text": "Was missing in round 1: the \"Events\" sidebar item led nowhere. Sorted by date; Calendar shows the same events."
+      }
+    ]
+  },
+  {
+    "journey": "planner",
+    "index": 11,
+    "name": "Event Hub › Overview",
+    "route": "Event Hub › Overview",
+    "url": "app/events/rivera",
+    "kind": null,
+    "snap": "Snapshot: mid-April 2027, 8 weeks out",
+    "from": "Events list / Contract \"Go to Event Hub\" / Calendar",
+    "next": "Tabs: Tasks · Guests · Money · Files · Messages · Change date → Reschedule · Cancel event → Cancel",
+    "notes": [
+      {
+        "kind": "yellow",
+        "text": "Status path: Inquiry → Proposal → Booked → In planning → Final week → Event day → Wrap-up → Closed."
+      },
+      {
+        "kind": "yellow",
+        "text": "Phase 2 tabs (Timeline, Vendors, Equipment…) slot into this same tab bar later."
+      }
+    ]
+  },
+  {
+    "journey": "planner",
+    "index": 12,
+    "name": "Reschedule event",
+    "route": "Event Hub › Reschedule",
+    "url": "app/events/rivera/reschedule",
+    "kind": null,
+    "snap": "Example: moving the wedding to Sat Jul 3 (mid-April)",
+    "from": "Event Hub › Overview \"Change date\" / client's postpone request (Portal › Cancel or postpone)",
+    "next": "Confirm → Event Hub › Overview with the new date · ✉ change notices to everyone checked",
+    "notes": [
+      {
+        "kind": "yellow",
+        "text": "Was a gap in round 2. Nothing changes until \"Confirm\"; every change is logged on the event."
+      },
+      {
+        "kind": "sys",
+        "text": "→ System (event.rescheduled): relative task and payment dates shift; staff, gear, vendors rechecked; everyone checked is notified."
+      }
+    ]
+  },
+  {
+    "journey": "planner",
+    "index": 13,
+    "name": "Cancel event",
+    "route": "Event Hub › Cancel",
+    "url": "app/events/rivera/cancel",
+    "kind": null,
+    "snap": "Example: cancelled Sat Apr 10, 2027 (63 days out)",
+    "from": "Event Hub › Overview \"Cancel event\" / client's cancel request (Portal › Cancel or postpone)",
+    "next": "Confirm → event archived (restorable 30 days) · refund on Invoice · Events list",
+    "notes": [
+      {
+        "kind": "yellow",
+        "text": "Was a gap in round 2. Destructive, so it asks you to type CANCEL (NFR-13)."
+      },
+      {
+        "kind": "sys",
+        "text": "→ System: refund through the processor; gear, staff and reminders released; event archived."
+      }
+    ]
+  },
+  {
+    "journey": "planner",
+    "index": 14,
+    "name": "Event Hub › Tasks",
+    "route": "Event Hub › Tasks",
+    "url": "app/events/rivera/tasks",
+    "kind": null,
+    "snap": "Snapshot: mid-April 2027",
+    "from": "Hub tab / Overview \"open tasks\"",
+    "next": "\"Send\" on a questionnaire task → ✉ to Ana → Portal › Questionnaire",
+    "notes": [
+      {
+        "kind": "yellow",
+        "text": "Due dates are relative to the event (\"30 days before\"). Client-assigned tasks show up in Ana's \"Needs your action\"."
+      },
+      {
+        "kind": "sys",
+        "text": "→ System (event.rescheduled): every relative due date shifts when the event date moves."
+      }
+    ]
+  },
+  {
+    "journey": "planner",
+    "index": 15,
+    "name": "Event Hub › Guests",
+    "route": "Event Hub › Guests",
+    "url": "app/events/rivera/guests",
+    "kind": null,
+    "snap": "Snapshot: mid-April 2027",
+    "from": "Hub tab",
+    "next": "Sub-tabs → Invitations / Website & RSVP · Lock final headcount (Jun 5, after Ana approves)",
+    "notes": [
+      {
+        "kind": "sys",
+        "text": "→ System (rsvp.updated / headcount.locked): counts update live; locking closes RSVPs and notifies vendors."
+      },
+      {
+        "kind": "yellow",
+        "text": "Plus-ones are set per household here, e.g. \"(+1)\". Allergies are never dropped on import/export."
+      }
+    ]
+  },
+  {
+    "journey": "planner",
+    "index": 16,
+    "name": "Event Hub › Guests › Website & RSVP",
+    "route": "Event Hub › Guests › Website & RSVP",
+    "url": "app/events/rivera/guests/website",
+    "kind": null,
+    "snap": "Snapshot: Feb 2027, before invitations",
+    "from": "Guests sub-tab",
+    "next": "Preview as guest → Event Website · Save → Invitations sub-tab",
+    "notes": [
+      {
+        "kind": "yellow",
+        "text": "Was missing in round 1: this is where the RSVP's meals, plus-ones, May 1 cutoff and fund link come from."
+      },
+      {
+        "kind": "yellow",
+        "text": "P1: fund = external link. In-app donations/funds come in Phase 4."
+      }
+    ]
+  },
+  {
+    "journey": "planner",
+    "index": 17,
+    "name": "Event Hub › Guests › Invitations",
+    "route": "Event Hub › Guests › Invitations",
+    "url": "app/events/rivera/guests/invitations",
+    "kind": null,
+    "snap": "Snapshot: Mar 1, 2027",
+    "from": "Guests sub-tab",
+    "next": "Request client approval → Portal › Approvals · Send → 💬 invitation text (Guest journey)",
+    "notes": [
+      {
+        "kind": "yellow",
+        "text": "Was missing in round 1. P1 = one simple branded template; the full Invitation Designer is Phase 3."
+      },
+      {
+        "kind": "sys",
+        "text": "→ System: tracks delivered / opened / responded per guest; honors STOP opt-outs."
+      }
+    ]
+  },
+  {
+    "journey": "planner",
+    "index": 18,
+    "name": "Event Hub › Money",
+    "route": "Event Hub › Money",
+    "url": "app/events/rivera/money",
+    "kind": null,
+    "snap": "Snapshot: mid-April 2027",
+    "from": "Hub tab",
+    "next": "Open invoice → Invoice · Add expense",
+    "notes": [
+      {
+        "kind": "yellow",
+        "text": "Hidden from staff unless the owner grants it. Profit is owner-only even then."
+      }
+    ]
+  },
+  {
+    "journey": "planner",
+    "index": 19,
+    "name": "Event Hub › Files + Mood Board",
+    "route": "Event Hub › Files",
+    "url": "app/events/rivera/files",
+    "kind": null,
+    "snap": null,
+    "from": "Hub tab",
+    "next": "Request approval → Portal › Approvals · Upload",
+    "notes": [
+      {
+        "kind": "yellow",
+        "text": "Each file is Shared (client sees it) or Private. Client can comment on the mood board and paste Pinterest links."
+      }
+    ]
+  },
+  {
+    "journey": "planner",
+    "index": 20,
+    "name": "Event Hub › Messages",
+    "route": "Event Hub › Messages",
+    "url": "app/events/rivera/messages",
+    "kind": null,
+    "snap": null,
+    "from": "Hub tab / 🔔 new-message push",
+    "next": "Reply · change order → Ana approves in Portal › Payments",
+    "notes": [
+      {
+        "kind": "yellow",
+        "text": "One thread with the client, one per vendor. The client never sees vendor threads unless you share."
+      }
+    ]
+  },
+  {
+    "journey": "planner",
+    "index": 21,
+    "name": "Settings › Team & roles",
+    "route": "Settings",
+    "url": "app/settings/team",
+    "kind": null,
+    "snap": null,
+    "from": "Sidebar",
+    "next": "Invite staff → 💬 team invite text (Staff journey) · other sections reuse the Onboarding forms",
+    "notes": [
+      {
+        "kind": "yellow",
+        "text": "Permissions are per person, not just per role (spec: coordinator can see budgets but not profit)."
+      },
+      {
+        "kind": "sys",
+        "text": "→ System: permissions are checked on the server for every request, not just by hiding buttons."
+      }
+    ]
+  },
+  {
+    "journey": "client",
+    "index": 0,
+    "name": "Inquiry Form",
+    "route": "Inquiry Form",
+    "url": "events.yourbiz.com/inquire",
+    "kind": null,
+    "snap": "Wed Oct 28",
+    "from": "Planner's website / Instagram / Facebook embed",
+    "next": "Send inquiry → ✉ auto-reply with booking link",
+    "notes": [
+      {
+        "kind": "yellow",
+        "text": "No account needed. Embeddable on the website, Instagram and Facebook."
+      },
+      {
+        "kind": "sys",
+        "text": "→ System (lead.created): creates a Lead, checks the date, sends the auto-reply, pushes to the planner."
+      }
+    ]
+  },
+  {
+    "journey": "client",
+    "index": 1,
+    "name": "Auto-reply with booking link",
+    "route": "✉ Inquiry auto-reply",
+    "url": null,
+    "kind": "email",
+    "snap": "Wed Oct 28, 9:41 AM",
+    "from": "Inquiry Form submitted",
+    "next": "\"Pick a consult time\" → Public Booking Page",
+    "notes": [
+      {
+        "kind": "yellow",
+        "text": "Planner can edit this template in Settings › Templates."
+      }
+    ]
+  },
+  {
+    "journey": "client",
+    "index": 2,
+    "name": "Public Booking Page",
+    "route": "Public Booking Page",
+    "url": "events.yourbiz.com/book",
+    "kind": null,
+    "snap": "Wed Oct 28",
+    "from": "✉ auto-reply \"Pick a consult time\" / Lead Detail \"Send booking link\"",
+    "next": "Book → confirmation + calendar invite · consult happens Nov 2",
+    "notes": [
+      {
+        "kind": "yellow",
+        "text": "Like Calendly: buffer times and daily limits come from the planner's settings."
+      },
+      {
+        "kind": "sys",
+        "text": "→ System: adds to both calendars; reminders 24h and 1h before."
+      }
+    ]
+  },
+  {
+    "journey": "client",
+    "index": 3,
+    "name": "Proposal email (magic link)",
+    "route": "✉ Your proposal",
+    "url": null,
+    "kind": "email",
+    "snap": "Wed Nov 4 (v2)",
+    "from": "Planner clicks \"Send\" in Proposal Builder",
+    "next": "\"View your proposal\" → Portal › Proposal (no password)",
+    "notes": [
+      {
+        "kind": "sys",
+        "text": "→ System: magic link = signed one-time token; tracks when the proposal is opened."
+      }
+    ]
+  },
+  {
+    "journey": "client",
+    "index": 4,
+    "name": "Portal › Proposal",
+    "route": "Portal › Proposal",
+    "url": "events.yourbiz.com/portal/proposal",
+    "kind": null,
+    "snap": "Thu Nov 5",
+    "from": "✉ proposal email",
+    "next": "Accept → Portal › Contract · Request changes → planner's Proposal Builder · Ask a question → Messages",
+    "notes": [
+      {
+        "kind": "yellow",
+        "text": "Before the deposit, Home / Guests / Approvals are shown locked so Ana sees what's coming. Messages stays open."
+      },
+      {
+        "kind": "sys",
+        "text": "→ System (proposal.accepted): contract generated from the template with merge fields filled."
+      }
+    ]
+  },
+  {
+    "journey": "client",
+    "index": 5,
+    "name": "Portal › Contract",
+    "route": "Portal › Contract",
+    "url": "events.yourbiz.com/portal/contract",
+    "kind": null,
+    "snap": "Thu Nov 5, 4:12 PM",
+    "from": "Accept on Portal › Proposal",
+    "next": "Sign → \"Continue to payment\" → Portal › Pay (same sitting)",
+    "notes": [
+      {
+        "kind": "sys",
+        "text": "→ System (contract.client_signed): stores signed PDF, creates invoice + payment schedule, asks planner to countersign."
+      }
+    ]
+  },
+  {
+    "journey": "client",
+    "index": 6,
+    "name": "Portal › Pay",
+    "route": "Portal › Pay",
+    "url": "events.yourbiz.com/portal/pay",
+    "kind": null,
+    "snap": "Thu Nov 5, 4:14 PM",
+    "from": "Contract \"Continue to payment\" / 💬 payment reminder / Payments \"Pay\"",
+    "next": "Pay → ✉ receipt + welcome → portal unlocks",
+    "notes": [
+      {
+        "kind": "yellow",
+        "text": "Payments not connected? Only \"pay by check/cash\" shows here."
+      },
+      {
+        "kind": "sys",
+        "text": "→ System (payment.succeeded): receipt email, planner alerted to countersign, portal unlocks. Planner alerted after 2 failures."
+      }
+    ]
+  },
+  {
+    "journey": "client",
+    "index": 7,
+    "name": "Receipt + welcome",
+    "route": "✉ Your date is locked",
+    "url": null,
+    "kind": "email",
+    "snap": "Thu Nov 5, 4:15 PM",
+    "from": "Deposit paid",
+    "next": "\"Open your portal\" → Portal › Home (first visit: 3-screen tour)",
+    "notes": [
+      {
+        "kind": "yellow",
+        "text": "Ana's first portal visit shows a 3-screen tour."
+      }
+    ]
+  },
+  {
+    "journey": "client",
+    "index": 8,
+    "name": "Portal › Home",
+    "route": "Portal › Home",
+    "url": "events.yourbiz.com/portal",
+    "kind": null,
+    "snap": "Snapshot: Tue Nov 10",
+    "from": "✉ welcome email / any portal link",
+    "next": "Each action item → Questionnaire / Approvals / Guests · Pay now → Pay",
+    "notes": [
+      {
+        "kind": "yellow",
+        "text": "Answers \"what's next and what do I owe?\" Every action item links straight to the screen that finishes it."
+      }
+    ]
+  },
+  {
+    "journey": "client",
+    "index": 9,
+    "name": "Portal › Questionnaire",
+    "route": "Portal › Questionnaire",
+    "url": "events.yourbiz.com/portal/questionnaire/wedding-details",
+    "kind": null,
+    "snap": "Snapshot: Nov 12",
+    "from": "Home \"Needs your action\" / ✉ \"Please fill this out\" from planner (Tasks \"Send\")",
+    "next": "Submit → back to Home · answers appear on the planner's Event Hub Overview",
+    "notes": [
+      {
+        "kind": "yellow",
+        "text": "Was missing in round 1. Saves after every field, so Ana can stop and come back."
+      },
+      {
+        "kind": "sys",
+        "text": "→ System: answers populate event fields (ceremony time, music lists…) and mark the planner's task done."
+      }
+    ]
+  },
+  {
+    "journey": "client",
+    "index": 10,
+    "name": "Portal › Mood Board",
+    "route": "Portal › Mood Board",
+    "url": "events.yourbiz.com/portal/mood-board",
+    "kind": null,
+    "snap": "Snapshot: Nov 20",
+    "from": "Sidebar \"Mood Board\" / ✉ \"New ideas on your mood board\" email",
+    "next": "Comment or upload → planner sees it in Event Hub › Files · Approve board → Approvals log",
+    "notes": [
+      {
+        "kind": "yellow",
+        "text": "Was a gap in round 2: the portal menu had no Mood Board. Added to the menu (locked before the deposit)."
+      },
+      {
+        "kind": "sys",
+        "text": "→ System: comments and uploads show up on the planner's Event Hub › Files board; approval is logged."
+      }
+    ]
+  },
+  {
+    "journey": "client",
+    "index": 11,
+    "name": "Portal › Approvals",
+    "route": "Portal › Approvals",
+    "url": "events.yourbiz.com/portal/approvals",
+    "kind": null,
+    "snap": "Snapshot: mid-April 2027",
+    "from": "Sidebar / Home \"Needs your action\" / ✉ \"Please approve\" email",
+    "next": "Approve / Request changes → logged; planner notified",
+    "notes": [
+      {
+        "kind": "yellow",
+        "text": "Split out of Home in this round (it's its own screen in the P1 inventory)."
+      },
+      {
+        "kind": "sys",
+        "text": "→ System: logs who approved what and when."
+      }
+    ]
+  },
+  {
+    "journey": "client",
+    "index": 12,
+    "name": "Payment reminder",
+    "route": "💬 Payment 2 reminder",
+    "url": null,
+    "kind": "sms",
+    "snap": "Tue Apr 6 (7 days before)",
+    "from": "Automatic: 7 days and 1 day before each due date",
+    "next": "Tap link → Portal › Pay (Payment 2)",
+    "notes": [
+      {
+        "kind": "yellow",
+        "text": "Also sent by email. Autopay clients get a \"we'll charge your card on Apr 13\" notice instead."
+      }
+    ]
+  },
+  {
+    "journey": "client",
+    "index": 13,
+    "name": "Portal › Payments",
+    "route": "Portal › Payments",
+    "url": "events.yourbiz.com/portal/payments",
+    "kind": null,
+    "snap": "Snapshot: mid-April 2027",
+    "from": "Sidebar / Home \"Next payment\" / change order in Messages",
+    "next": "Pay → Portal › Pay · Approve change order → invoice updates",
+    "notes": [
+      {
+        "kind": "sys",
+        "text": "→ System: an approved change order updates the invoice and the final payment."
+      }
+    ]
+  },
+  {
+    "journey": "client",
+    "index": 14,
+    "name": "Portal › Cancel or postpone",
+    "route": "Portal › Cancel or postpone",
+    "url": "events.yourbiz.com/portal/change-request",
+    "kind": null,
+    "snap": "Example: Sat Apr 10, 2027",
+    "from": "Portal › Payments \"Request a change\"",
+    "next": "Send request → planner handles it in Reschedule event or Cancel event · back to Home",
+    "notes": [
+      {
+        "kind": "yellow",
+        "text": "Was a gap in round 2. The refund is an estimate shown before submitting; the planner confirms it."
+      },
+      {
+        "kind": "sys",
+        "text": "→ System: creates a request on the planner's Dashboard alerts, linked to Reschedule / Cancel event."
+      }
+    ]
+  },
+  {
+    "journey": "client",
+    "index": 15,
+    "name": "Portal › Guests",
+    "route": "Portal › Guests",
+    "url": "events.yourbiz.com/portal/guests",
+    "kind": null,
+    "snap": null,
+    "from": "Sidebar / Home \"Add your guests\"",
+    "next": "Guests appear in the planner's Guest list → planner sends invitations",
+    "notes": [
+      {
+        "kind": "yellow",
+        "text": "Co-host (partner or parent) can get the same or limited access."
+      },
+      {
+        "kind": "sys",
+        "text": "→ System: imports of 1,000+ rows run as a background job with a progress bar."
+      }
+    ]
+  },
+  {
+    "journey": "client",
+    "index": 16,
+    "name": "Portal › Messages",
+    "route": "Portal › Messages",
+    "url": "events.yourbiz.com/portal/messages",
+    "kind": null,
+    "snap": null,
+    "from": "Sidebar / \"Ask a question\" on Proposal / ✉ new-message email",
+    "next": "Reply · \"Review\" on a change order → Portal › Payments",
+    "notes": [
+      {
+        "kind": "yellow",
+        "text": "One thread with the planner. Open even before booking, so Ana can ask questions about the proposal."
+      }
+    ]
+  },
+  {
+    "journey": "guest",
+    "index": 0,
+    "name": "Invitation text",
+    "route": "💬 Invitation",
+    "url": null,
+    "kind": "sms",
+    "snap": "Mon Mar 1, 9:00 AM",
+    "from": "Planner schedules invitations (Event Hub › Guests › Invitations)",
+    "next": "Tap link → Invitation",
+    "notes": [
+      {
+        "kind": "yellow",
+        "text": "Same invite also goes by email; paper invites carry a QR to the same link."
+      },
+      {
+        "kind": "sys",
+        "text": "→ System: the link carries Lucia's guest token (no login). Tracks delivered / opened."
+      }
+    ]
+  },
+  {
+    "journey": "guest",
+    "index": 1,
+    "name": "Invitation (basic, P1)",
+    "route": "Invitation",
+    "url": "events.yourbiz.com/i/abc123",
+    "kind": null,
+    "snap": null,
+    "from": "💬 invitation text / email / QR on paper invite",
+    "next": "\"View details & RSVP\" → Event Website",
+    "notes": [
+      {
+        "kind": "yellow",
+        "text": "P1 = simple branded template. P3 adds the designer, animated envelope and music (with Skip)."
+      }
+    ]
+  },
+  {
+    "journey": "guest",
+    "index": 2,
+    "name": "Event Website",
+    "route": "Event Website",
+    "url": "events.yourbiz.com/rivera",
+    "kind": null,
+    "snap": null,
+    "from": "Invitation \"View details & RSVP\" / planner \"Preview as guest\"",
+    "next": "RSVP → RSVP form · Honeyfund ↗ opens in a new tab",
+    "notes": [
+      {
+        "kind": "yellow",
+        "text": "Sections and fund link come from the planner's Website & RSVP settings. Under 2 seconds on a phone; WCAG 2.1 AA; EN/ES."
+      }
+    ]
+  },
+  {
+    "journey": "guest",
+    "index": 3,
+    "name": "RSVP",
+    "route": "RSVP",
+    "url": "events.yourbiz.com/rivera/rsvp?t=abc123",
+    "kind": null,
+    "snap": null,
+    "from": "Event Website \"RSVP\" / ✉ confirmation \"Change my RSVP\"",
+    "next": "Submit → Confirmation",
+    "notes": [
+      {
+        "kind": "yellow",
+        "text": "Name is prefilled from the link token. Meals, plus-ones and cutoff come from the planner's Website & RSVP settings."
+      },
+      {
+        "kind": "yellow",
+        "text": "Forwarded link? RSVP stays tied to the original guest; host sees a flag."
+      }
+    ]
+  },
+  {
+    "journey": "guest",
+    "index": 4,
+    "name": "RSVP Confirmation",
+    "route": "RSVP › Confirmation",
+    "url": "events.yourbiz.com/rivera/rsvp/done",
+    "kind": null,
+    "snap": null,
+    "from": "Submit RSVP",
+    "next": "Add to calendar · Honeyfund ↗ · ✉ confirmation email arrives",
+    "notes": [
+      {
+        "kind": "sys",
+        "text": "→ System (rsvp.updated): headcount, meals, seating pool and potluck targets update; confirmation email/text; host notified if set."
+      }
+    ]
+  },
+  {
+    "journey": "guest",
+    "index": 5,
+    "name": "RSVP confirmation email",
+    "route": "✉ RSVP confirmed",
+    "url": null,
+    "kind": "email",
+    "snap": null,
+    "from": "RSVP submitted",
+    "next": "\"Change my RSVP\" → RSVP form (until May 1) · Add to calendar",
+    "notes": [
+      {
+        "kind": "yellow",
+        "text": "This email is how a guest gets back to their RSVP later. No account needed."
+      }
+    ]
+  },
+  {
+    "journey": "guest",
+    "index": 6,
+    "name": "Guest reminder (one week to go)",
+    "route": "✉ One week to go",
+    "url": null,
+    "kind": "email",
+    "snap": "Sat Jun 5, 9:00 AM",
+    "from": "Automatic: 1 week before (and a short text 1 day before)",
+    "next": "\"Directions\" → maps · \"Event details\" → Event Website",
+    "notes": [
+      {
+        "kind": "yellow",
+        "text": "Was a gap in round 2. Day-before text: \"See you tomorrow at 4 PM! Directions: yourbiz.link/d/rivera\"."
+      },
+      {
+        "kind": "sys",
+        "text": "→ System: scheduled per event; skipped for guests who declined; respects STOP opt-outs."
+      }
+    ]
+  },
+  {
+    "journey": "staff",
+    "index": 0,
+    "name": "Team invite text",
+    "route": "💬 Team invite",
+    "url": null,
+    "kind": "sms",
+    "snap": null,
+    "from": "Owner clicks \"Invite staff\" in Settings › Team & roles",
+    "next": "Tap link → Staff Invite + Sign In",
+    "notes": [
+      {
+        "kind": "yellow",
+        "text": "Can also go by email. The link knows which business and role Sam was invited to."
+      }
+    ]
+  },
+  {
+    "journey": "staff",
+    "index": 1,
+    "name": "Staff Invite + Sign In",
+    "route": "Invite",
+    "url": "events.yourbiz.com/join/xyz789",
+    "kind": null,
+    "snap": null,
+    "from": "💬 team invite text",
+    "next": "Download app → sign in with code → Profile",
+    "notes": [
+      {
+        "kind": "sys",
+        "text": "→ System: links the staff member to the business with the role the owner set."
+      },
+      {
+        "kind": "yellow",
+        "text": "No password to remember. Phone number + SMS code only."
+      }
+    ]
+  },
+  {
+    "journey": "staff",
+    "index": 2,
+    "name": "Staff Profile",
+    "route": "Profile",
+    "url": "app/staff/profile",
+    "kind": null,
+    "snap": null,
+    "from": "First sign-in / tab bar \"Profile\"",
+    "next": "Save → wait for shifts (My Shifts unlocks in Phase 2)",
+    "notes": [
+      {
+        "kind": "yellow",
+        "text": "My Shifts / Day-of / Chat are shown locked: they arrive in Phase 2, so P1 has no dead-end tabs."
+      },
+      {
+        "kind": "yellow",
+        "text": "Staff never see money unless the owner grants it."
+      }
+    ]
+  }
+]

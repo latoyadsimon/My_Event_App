@@ -1,0 +1,2848 @@
+- generic [ref=e2]:
+  - 'heading "Event Planner App: Phase 1 User Journeys + Wireframes" [level=1] [ref=e3]'
+  - paragraph [ref=e4]:
+    - text: "Running example: the Rivera wedding, Sat Jun 12, 2027 · 120 guests · photo booth, karaoke, honeymoon fund. Source:"
+    - code [ref=e5]: app_outline/user_journeys.md
+  - generic [ref=e6]:
+    - generic [ref=e7]: Lo-fi on purpose! Boxes + labels. No colors or fonts yet. That's the style guide's job.
+    - generic [ref=e8]:
+      - text: "Every screen shows:"
+      - list [ref=e9]:
+        - listitem [ref=e10]: info
+        - listitem [ref=e11]: actions/buttons
+        - listitem [ref=e12]: navigation
+        - listitem [ref=e13]: empty/error state
+    - generic [ref=e14]: "Every screen is drawn 3 ways: Desktop · Tablet · Phone. The role's main device is drawn first and in bold."
+    - generic [ref=e15]:
+      - text: "How to read:"
+      - list [ref=e16]:
+        - listitem [ref=e17]: Blue box = a step
+        - listitem [ref=e18]: Red diamond = edge case
+        - listitem [ref=e19]: Dashed box in a screen = empty/error/edge state
+        - listitem [ref=e20]: Blue note = → System (a backend job to build)
+  - generic [ref=e21]:
+    - generic [ref=e22]:
+      - heading "Planner (Owner) journey" [level=2] [ref=e23]
+      - generic [ref=e24]: "Goal: inquiry → signed contract + deposit in under 15 minutes, then plan the event. Main device: Desktop (web app); also mobile."
+      - generic [ref=e26]:
+        - generic [ref=e27]: Signs up
+        - generic [ref=e29]: →
+        - generic [ref=e30]: Onboarding wizard
+        - generic [ref=e32]: →
+        - generic [ref=e33]: Dashboard
+        - generic [ref=e35]: →
+        - generic [ref=e36]: New lead arrives on Leads board
+        - generic [ref=e38]: →
+        - generic [ref=e39]:
+          - generic [ref=e40]: Lead Detail
+          - generic [ref=e41]: ▼
+          - generic [ref=e42]: Date already booked? → red badge + suggest nearby open dates
+        - generic [ref=e44]: →
+        - generic [ref=e45]:
+          - generic [ref=e46]: Proposal Builder
+          - generic [ref=e47]: ▼
+          - generic [ref=e48]: More gear than owned? → reduce / add rental / override + note
+        - generic [ref=e50]: →
+        - generic [ref=e51]:
+          - generic [ref=e52]: Countersigns contract
+          - generic [ref=e53]: ▼
+          - generic [ref=e54]: Payments not connected? → deposit by check/cash only + banner
+        - generic [ref=e56]: →
+        - generic [ref=e57]: Event Hub › Overview
+        - generic [ref=e59]: →
+        - generic [ref=e60]: Event Hub › Guests
+      - generic [ref=e62]:
+        - generic [ref=e63]:
+          - generic [ref=e64]: "1"
+          - text: Onboarding Wizard
+          - code [ref=e65]: Onboarding
+        - generic [ref=e66]:
+          - figure "★ Desktop · 1280px (main)" [ref=e67]:
+            - generic [ref=e69]:
+              - generic [ref=e70]: app/onboarding/payments
+              - generic [ref=e75]:
+                - generic [ref=e76]: Set up your business
+                - generic [ref=e78]:
+                  - generic [ref=e79]:
+                    - generic [ref=e80]: Banner until done
+                    - generic [ref=e81]:
+                      - text: ⚠ Payments not connected. Clients can only pay by check/cash.
+                      - generic [ref=e82]: "[ Connect now ]"
+                  - generic [ref=e83]:
+                    - generic [ref=e84]: 1 Business
+                    - generic [ref=e85]: 2 Payments
+                    - generic [ref=e86]: 3 Packages
+                    - generic [ref=e87]: 4 Calendar
+                    - generic [ref=e88]: 5 Team
+                    - generic [ref=e89]: 6 Templates
+                  - generic [ref=e90]: Step 2 of 6 · Connect payments
+                  - generic [ref=e94]:
+                    - generic [ref=e95]:
+                      - heading "Stripe" [level=5] [ref=e96]
+                      - generic [ref=e97]: logo
+                      - generic [ref=e99]: "[ Connect Stripe ]"
+                    - generic [ref=e100]:
+                      - heading "Square" [level=5] [ref=e101]
+                      - generic [ref=e102]: logo
+                      - generic [ref=e104]: "[ Connect Square ]"
+                  - generic [ref=e105]:
+                    - 'heading "✓ Step 1 done: Business" [level=5] [ref=e106]'
+                    - generic [ref=e107]:
+                      - generic [ref=e108]: Business name
+                      - generic [ref=e109]: "[Business]"
+                    - generic [ref=e110]: "Brand colors:"
+                  - generic [ref=e114]:
+                    - generic [ref=e115]: "[ Back ]"
+                    - generic [ref=e116]: "[ Skip for now ]"
+                    - generic [ref=e117]: "[ Next → ]"
+          - figure "Tablet · 820px" [ref=e118]:
+            - generic [ref=e121]:
+              - generic [ref=e122]: Set up your business
+              - generic [ref=e124]:
+                - generic [ref=e125]:
+                  - generic [ref=e126]: Banner until done
+                  - generic [ref=e127]:
+                    - text: ⚠ Payments not connected. Clients can only pay by check/cash.
+                    - generic [ref=e128]: "[ Connect now ]"
+                - generic [ref=e129]:
+                  - generic [ref=e130]: 1 Business
+                  - generic [ref=e131]: 2 Payments
+                  - generic [ref=e132]: 3 Packages
+                  - generic [ref=e133]: 4 Calendar
+                  - generic [ref=e134]: 5 Team
+                  - generic [ref=e135]: 6 Templates
+                - generic [ref=e136]: Step 2 of 6 · Connect payments
+                - generic [ref=e140]:
+                  - generic [ref=e141]:
+                    - heading "Stripe" [level=5] [ref=e142]
+                    - generic [ref=e143]: logo
+                    - generic [ref=e145]: "[ Connect Stripe ]"
+                  - generic [ref=e146]:
+                    - heading "Square" [level=5] [ref=e147]
+                    - generic [ref=e148]: logo
+                    - generic [ref=e150]: "[ Connect Square ]"
+                - generic [ref=e151]:
+                  - 'heading "✓ Step 1 done: Business" [level=5] [ref=e152]'
+                  - generic [ref=e153]:
+                    - generic [ref=e154]: Business name
+                    - generic [ref=e155]: "[Business]"
+                  - generic [ref=e156]: "Brand colors:"
+                - generic [ref=e160]:
+                  - generic [ref=e161]: "[ Back ]"
+                  - generic [ref=e162]: "[ Skip for now ]"
+                  - generic [ref=e163]: "[ Next → ]"
+          - figure "Phone · 390px" [ref=e164]:
+            - generic [ref=e168]:
+              - generic [ref=e169]: Set up your business
+              - generic [ref=e171]:
+                - generic [ref=e172]:
+                  - generic [ref=e173]: Banner until done
+                  - generic [ref=e174]:
+                    - text: ⚠ Payments not connected. Clients can only pay by check/cash.
+                    - generic [ref=e175]: "[ Connect now ]"
+                - generic [ref=e176]:
+                  - generic [ref=e177]: "1"
+                  - generic [ref=e178]: "2"
+                  - generic [ref=e179]: "3"
+                  - generic [ref=e180]: "4"
+                  - generic [ref=e181]: "5"
+                  - generic [ref=e182]: "6"
+                - generic [ref=e183]: Step 2 of 6 · Connect payments
+                - generic [ref=e187]:
+                  - generic [ref=e188]:
+                    - heading "Stripe" [level=5] [ref=e189]
+                    - generic [ref=e190]: logo
+                    - generic [ref=e192]: "[ Connect Stripe ]"
+                  - generic [ref=e193]:
+                    - heading "Square" [level=5] [ref=e194]
+                    - generic [ref=e195]: logo
+                    - generic [ref=e197]: "[ Connect Square ]"
+                - generic [ref=e198]:
+                  - 'heading "✓ Step 1 done: Business" [level=5] [ref=e199]'
+                  - generic [ref=e200]:
+                    - generic [ref=e201]: Business name
+                    - generic [ref=e202]: "[Business]"
+                  - generic [ref=e203]: "Brand colors:"
+                - generic [ref=e207]:
+                  - generic [ref=e208]: "[ Back ]"
+                  - generic [ref=e209]: "[ Skip for now ]"
+                  - generic [ref=e210]: "[ Next → ]"
+        - generic [ref=e211]:
+          - generic [ref=e212]: Skippable and resumable. Progress is saved after each step.
+          - generic [ref=e213]: "→ System: Sign Up creates a tenant (business account) with this user as Owner."
+      - generic [ref=e214]:
+        - generic [ref=e215]:
+          - generic [ref=e216]: "2"
+          - text: Dashboard
+          - code [ref=e217]: Dashboard
+        - generic [ref=e218]:
+          - figure "★ Desktop · 1280px (main)" [ref=e219]:
+            - generic [ref=e221]:
+              - generic [ref=e222]: app/dashboard
+              - generic [ref=e227]:
+                - generic [ref=e228]:
+                  - text: "[Business] ·"
+                  - generic [ref=e230]: Dashboard
+                - generic [ref=e232]:
+                  - navigation [ref=e233]:
+                    - generic [ref=e234]: Dashboard
+                    - generic [ref=e235]: Leads
+                    - generic [ref=e236]: Calendar
+                    - generic [ref=e237]: Events
+                    - generic [ref=e238]: Settings
+                  - generic [ref=e239]:
+                    - generic [ref=e240]:
+                      - generic [ref=e241]:
+                        - generic [ref=e242]: $24,500
+                        - text: booked · Oct
+                      - generic [ref=e243]:
+                        - generic [ref=e244]: $15,200
+                        - text: collected · Oct
+                      - generic [ref=e245]:
+                        - generic [ref=e246]: $9,300
+                        - text: balance due
+                      - generic [ref=e247]:
+                        - generic [ref=e248]: "14"
+                        - text: open tasks
+                    - generic [ref=e249]:
+                      - generic [ref=e250]:
+                        - heading "Today & this week" [level=5] [ref=e251]
+                        - list [ref=e252]:
+                          - listitem [ref=e253]: Sat Rivera · tasting 11 AM
+                          - listitem [ref=e254]: Tue Lee shower · site visit
+                          - listitem [ref=e255]: Wed Gear pickup · 4 PM
+                          - listitem [ref=e256]: "Thu Call: Kim (new lead)"
+                      - generic [ref=e257]:
+                        - heading "Alerts (4)" [level=5] [ref=e258]
+                        - list [ref=e259]:
+                          - listitem [ref=e260]: "⚠ Rivera: proposal opened, not accepted"
+                          - listitem [ref=e261]: "⚠ Lee: contract unsigned"
+                          - listitem [ref=e262]: "⚠ Kim party: only 40% RSVPs"
+                          - listitem [ref=e263]: ⚠ 2 mics not returned
+                    - generic [ref=e264]:
+                      - heading "Pipeline" [level=5] [ref=e265]
+                      - generic [ref=e266]:
+                        - generic [ref=e267]:
+                          - generic [ref=e268]: "6"
+                          - text: inquiries
+                        - generic [ref=e269]:
+                          - generic [ref=e270]: "3"
+                          - text: proposals sent
+                        - generic [ref=e271]:
+                          - generic [ref=e272]: "8"
+                          - text: booked
+                        - generic [ref=e273]:
+                          - generic [ref=e274]: "21"
+                          - text: completed
+                    - generic [ref=e275]:
+                      - generic [ref=e276]: Empty state
+                      - generic [ref=e277]:
+                        - text: "No events yet? Getting started:"
+                        - generic [ref=e278]: ☑ Add packages
+                        - generic [ref=e279]: ☐ Connect payments
+                        - generic [ref=e280]: ☐ Share your inquiry form
+          - figure "Tablet · 820px" [ref=e281]:
+            - generic [ref=e284]:
+              - generic [ref=e285]:
+                - text: "[Business] ·"
+                - generic [ref=e287]: Dashboard
+              - navigation [ref=e289]:
+                - generic [ref=e290]: Dashboard
+                - generic [ref=e291]: Leads
+                - generic [ref=e292]: Calendar
+                - generic [ref=e293]: Events
+                - generic [ref=e294]: Settings
+              - generic [ref=e295]:
+                - generic [ref=e296]:
+                  - generic [ref=e297]:
+                    - generic [ref=e298]: $24,500
+                    - text: booked · Oct
+                  - generic [ref=e299]:
+                    - generic [ref=e300]: $15,200
+                    - text: collected · Oct
+                  - generic [ref=e301]:
+                    - generic [ref=e302]: $9,300
+                    - text: balance due
+                  - generic [ref=e303]:
+                    - generic [ref=e304]: "14"
+                    - text: open tasks
+                - generic [ref=e305]:
+                  - generic [ref=e306]:
+                    - heading "Today & this week" [level=5] [ref=e307]
+                    - list [ref=e308]:
+                      - listitem [ref=e309]: Sat Rivera · tasting 11 AM
+                      - listitem [ref=e310]: Tue Lee shower · site visit
+                      - listitem [ref=e311]: Wed Gear pickup · 4 PM
+                      - listitem [ref=e312]: "Thu Call: Kim (new lead)"
+                  - generic [ref=e313]:
+                    - heading "Alerts (4)" [level=5] [ref=e314]
+                    - list [ref=e315]:
+                      - listitem [ref=e316]: "⚠ Rivera: proposal opened, not accepted"
+                      - listitem [ref=e317]: "⚠ Lee: contract unsigned"
+                      - listitem [ref=e318]: "⚠ Kim party: only 40% RSVPs"
+                      - listitem [ref=e319]: ⚠ 2 mics not returned
+                - generic [ref=e320]:
+                  - heading "Pipeline" [level=5] [ref=e321]
+                  - generic [ref=e322]:
+                    - generic [ref=e323]:
+                      - generic [ref=e324]: "6"
+                      - text: inquiries
+                    - generic [ref=e325]:
+                      - generic [ref=e326]: "3"
+                      - text: proposals sent
+                    - generic [ref=e327]:
+                      - generic [ref=e328]: "8"
+                      - text: booked
+                    - generic [ref=e329]:
+                      - generic [ref=e330]: "21"
+                      - text: completed
+                - generic [ref=e331]:
+                  - generic [ref=e332]: Empty state
+                  - generic [ref=e333]:
+                    - text: "No events yet? Getting started:"
+                    - generic [ref=e334]: ☑ Add packages
+                    - generic [ref=e335]: ☐ Connect payments
+                    - generic [ref=e336]: ☐ Share your inquiry form
+          - figure "Phone · 390px" [ref=e337]:
+            - generic [ref=e341]:
+              - generic [ref=e342]:
+                - text: "[Business] · ☰"
+                - generic [ref=e344]: Dashboard
+              - generic [ref=e346]:
+                - generic [ref=e347]:
+                  - generic [ref=e348]:
+                    - generic [ref=e349]: $24,500
+                    - text: booked · Oct
+                  - generic [ref=e350]:
+                    - generic [ref=e351]: $15,200
+                    - text: collected · Oct
+                  - generic [ref=e352]:
+                    - generic [ref=e353]: $9,300
+                    - text: balance due
+                  - generic [ref=e354]:
+                    - generic [ref=e355]: "14"
+                    - text: open tasks
+                - generic [ref=e356]:
+                  - generic [ref=e357]:
+                    - heading "Today & this week" [level=5] [ref=e358]
+                    - list [ref=e359]:
+                      - listitem [ref=e360]: Sat Rivera · tasting 11 AM
+                      - listitem [ref=e361]: Tue Lee shower · site visit
+                      - listitem [ref=e362]: Wed Gear pickup · 4 PM
+                      - listitem [ref=e363]: "Thu Call: Kim (new lead)"
+                  - generic [ref=e364]:
+                    - heading "Alerts (4)" [level=5] [ref=e365]
+                    - list [ref=e366]:
+                      - listitem [ref=e367]: "⚠ Rivera: proposal opened, not accepted"
+                      - listitem [ref=e368]: "⚠ Lee: contract unsigned"
+                      - listitem [ref=e369]: "⚠ Kim party: only 40% RSVPs"
+                      - listitem [ref=e370]: ⚠ 2 mics not returned
+                - generic [ref=e371]:
+                  - heading "Pipeline" [level=5] [ref=e372]
+                  - generic [ref=e373]:
+                    - generic [ref=e374]:
+                      - generic [ref=e375]: "6"
+                      - text: inquiries
+                    - generic [ref=e376]:
+                      - generic [ref=e377]: "3"
+                      - text: proposals sent
+                    - generic [ref=e378]:
+                      - generic [ref=e379]: "8"
+                      - text: booked
+                    - generic [ref=e380]:
+                      - generic [ref=e381]: "21"
+                      - text: completed
+                - generic [ref=e382]:
+                  - generic [ref=e383]: Empty state
+                  - generic [ref=e384]:
+                    - text: "No events yet? Getting started:"
+                    - generic [ref=e385]: ☑ Add packages
+                    - generic [ref=e386]: ☐ Connect payments
+                    - generic [ref=e387]: ☐ Share your inquiry form
+              - generic [ref=e388]:
+                - generic [ref=e389]: Dashboard
+                - generic [ref=e390]: Leads
+                - generic [ref=e391]: Calendar
+                - generic [ref=e392]: Events
+                - generic [ref=e393]: More
+        - generic [ref=e394]:
+          - generic [ref=e395]: "Answers \"what needs me today?\", which is success metric #1 in the spec."
+          - generic [ref=e396]: "Phone: tiles go 2×2, cards stack."
+      - generic [ref=e397]:
+        - generic [ref=e398]:
+          - generic [ref=e399]: "3"
+          - text: Leads (kanban)
+          - code [ref=e400]: Leads
+        - generic [ref=e401]:
+          - figure "★ Desktop · 1280px (main)" [ref=e402]:
+            - generic [ref=e404]:
+              - generic [ref=e405]: app/leads
+              - generic [ref=e410]:
+                - generic [ref=e411]:
+                  - text: "[Business] ·"
+                  - generic [ref=e413]: Leads
+                - generic [ref=e415]:
+                  - navigation [ref=e416]:
+                    - generic [ref=e417]: Dashboard
+                    - generic [ref=e418]: Leads
+                    - generic [ref=e419]: Calendar
+                    - generic [ref=e420]: Events
+                    - generic [ref=e421]: Settings
+                  - generic [ref=e422]:
+                    - generic [ref=e423]:
+                      - generic [ref=e424]: "[ + Add lead ]"
+                      - generic [ref=e425]: "[ Source: All ▾ ]"
+                      - generic [ref=e426]: "[ Copy inquiry form link ]"
+                    - generic [ref=e427]:
+                      - generic [ref=e428]:
+                        - heading "New (2)" [level=6] [ref=e429]
+                        - generic [ref=e430]:
+                          - generic [ref=e431]: Rivera · Wedding
+                          - generic [ref=e432]: Jun 12 · 120 guests
+                          - generic [ref=e433]: $15–20k · Instagram
+                        - generic [ref=e434]:
+                          - generic [ref=e435]: Kim · Birthday
+                          - generic [ref=e436]: Nov 20 · 40 guests
+                          - generic [ref=e437]: $2–4k · Referral
+                          - generic [ref=e438]: ⚠ Date taken
+                      - generic [ref=e439]:
+                        - heading "Contacted (1)" [level=6] [ref=e440]
+                        - generic [ref=e441]:
+                          - generic [ref=e442]: Lee · Shower
+                          - generic [ref=e443]: Dec 5 · 30 guests
+                          - generic [ref=e444]: $3k · Google
+                      - generic [ref=e445]:
+                        - heading "Consult booked (1)" [level=6] [ref=e446]
+                        - generic [ref=e447]:
+                          - generic [ref=e448]: Hope Church · Potluck
+                          - generic [ref=e449]: Jan 9 · 200
+                          - generic [ref=e450]: $1–2k · Facebook
+                      - generic [ref=e451]:
+                        - heading "Proposal sent (1)" [level=6] [ref=e452]
+                        - generic [ref=e453]:
+                          - generic [ref=e454]: Acme · Holiday
+                          - generic [ref=e455]: Dec 12 · 150
+                          - generic [ref=e456]: $12k · The Knot
+                      - generic [ref=e457]:
+                        - heading "Won (1)" [level=6] [ref=e458]
+                        - generic [ref=e459]:
+                          - generic [ref=e460]: Patel · Reunion
+                          - generic [ref=e461]: Mar 3 · 80
+                          - generic [ref=e462]: $6k · Referral
+                      - generic [ref=e463]:
+                        - heading "Lost (0)" [level=6] [ref=e464]
+                        - generic [ref=e465]:
+                          - generic [ref=e466]: Empty
+                          - generic [ref=e467]: No leads here
+                    - generic [ref=e468]:
+                      - generic [ref=e469]: Empty board
+                      - generic [ref=e470]:
+                        - text: No leads yet. Share your inquiry form to get your first one.
+                        - generic [ref=e471]: "[ Copy link ]"
+          - figure "Tablet · 820px" [ref=e472]:
+            - generic [ref=e475]:
+              - generic [ref=e476]:
+                - text: "[Business] ·"
+                - generic [ref=e478]: Leads
+              - navigation [ref=e480]:
+                - generic [ref=e481]: Dashboard
+                - generic [ref=e482]: Leads
+                - generic [ref=e483]: Calendar
+                - generic [ref=e484]: Events
+                - generic [ref=e485]: Settings
+              - generic [ref=e486]:
+                - generic [ref=e487]:
+                  - generic [ref=e488]: "[ + Add lead ]"
+                  - generic [ref=e489]: "[ Source: All ▾ ]"
+                  - generic [ref=e490]: "[ Copy inquiry form link ]"
+                - generic [ref=e491]:
+                  - generic [ref=e492]:
+                    - heading "New (2)" [level=6] [ref=e493]
+                    - generic [ref=e494]:
+                      - generic [ref=e495]: Rivera · Wedding
+                      - generic [ref=e496]: Jun 12 · 120 guests
+                      - generic [ref=e497]: $15–20k · Instagram
+                    - generic [ref=e498]:
+                      - generic [ref=e499]: Kim · Birthday
+                      - generic [ref=e500]: Nov 20 · 40 guests
+                      - generic [ref=e501]: $2–4k · Referral
+                      - generic [ref=e502]: ⚠ Date taken
+                  - generic [ref=e503]:
+                    - heading "Contacted (1)" [level=6] [ref=e504]
+                    - generic [ref=e505]:
+                      - generic [ref=e506]: Lee · Shower
+                      - generic [ref=e507]: Dec 5 · 30 guests
+                      - generic [ref=e508]: $3k · Google
+                  - generic [ref=e509]:
+                    - heading "Consult booked (1)" [level=6] [ref=e510]
+                    - generic [ref=e511]:
+                      - generic [ref=e512]: Hope Church · Potluck
+                      - generic [ref=e513]: Jan 9 · 200
+                      - generic [ref=e514]: $1–2k · Facebook
+                - generic [ref=e515]: swipe → Proposal sent · Won · Lost
+                - generic [ref=e516]:
+                  - generic [ref=e517]: Empty board
+                  - generic [ref=e518]:
+                    - text: No leads yet. Share your inquiry form to get your first one.
+                    - generic [ref=e519]: "[ Copy link ]"
+          - figure "Phone · 390px" [ref=e520]:
+            - generic [ref=e524]:
+              - generic [ref=e525]:
+                - text: "[Business] · ☰"
+                - generic [ref=e527]: Leads
+              - generic [ref=e529]:
+                - generic [ref=e530]:
+                  - generic [ref=e531]: "[ + Add lead ]"
+                  - generic [ref=e532]: "[ Source: All ▾ ]"
+                  - generic [ref=e533]: "[ Copy inquiry form link ]"
+                - generic [ref=e534]:
+                  - generic [ref=e535]: New 2
+                  - generic [ref=e536]: Contacted 1
+                  - generic [ref=e537]: Consult booked 1
+                  - generic [ref=e538]: Proposal sent 1
+                  - generic [ref=e539]: Won 1
+                  - generic [ref=e540]: Lost 0
+                - generic [ref=e541]:
+                  - generic [ref=e542]: Rivera · Wedding
+                  - generic [ref=e543]: Jun 12 · 120 guests
+                  - generic [ref=e544]: $15–20k · Instagram
+                - generic [ref=e545]:
+                  - generic [ref=e546]: Kim · Birthday
+                  - generic [ref=e547]: Nov 20 · 40 guests
+                  - generic [ref=e548]: $2–4k · Referral
+                  - generic [ref=e549]: ⚠ Date taken
+                - generic [ref=e550]: ← swipe for other stages →
+                - generic [ref=e551]:
+                  - generic [ref=e552]: Empty board
+                  - generic [ref=e553]:
+                    - text: No leads yet. Share your inquiry form to get your first one.
+                    - generic [ref=e554]: "[ Copy link ]"
+              - generic [ref=e555]:
+                - generic [ref=e556]: Dashboard
+                - generic [ref=e557]: Leads
+                - generic [ref=e558]: Calendar
+                - generic [ref=e559]: Events
+                - generic [ref=e560]: More
+        - generic [ref=e561]:
+          - generic [ref=e562]: Drag a card to move it between stages. Each card shows date, type, guests, budget and a conflict badge.
+          - generic [ref=e563]: "→ System (lead.created): push to planner, calendar conflict check, auto-reply to prospect."
+      - generic [ref=e564]:
+        - generic [ref=e565]:
+          - generic [ref=e566]: "4"
+          - text: Lead Detail
+          - code [ref=e567]: Lead Detail
+        - generic [ref=e568]:
+          - figure "★ Desktop · 1280px (main)" [ref=e569]:
+            - generic [ref=e571]:
+              - generic [ref=e572]: app/leads/rivera
+              - generic [ref=e577]:
+                - generic [ref=e578]:
+                  - text: "[Business] ·"
+                  - generic [ref=e580]: Lead · Rivera
+                - generic [ref=e582]:
+                  - navigation [ref=e583]:
+                    - generic [ref=e584]: Dashboard
+                    - generic [ref=e585]: Leads
+                    - generic [ref=e586]: Calendar
+                    - generic [ref=e587]: Events
+                    - generic [ref=e588]: Settings
+                  - generic [ref=e589]:
+                    - generic [ref=e590]: Leads › Ana & Marco Rivera
+                    - generic [ref=e591]:
+                      - generic [ref=e592]: New
+                      - generic [ref=e593]: "Source: Instagram"
+                      - generic [ref=e594]: Received Oct 28
+                    - generic [ref=e595]:
+                      - generic [ref=e596]:
+                        - heading "Event details" [level=5] [ref=e597]
+                        - generic [ref=e598]:
+                          - generic [ref=e599]:
+                            - generic [ref=e600]: Event type
+                            - generic [ref=e601]: Wedding
+                          - generic [ref=e602]:
+                            - generic [ref=e603]: Date
+                            - generic [ref=e604]: Sat, Jun 12, 2027
+                          - generic [ref=e605]:
+                            - generic [ref=e606]: Guests
+                            - generic [ref=e607]: "120"
+                          - generic [ref=e608]:
+                            - generic [ref=e609]: Budget
+                            - generic [ref=e610]: $15–20k
+                          - generic [ref=e611]:
+                            - generic [ref=e612]: Services
+                            - generic [ref=e613]: Photo booth, Karaoke
+                          - generic [ref=e614]:
+                            - generic [ref=e615]: Venue
+                            - generic [ref=e616]: Hacienda (TBD)
+                      - generic [ref=e617]:
+                        - heading "Next step" [level=5] [ref=e618]
+                        - generic [ref=e619]: "[ Send canned reply ▾ ]"
+                        - generic [ref=e620]: "[ Hold date · 7 days ]"
+                        - generic [ref=e621]: "[ Send booking link ]"
+                        - generic [ref=e622]: "[ Create Proposal → ]"
+                    - generic [ref=e623]:
+                      - generic [ref=e624]: Edge case
+                      - generic [ref=e625]:
+                        - text: "⚠ Date taken: Jun 12 is booked (Lee wedding).Nearby open: Jun 5 · Jun 19 · Jun 26"
+                        - generic [ref=e626]: "[ Insert into reply ]"
+                    - generic [ref=e627]:
+                      - heading "Activity" [level=5] [ref=e628]
+                      - list [ref=e629]:
+                        - listitem [ref=e630]: Oct 28 · Inquiry received from website
+                        - listitem [ref=e631]: Oct 28 · Auto-reply sent
+                        - listitem [ref=e632]: Oct 29 · Consult booked for Nov 2
+          - figure "Tablet · 820px" [ref=e633]:
+            - generic [ref=e636]:
+              - generic [ref=e637]:
+                - text: "[Business] ·"
+                - generic [ref=e639]: Lead · Rivera
+              - navigation [ref=e641]:
+                - generic [ref=e642]: Dashboard
+                - generic [ref=e643]: Leads
+                - generic [ref=e644]: Calendar
+                - generic [ref=e645]: Events
+                - generic [ref=e646]: Settings
+              - generic [ref=e647]:
+                - generic [ref=e648]: Leads › Ana & Marco Rivera
+                - generic [ref=e649]:
+                  - generic [ref=e650]: New
+                  - generic [ref=e651]: "Source: Instagram"
+                  - generic [ref=e652]: Received Oct 28
+                - generic [ref=e653]:
+                  - generic [ref=e654]:
+                    - heading "Event details" [level=5] [ref=e655]
+                    - generic [ref=e656]:
+                      - generic [ref=e657]:
+                        - generic [ref=e658]: Event type
+                        - generic [ref=e659]: Wedding
+                      - generic [ref=e660]:
+                        - generic [ref=e661]: Date
+                        - generic [ref=e662]: Sat, Jun 12, 2027
+                      - generic [ref=e663]:
+                        - generic [ref=e664]: Guests
+                        - generic [ref=e665]: "120"
+                      - generic [ref=e666]:
+                        - generic [ref=e667]: Budget
+                        - generic [ref=e668]: $15–20k
+                      - generic [ref=e669]:
+                        - generic [ref=e670]: Services
+                        - generic [ref=e671]: Photo booth, Karaoke
+                      - generic [ref=e672]:
+                        - generic [ref=e673]: Venue
+                        - generic [ref=e674]: Hacienda (TBD)
+                  - generic [ref=e675]:
+                    - heading "Next step" [level=5] [ref=e676]
+                    - generic [ref=e677]: "[ Send canned reply ▾ ]"
+                    - generic [ref=e678]: "[ Hold date · 7 days ]"
+                    - generic [ref=e679]: "[ Send booking link ]"
+                    - generic [ref=e680]: "[ Create Proposal → ]"
+                - generic [ref=e681]:
+                  - generic [ref=e682]: Edge case
+                  - generic [ref=e683]:
+                    - text: "⚠ Date taken: Jun 12 is booked (Lee wedding).Nearby open: Jun 5 · Jun 19 · Jun 26"
+                    - generic [ref=e684]: "[ Insert into reply ]"
+                - generic [ref=e685]:
+                  - heading "Activity" [level=5] [ref=e686]
+                  - list [ref=e687]:
+                    - listitem [ref=e688]: Oct 28 · Inquiry received from website
+                    - listitem [ref=e689]: Oct 28 · Auto-reply sent
+                    - listitem [ref=e690]: Oct 29 · Consult booked for Nov 2
+          - figure "Phone · 390px" [ref=e691]:
+            - generic [ref=e695]:
+              - generic [ref=e696]:
+                - text: "[Business] · ☰"
+                - generic [ref=e698]: Lead · Rivera
+              - generic [ref=e700]:
+                - generic [ref=e701]: Leads › Ana & Marco Rivera
+                - generic [ref=e702]:
+                  - generic [ref=e703]: New
+                  - generic [ref=e704]: "Source: Instagram"
+                  - generic [ref=e705]: Received Oct 28
+                - generic [ref=e706]:
+                  - generic [ref=e707]:
+                    - heading "Event details" [level=5] [ref=e708]
+                    - generic [ref=e709]:
+                      - generic [ref=e710]:
+                        - generic [ref=e711]: Event type
+                        - generic [ref=e712]: Wedding
+                      - generic [ref=e713]:
+                        - generic [ref=e714]: Date
+                        - generic [ref=e715]: Sat, Jun 12, 2027
+                      - generic [ref=e716]:
+                        - generic [ref=e717]: Guests
+                        - generic [ref=e718]: "120"
+                      - generic [ref=e719]:
+                        - generic [ref=e720]: Budget
+                        - generic [ref=e721]: $15–20k
+                      - generic [ref=e722]:
+                        - generic [ref=e723]: Services
+                        - generic [ref=e724]: Photo booth, Karaoke
+                      - generic [ref=e725]:
+                        - generic [ref=e726]: Venue
+                        - generic [ref=e727]: Hacienda (TBD)
+                  - generic [ref=e728]:
+                    - heading "Next step" [level=5] [ref=e729]
+                    - generic [ref=e730]: "[ Send canned reply ▾ ]"
+                    - generic [ref=e731]: "[ Hold date · 7 days ]"
+                    - generic [ref=e732]: "[ Send booking link ]"
+                    - generic [ref=e733]: "[ Create Proposal → ]"
+                - generic [ref=e734]:
+                  - generic [ref=e735]: Edge case
+                  - generic [ref=e736]:
+                    - text: "⚠ Date taken: Jun 12 is booked (Lee wedding).Nearby open: Jun 5 · Jun 19 · Jun 26"
+                    - generic [ref=e737]: "[ Insert into reply ]"
+                - generic [ref=e738]:
+                  - heading "Activity" [level=5] [ref=e739]
+                  - list [ref=e740]:
+                    - listitem [ref=e741]: Oct 28 · Inquiry received from website
+                    - listitem [ref=e742]: Oct 28 · Auto-reply sent
+                    - listitem [ref=e743]: Oct 29 · Consult booked for Nov 2
+              - generic [ref=e744]:
+                - generic [ref=e745]: Dashboard
+                - generic [ref=e746]: Leads
+                - generic [ref=e747]: Calendar
+                - generic [ref=e748]: Events
+                - generic [ref=e749]: More
+        - generic [ref=e750]:
+          - generic [ref=e751]: "\"Create Proposal\" carries all lead data over. No retyping."
+          - generic [ref=e752]: "→ System: a date hold blocks the calendar and auto-expires after X days."
+      - generic [ref=e753]:
+        - generic [ref=e754]:
+          - generic [ref=e755]: "5"
+          - text: Proposal Builder
+          - code [ref=e756]: Proposal Builder
+        - generic [ref=e757]:
+          - figure "★ Desktop · 1280px (main)" [ref=e758]:
+            - generic [ref=e760]:
+              - generic [ref=e761]: app/proposals/new?lead=rivera
+              - generic [ref=e766]:
+                - generic [ref=e767]:
+                  - text: "[Business] ·"
+                  - generic [ref=e769]: Proposal · Rivera
+                - generic [ref=e771]:
+                  - navigation [ref=e772]:
+                    - generic [ref=e773]: Dashboard
+                    - generic [ref=e774]: Leads
+                    - generic [ref=e775]: Calendar
+                    - generic [ref=e776]: Events
+                    - generic [ref=e777]: Settings
+                  - generic [ref=e779]:
+                    - generic [ref=e780]:
+                      - generic [ref=e781]: 1. Pick a package
+                      - generic [ref=e782]:
+                        - generic [ref=e783]:
+                          - generic [ref=e785]: Silver
+                          - generic [ref=e786]: $8,000
+                        - generic [ref=e787]:
+                          - generic [ref=e789]: Gold ✓
+                          - generic [ref=e790]: $11,000
+                        - generic [ref=e791]:
+                          - generic [ref=e793]: Platinum
+                          - generic [ref=e794]: $15,500
+                      - generic [ref=e795]: 2. Add-ons
+                      - table [ref=e796]:
+                        - rowgroup [ref=e797]:
+                          - row [ref=e798]:
+                            - columnheader [ref=e799]
+                            - columnheader "Add-on" [ref=e800]
+                            - columnheader "Qty" [ref=e801]
+                            - columnheader "Price" [ref=e802]
+                          - row [ref=e803]:
+                            - cell "☑" [ref=e804]
+                            - cell "Photo booth (4 hrs)" [ref=e805]
+                            - cell "1" [ref=e806]
+                            - cell "$1,500" [ref=e807]
+                          - row [ref=e808]:
+                            - cell "☑" [ref=e809]
+                            - cell "Karaoke + KJ (3 hrs)" [ref=e810]
+                            - cell "1" [ref=e811]
+                            - cell "$900" [ref=e812]
+                          - row [ref=e813]:
+                            - cell "☑" [ref=e814]
+                            - cell "Chairs" [ref=e815]
+                            - cell "140" [ref=e816]
+                            - cell "$350" [ref=e817]
+                          - row [ref=e818]:
+                            - cell "☐" [ref=e819]
+                            - cell "Photo magnets" [ref=e820]
+                            - cell "-" [ref=e821]
+                            - cell "$600" [ref=e822]
+                      - generic [ref=e823]:
+                        - generic [ref=e824]: Edge case
+                        - generic [ref=e825]:
+                          - text: "⚠ Chairs: you own 120, quoted 140."
+                          - generic [ref=e826]:
+                            - generic [ref=e827]: "[ Reduce to 120 ]"
+                            - generic [ref=e828]: "[ Add partner rental ]"
+                            - generic [ref=e829]: "[ Override + note ]"
+                    - generic [ref=e830]:
+                      - heading "Summary" [level=5] [ref=e831]
+                      - table [ref=e832]:
+                        - rowgroup [ref=e833]:
+                          - row [ref=e834]:
+                            - cell "Package" [ref=e835]
+                            - cell "$11,000" [ref=e836]
+                          - row [ref=e837]:
+                            - cell "Add-ons" [ref=e838]
+                            - cell "$2,750" [ref=e839]
+                          - row [ref=e840]:
+                            - cell "Discount" [ref=e841]
+                            - cell "$0" [ref=e842]
+                          - row [ref=e843]:
+                            - cell "Tax 8%" [ref=e844]
+                            - cell "$1,100" [ref=e845]
+                          - row [ref=e846]:
+                            - columnheader "Total" [ref=e847]
+                            - columnheader "$14,850" [ref=e848]
+                          - row [ref=e849]:
+                            - cell "Deposit 30%" [ref=e850]
+                            - cell "$4,455" [ref=e851]
+                      - generic [ref=e852]: "[ Preview as client ]"
+                      - generic [ref=e853]: "[ Send to client ]"
+          - figure "Tablet · 820px" [ref=e854]:
+            - generic [ref=e857]:
+              - generic [ref=e858]:
+                - text: "[Business] ·"
+                - generic [ref=e860]: Proposal · Rivera
+              - navigation [ref=e862]:
+                - generic [ref=e863]: Dashboard
+                - generic [ref=e864]: Leads
+                - generic [ref=e865]: Calendar
+                - generic [ref=e866]: Events
+                - generic [ref=e867]: Settings
+              - generic [ref=e869]:
+                - generic [ref=e870]:
+                  - generic [ref=e871]: 1. Pick a package
+                  - generic [ref=e872]:
+                    - generic [ref=e873]:
+                      - generic [ref=e875]: Silver
+                      - generic [ref=e876]: $8,000
+                    - generic [ref=e877]:
+                      - generic [ref=e879]: Gold ✓
+                      - generic [ref=e880]: $11,000
+                    - generic [ref=e881]:
+                      - generic [ref=e883]: Platinum
+                      - generic [ref=e884]: $15,500
+                  - generic [ref=e885]: 2. Add-ons
+                  - table [ref=e886]:
+                    - rowgroup [ref=e887]:
+                      - row [ref=e888]:
+                        - columnheader [ref=e889]
+                        - columnheader "Add-on" [ref=e890]
+                        - columnheader "Qty" [ref=e891]
+                        - columnheader "Price" [ref=e892]
+                      - row [ref=e893]:
+                        - cell "☑" [ref=e894]
+                        - cell "Photo booth (4 hrs)" [ref=e895]
+                        - cell "1" [ref=e896]
+                        - cell "$1,500" [ref=e897]
+                      - row [ref=e898]:
+                        - cell "☑" [ref=e899]
+                        - cell "Karaoke + KJ (3 hrs)" [ref=e900]
+                        - cell "1" [ref=e901]
+                        - cell "$900" [ref=e902]
+                      - row [ref=e903]:
+                        - cell "☑" [ref=e904]
+                        - cell "Chairs" [ref=e905]
+                        - cell "140" [ref=e906]
+                        - cell "$350" [ref=e907]
+                      - row [ref=e908]:
+                        - cell "☐" [ref=e909]
+                        - cell "Photo magnets" [ref=e910]
+                        - cell "-" [ref=e911]
+                        - cell "$600" [ref=e912]
+                  - generic [ref=e913]:
+                    - generic [ref=e914]: Edge case
+                    - generic [ref=e915]:
+                      - text: "⚠ Chairs: you own 120, quoted 140."
+                      - generic [ref=e916]:
+                        - generic [ref=e917]: "[ Reduce to 120 ]"
+                        - generic [ref=e918]: "[ Add partner rental ]"
+                        - generic [ref=e919]: "[ Override + note ]"
+                - generic [ref=e920]:
+                  - heading "Summary" [level=5] [ref=e921]
+                  - table [ref=e922]:
+                    - rowgroup [ref=e923]:
+                      - row [ref=e924]:
+                        - cell "Package" [ref=e925]
+                        - cell "$11,000" [ref=e926]
+                      - row [ref=e927]:
+                        - cell "Add-ons" [ref=e928]
+                        - cell "$2,750" [ref=e929]
+                      - row [ref=e930]:
+                        - cell "Discount" [ref=e931]
+                        - cell "$0" [ref=e932]
+                      - row [ref=e933]:
+                        - cell "Tax 8%" [ref=e934]
+                        - cell "$1,100" [ref=e935]
+                      - row [ref=e936]:
+                        - columnheader "Total" [ref=e937]
+                        - columnheader "$14,850" [ref=e938]
+                      - row [ref=e939]:
+                        - cell "Deposit 30%" [ref=e940]
+                        - cell "$4,455" [ref=e941]
+                  - generic [ref=e942]: "[ Preview as client ]"
+                  - generic [ref=e943]: "[ Send to client ]"
+          - figure "Phone · 390px" [ref=e944]:
+            - generic [ref=e948]:
+              - generic [ref=e949]:
+                - text: "[Business] · ☰"
+                - generic [ref=e951]: Proposal · Rivera
+              - generic [ref=e953]:
+                - generic [ref=e954]:
+                  - generic [ref=e955]: 1. Pick a package
+                  - generic [ref=e956]:
+                    - generic [ref=e957]:
+                      - generic [ref=e959]: Silver
+                      - generic [ref=e960]: $8,000
+                    - generic [ref=e961]:
+                      - generic [ref=e963]: Gold ✓
+                      - generic [ref=e964]: $11,000
+                    - generic [ref=e965]:
+                      - generic [ref=e967]: Platinum
+                      - generic [ref=e968]: $15,500
+                  - generic [ref=e969]: 2. Add-ons
+                  - table [ref=e970]:
+                    - rowgroup [ref=e971]:
+                      - row [ref=e972]:
+                        - columnheader [ref=e973]
+                        - columnheader "Add-on" [ref=e974]
+                        - columnheader "Qty" [ref=e975]
+                        - columnheader "Price" [ref=e976]
+                      - row [ref=e977]:
+                        - cell "☑" [ref=e978]
+                        - cell "Photo booth (4 hrs)" [ref=e979]
+                        - cell "1" [ref=e980]
+                        - cell "$1,500" [ref=e981]
+                      - row [ref=e982]:
+                        - cell "☑" [ref=e983]
+                        - cell "Karaoke + KJ (3 hrs)" [ref=e984]
+                        - cell "1" [ref=e985]
+                        - cell "$900" [ref=e986]
+                      - row [ref=e987]:
+                        - cell "☑" [ref=e988]
+                        - cell "Chairs" [ref=e989]
+                        - cell "140" [ref=e990]
+                        - cell "$350" [ref=e991]
+                      - row [ref=e992]:
+                        - cell "☐" [ref=e993]
+                        - cell "Photo magnets" [ref=e994]
+                        - cell "-" [ref=e995]
+                        - cell "$600" [ref=e996]
+                  - generic [ref=e997]:
+                    - generic [ref=e998]: Edge case
+                    - generic [ref=e999]:
+                      - text: "⚠ Chairs: you own 120, quoted 140."
+                      - generic [ref=e1000]:
+                        - generic [ref=e1001]: "[ Reduce to 120 ]"
+                        - generic [ref=e1002]: "[ Add partner rental ]"
+                        - generic [ref=e1003]: "[ Override + note ]"
+                - generic [ref=e1004]:
+                  - generic [ref=e1005]: Total $14,850
+                  - generic [ref=e1006]: "[ Preview ]"
+                  - generic [ref=e1007]: "[ Send ]"
+              - generic [ref=e1008]:
+                - generic [ref=e1009]: Dashboard
+                - generic [ref=e1010]: Leads
+                - generic [ref=e1011]: Calendar
+                - generic [ref=e1012]: Events
+                - generic [ref=e1013]: More
+        - generic [ref=e1014]:
+          - generic [ref=e1015]: Total updates live as add-ons and quantities change.
+          - generic [ref=e1016]: "→ System: checks gear availability for each add-on on Jun 12 and warns if short."
+      - generic [ref=e1017]:
+        - generic [ref=e1018]:
+          - generic [ref=e1019]: "6"
+          - text: Contract (countersign)
+          - code [ref=e1020]: Contract
+        - generic [ref=e1021]:
+          - figure "★ Desktop · 1280px (main)" [ref=e1022]:
+            - generic [ref=e1024]:
+              - generic [ref=e1025]: app/contracts/rivera
+              - generic [ref=e1030]:
+                - generic [ref=e1031]:
+                  - text: "[Business] ·"
+                  - generic [ref=e1033]: Contract · Rivera
+                - generic [ref=e1035]:
+                  - navigation [ref=e1036]:
+                    - generic [ref=e1037]: Dashboard
+                    - generic [ref=e1038]: Leads
+                    - generic [ref=e1039]: Calendar
+                    - generic [ref=e1040]: Events
+                    - generic [ref=e1041]: Settings
+                  - generic [ref=e1042]:
+                    - generic [ref=e1043]:
+                      - generic [ref=e1044]: Client signed ✓
+                      - generic [ref=e1045]: Waiting for you
+                    - generic [ref=e1046]:
+                      - generic [ref=e1047]: Event Services Agreement
+                      - paragraph [ref=e1048]: Between [Business] and Ana Rivera for a wedding on Jun 12, 2027 at Hacienda Venue. Total $14,850; deposit $4,455.
+                      - generic [ref=e1053]: Cancellation policy
+                    - generic [ref=e1057]: underlined = merge fields filled from the proposal
+                    - generic [ref=e1058]:
+                      - generic [ref=e1059]:
+                        - heading "Client" [level=5] [ref=e1060]
+                        - generic [ref=e1061]: Ana Rivera
+                        - generic [ref=e1062]: Signed Oct 30 · 4:12 PM
+                      - generic [ref=e1063]:
+                        - heading "You" [level=5] [ref=e1064]
+                        - generic [ref=e1065]: Sign here
+                        - generic [ref=e1066]: "[ Countersign ]"
+                    - generic [ref=e1067]:
+                      - generic [ref=e1068]: After signing
+                      - generic [ref=e1069]: We'll book the event and send the deposit invoice to Ana.
+          - figure "Tablet · 820px" [ref=e1070]:
+            - generic [ref=e1073]:
+              - generic [ref=e1074]:
+                - text: "[Business] ·"
+                - generic [ref=e1076]: Contract · Rivera
+              - navigation [ref=e1078]:
+                - generic [ref=e1079]: Dashboard
+                - generic [ref=e1080]: Leads
+                - generic [ref=e1081]: Calendar
+                - generic [ref=e1082]: Events
+                - generic [ref=e1083]: Settings
+              - generic [ref=e1084]:
+                - generic [ref=e1085]:
+                  - generic [ref=e1086]: Client signed ✓
+                  - generic [ref=e1087]: Waiting for you
+                - generic [ref=e1088]:
+                  - generic [ref=e1089]: Event Services Agreement
+                  - paragraph [ref=e1090]: Between [Business] and Ana Rivera for a wedding on Jun 12, 2027 at Hacienda Venue. Total $14,850; deposit $4,455.
+                  - generic [ref=e1095]: Cancellation policy
+                - generic [ref=e1099]: underlined = merge fields filled from the proposal
+                - generic [ref=e1100]:
+                  - generic [ref=e1101]:
+                    - heading "Client" [level=5] [ref=e1102]
+                    - generic [ref=e1103]: Ana Rivera
+                    - generic [ref=e1104]: Signed Oct 30 · 4:12 PM
+                  - generic [ref=e1105]:
+                    - heading "You" [level=5] [ref=e1106]
+                    - generic [ref=e1107]: Sign here
+                    - generic [ref=e1108]: "[ Countersign ]"
+                - generic [ref=e1109]:
+                  - generic [ref=e1110]: After signing
+                  - generic [ref=e1111]: We'll book the event and send the deposit invoice to Ana.
+          - figure "Phone · 390px" [ref=e1112]:
+            - generic [ref=e1116]:
+              - generic [ref=e1117]:
+                - text: "[Business] · ☰"
+                - generic [ref=e1119]: Contract · Rivera
+              - generic [ref=e1121]:
+                - generic [ref=e1122]:
+                  - generic [ref=e1123]: Client signed ✓
+                  - generic [ref=e1124]: Waiting for you
+                - generic [ref=e1125]:
+                  - generic [ref=e1126]: Event Services Agreement
+                  - paragraph [ref=e1127]: Between [Business] and Ana Rivera for a wedding on Jun 12, 2027 at Hacienda Venue. Total $14,850; deposit $4,455.
+                  - generic [ref=e1132]: Cancellation policy
+                - generic [ref=e1136]: underlined = merge fields filled from the proposal
+                - generic [ref=e1137]:
+                  - generic [ref=e1138]:
+                    - heading "Client" [level=5] [ref=e1139]
+                    - generic [ref=e1140]: Ana Rivera
+                    - generic [ref=e1141]: Signed Oct 30 · 4:12 PM
+                  - generic [ref=e1142]:
+                    - heading "You" [level=5] [ref=e1143]
+                    - generic [ref=e1144]: Sign here
+                    - generic [ref=e1145]: "[ Countersign ]"
+                - generic [ref=e1146]:
+                  - generic [ref=e1147]: After signing
+                  - generic [ref=e1148]: We'll book the event and send the deposit invoice to Ana.
+              - generic [ref=e1149]:
+                - generic [ref=e1150]: Dashboard
+                - generic [ref=e1151]: Leads
+                - generic [ref=e1152]: Calendar
+                - generic [ref=e1153]: Events
+                - generic [ref=e1154]: More
+        - generic [ref=e1155]:
+          - generic [ref=e1156]: "→ System (contract.signed): Event created as Booked, hold → booking, invoice + payment schedule, gear reserved, checklist applied, welcome email."
+          - generic [ref=e1157]: Signed PDF stored with timestamps for both parties.
+      - generic [ref=e1158]:
+        - generic [ref=e1159]:
+          - generic [ref=e1160]: "7"
+          - text: Event Hub › Overview
+          - code [ref=e1161]: Event Hub › Overview
+          - generic [ref=e1162]: "Snapshot: mid-April 2027, 8 weeks out"
+        - generic [ref=e1163]:
+          - figure "★ Desktop · 1280px (main)" [ref=e1164]:
+            - generic [ref=e1166]:
+              - generic [ref=e1167]: app/events/rivera
+              - generic [ref=e1172]:
+                - generic [ref=e1173]:
+                  - text: "[Business] ·"
+                  - generic [ref=e1175]: Rivera Wedding
+                - generic [ref=e1177]:
+                  - navigation [ref=e1178]:
+                    - generic [ref=e1179]: Dashboard
+                    - generic [ref=e1180]: Leads
+                    - generic [ref=e1181]: Calendar
+                    - generic [ref=e1182]: Events
+                    - generic [ref=e1183]: Settings
+                  - generic [ref=e1184]:
+                    - generic [ref=e1185]:
+                      - generic [ref=e1186]: Sat, Jun 12, 2027 · Hacienda Venue
+                      - generic [ref=e1187]: In planning
+                    - navigation [ref=e1188]:
+                      - generic [ref=e1189]: Overview
+                      - generic [ref=e1190]: Tasks
+                      - generic [ref=e1191]: Guests
+                      - generic [ref=e1192]: Money
+                      - generic [ref=e1193]: Files
+                      - generic [ref=e1194]: Messages
+                    - generic [ref=e1195]:
+                      - generic [ref=e1196]:
+                        - generic [ref=e1197]: "58"
+                        - text: days to go
+                      - generic [ref=e1198]:
+                        - generic [ref=e1199]: $4,455
+                        - text: balance due
+                      - generic [ref=e1200]:
+                        - generic [ref=e1201]: 75/120
+                        - text: RSVPs in
+                      - generic [ref=e1202]:
+                        - generic [ref=e1203]: "6"
+                        - text: open tasks · 1 late
+                    - generic [ref=e1204]:
+                      - generic [ref=e1205]:
+                        - heading "Next 3 deadlines" [level=5] [ref=e1206]
+                        - list [ref=e1207]:
+                          - listitem [ref=e1208]: May 1 · RSVP cutoff
+                          - listitem [ref=e1209]: May 29 · Final payment $4,455
+                          - listitem [ref=e1210]: Jun 5 · Lock final headcount
+                      - generic [ref=e1211]:
+                        - heading "Venue" [level=5] [ref=e1212]
+                        - generic [ref=e1213]: map
+                        - generic [ref=e1215]: "Load-in: side door · Wi-Fi on file"
+                    - generic [ref=e1216]:
+                      - heading "Open tasks" [level=5] [ref=e1217]
+                      - list [ref=e1218]:
+                        - listitem [ref=e1219]: "☐ Late: Confirm caterer tasting"
+                        - listitem [ref=e1220]: ☐ Send "Wedding details" questionnaire
+                        - listitem [ref=e1221]: ☐ Reserve Photo Booth Kit A
+          - figure "Tablet · 820px" [ref=e1222]:
+            - generic [ref=e1225]:
+              - generic [ref=e1226]:
+                - text: "[Business] ·"
+                - generic [ref=e1228]: Rivera Wedding
+              - navigation [ref=e1230]:
+                - generic [ref=e1231]: Dashboard
+                - generic [ref=e1232]: Leads
+                - generic [ref=e1233]: Calendar
+                - generic [ref=e1234]: Events
+                - generic [ref=e1235]: Settings
+              - generic [ref=e1236]:
+                - generic [ref=e1237]:
+                  - generic [ref=e1238]: Sat, Jun 12, 2027 · Hacienda Venue
+                  - generic [ref=e1239]: In planning
+                - navigation [ref=e1240]:
+                  - generic [ref=e1241]: Overview
+                  - generic [ref=e1242]: Tasks
+                  - generic [ref=e1243]: Guests
+                  - generic [ref=e1244]: Money
+                  - generic [ref=e1245]: Files
+                  - generic [ref=e1246]: Messages
+                - generic [ref=e1247]:
+                  - generic [ref=e1248]:
+                    - generic [ref=e1249]: "58"
+                    - text: days to go
+                  - generic [ref=e1250]:
+                    - generic [ref=e1251]: $4,455
+                    - text: balance due
+                  - generic [ref=e1252]:
+                    - generic [ref=e1253]: 75/120
+                    - text: RSVPs in
+                  - generic [ref=e1254]:
+                    - generic [ref=e1255]: "6"
+                    - text: open tasks · 1 late
+                - generic [ref=e1256]:
+                  - generic [ref=e1257]:
+                    - heading "Next 3 deadlines" [level=5] [ref=e1258]
+                    - list [ref=e1259]:
+                      - listitem [ref=e1260]: May 1 · RSVP cutoff
+                      - listitem [ref=e1261]: May 29 · Final payment $4,455
+                      - listitem [ref=e1262]: Jun 5 · Lock final headcount
+                  - generic [ref=e1263]:
+                    - heading "Venue" [level=5] [ref=e1264]
+                    - generic [ref=e1265]: map
+                    - generic [ref=e1267]: "Load-in: side door · Wi-Fi on file"
+                - generic [ref=e1268]:
+                  - heading "Open tasks" [level=5] [ref=e1269]
+                  - list [ref=e1270]:
+                    - listitem [ref=e1271]: "☐ Late: Confirm caterer tasting"
+                    - listitem [ref=e1272]: ☐ Send "Wedding details" questionnaire
+                    - listitem [ref=e1273]: ☐ Reserve Photo Booth Kit A
+          - figure "Phone · 390px" [ref=e1274]:
+            - generic [ref=e1278]:
+              - generic [ref=e1279]:
+                - text: "[Business] · ☰"
+                - generic [ref=e1281]: Rivera Wedding
+              - generic [ref=e1283]:
+                - generic [ref=e1284]:
+                  - generic [ref=e1285]: Sat, Jun 12, 2027 · Hacienda Venue
+                  - generic [ref=e1286]: In planning
+                - navigation [ref=e1287]:
+                  - generic [ref=e1288]: Overview
+                  - generic [ref=e1289]: Tasks
+                  - generic [ref=e1290]: Guests
+                  - generic [ref=e1291]: Money
+                  - generic [ref=e1292]: Files
+                  - generic [ref=e1293]: Messages
+                - generic [ref=e1294]:
+                  - generic [ref=e1295]:
+                    - generic [ref=e1296]: "58"
+                    - text: days to go
+                  - generic [ref=e1297]:
+                    - generic [ref=e1298]: $4,455
+                    - text: balance due
+                  - generic [ref=e1299]:
+                    - generic [ref=e1300]: 75/120
+                    - text: RSVPs in
+                  - generic [ref=e1301]:
+                    - generic [ref=e1302]: "6"
+                    - text: open tasks · 1 late
+                - generic [ref=e1303]:
+                  - generic [ref=e1304]:
+                    - heading "Next 3 deadlines" [level=5] [ref=e1305]
+                    - list [ref=e1306]:
+                      - listitem [ref=e1307]: May 1 · RSVP cutoff
+                      - listitem [ref=e1308]: May 29 · Final payment $4,455
+                      - listitem [ref=e1309]: Jun 5 · Lock final headcount
+                  - generic [ref=e1310]:
+                    - heading "Venue" [level=5] [ref=e1311]
+                    - generic [ref=e1312]: map
+                    - generic [ref=e1314]: "Load-in: side door · Wi-Fi on file"
+                - generic [ref=e1315]:
+                  - heading "Open tasks" [level=5] [ref=e1316]
+                  - list [ref=e1317]:
+                    - listitem [ref=e1318]: "☐ Late: Confirm caterer tasting"
+                    - listitem [ref=e1319]: ☐ Send "Wedding details" questionnaire
+                    - listitem [ref=e1320]: ☐ Reserve Photo Booth Kit A
+              - generic [ref=e1321]:
+                - generic [ref=e1322]: Dashboard
+                - generic [ref=e1323]: Leads
+                - generic [ref=e1324]: Calendar
+                - generic [ref=e1325]: Events
+                - generic [ref=e1326]: More
+        - generic [ref=e1327]:
+          - generic [ref=e1328]: "Status path: Inquiry → Proposal → Booked → In planning → Final week → Event day → Wrap-up → Closed."
+          - generic [ref=e1329]: Phase 2 tabs (Timeline, Vendors, Equipment…) slot into this same tab bar later.
+      - generic [ref=e1330]:
+        - generic [ref=e1331]:
+          - generic [ref=e1332]: "8"
+          - text: Event Hub › Guests
+          - code [ref=e1333]: Event Hub › Guests
+          - generic [ref=e1334]: "Snapshot: mid-April 2027"
+        - generic [ref=e1335]:
+          - figure "★ Desktop · 1280px (main)" [ref=e1336]:
+            - generic [ref=e1338]:
+              - generic [ref=e1339]: app/events/rivera/guests
+              - generic [ref=e1344]:
+                - generic [ref=e1345]:
+                  - text: "[Business] ·"
+                  - generic [ref=e1347]: Rivera Wedding
+                - generic [ref=e1349]:
+                  - navigation [ref=e1350]:
+                    - generic [ref=e1351]: Dashboard
+                    - generic [ref=e1352]: Leads
+                    - generic [ref=e1353]: Calendar
+                    - generic [ref=e1354]: Events
+                    - generic [ref=e1355]: Settings
+                  - generic [ref=e1356]:
+                    - navigation [ref=e1357]:
+                      - generic [ref=e1358]: Overview
+                      - generic [ref=e1359]: Tasks
+                      - generic [ref=e1360]: Guests
+                      - generic [ref=e1361]: Money
+                      - generic [ref=e1362]: Files
+                      - generic [ref=e1363]: Messages
+                    - generic [ref=e1364]:
+                      - generic [ref=e1365]:
+                        - generic [ref=e1366]: "64"
+                        - text: attending
+                      - generic [ref=e1367]:
+                        - generic [ref=e1368]: "8"
+                        - text: declined
+                      - generic [ref=e1369]:
+                        - generic [ref=e1370]: "3"
+                        - text: maybe
+                      - generic [ref=e1371]:
+                        - generic [ref=e1372]: "45"
+                        - text: no reply
+                    - generic [ref=e1373]:
+                      - text: "Meals:"
+                      - generic [ref=e1374]: Chicken 30
+                      - generic [ref=e1375]: Fish 20
+                      - generic [ref=e1376]: Veg 14
+                      - generic [ref=e1377]: ⚠ Allergies 5
+                    - generic [ref=e1378]:
+                      - generic [ref=e1379]: "[ + Add guest ]"
+                      - generic [ref=e1380]: "[ Import CSV ]"
+                      - generic [ref=e1381]: "[ Remind 45 non-responders ]"
+                    - table [ref=e1382]:
+                      - rowgroup [ref=e1383]:
+                        - row [ref=e1384]:
+                          - columnheader "Household" [ref=e1385]
+                          - columnheader "#" [ref=e1386]
+                          - columnheader "RSVP" [ref=e1387]
+                          - columnheader "Meals" [ref=e1388]
+                        - row [ref=e1389]:
+                          - cell "Rivera family" [ref=e1390]
+                          - cell "4" [ref=e1391]
+                          - cell "✓ Attending" [ref=e1392]
+                          - cell "Chicken ×2, Veg ×2" [ref=e1393]
+                        - row [ref=e1394]:
+                          - cell "Garcia, Luis (+1)" [ref=e1395]
+                          - cell "2" [ref=e1396]
+                          - cell "… No reply" [ref=e1397]
+                          - cell "-" [ref=e1398]
+                        - row [ref=e1399]:
+                          - cell "Chen household" [ref=e1400]
+                          - cell "3" [ref=e1401]
+                          - cell "✗ Declined" [ref=e1402]
+                          - cell "-" [ref=e1403]
+                        - row [ref=e1404]:
+                          - cell "Ortiz, Maria" [ref=e1405]
+                          - cell "1" [ref=e1406]
+                          - cell "? Maybe" [ref=e1407]
+                          - cell "Fish · ⚠ nuts" [ref=e1408]
+                    - generic [ref=e1409]:
+                      - generic [ref=e1410]: Empty state
+                      - generic [ref=e1411]:
+                        - text: No guests yet.
+                        - generic [ref=e1412]: "[ Import CSV ]"
+                        - text: or let the client add them in their portal.
+          - figure "Tablet · 820px" [ref=e1413]:
+            - generic [ref=e1416]:
+              - generic [ref=e1417]:
+                - text: "[Business] ·"
+                - generic [ref=e1419]: Rivera Wedding
+              - navigation [ref=e1421]:
+                - generic [ref=e1422]: Dashboard
+                - generic [ref=e1423]: Leads
+                - generic [ref=e1424]: Calendar
+                - generic [ref=e1425]: Events
+                - generic [ref=e1426]: Settings
+              - generic [ref=e1427]:
+                - navigation [ref=e1428]:
+                  - generic [ref=e1429]: Overview
+                  - generic [ref=e1430]: Tasks
+                  - generic [ref=e1431]: Guests
+                  - generic [ref=e1432]: Money
+                  - generic [ref=e1433]: Files
+                  - generic [ref=e1434]: Messages
+                - generic [ref=e1435]:
+                  - generic [ref=e1436]:
+                    - generic [ref=e1437]: "64"
+                    - text: attending
+                  - generic [ref=e1438]:
+                    - generic [ref=e1439]: "8"
+                    - text: declined
+                  - generic [ref=e1440]:
+                    - generic [ref=e1441]: "3"
+                    - text: maybe
+                  - generic [ref=e1442]:
+                    - generic [ref=e1443]: "45"
+                    - text: no reply
+                - generic [ref=e1444]:
+                  - text: "Meals:"
+                  - generic [ref=e1445]: Chicken 30
+                  - generic [ref=e1446]: Fish 20
+                  - generic [ref=e1447]: Veg 14
+                  - generic [ref=e1448]: ⚠ Allergies 5
+                - generic [ref=e1449]:
+                  - generic [ref=e1450]: "[ + Add guest ]"
+                  - generic [ref=e1451]: "[ Import CSV ]"
+                  - generic [ref=e1452]: "[ Remind 45 non-responders ]"
+                - table [ref=e1453]:
+                  - rowgroup [ref=e1454]:
+                    - row [ref=e1455]:
+                      - columnheader "Household" [ref=e1456]
+                      - columnheader "#" [ref=e1457]
+                      - columnheader "RSVP" [ref=e1458]
+                      - columnheader "Meals" [ref=e1459]
+                    - row [ref=e1460]:
+                      - cell "Rivera family" [ref=e1461]
+                      - cell "4" [ref=e1462]
+                      - cell "✓ Attending" [ref=e1463]
+                      - cell "Chicken ×2, Veg ×2" [ref=e1464]
+                    - row [ref=e1465]:
+                      - cell "Garcia, Luis (+1)" [ref=e1466]
+                      - cell "2" [ref=e1467]
+                      - cell "… No reply" [ref=e1468]
+                      - cell "-" [ref=e1469]
+                    - row [ref=e1470]:
+                      - cell "Chen household" [ref=e1471]
+                      - cell "3" [ref=e1472]
+                      - cell "✗ Declined" [ref=e1473]
+                      - cell "-" [ref=e1474]
+                    - row [ref=e1475]:
+                      - cell "Ortiz, Maria" [ref=e1476]
+                      - cell "1" [ref=e1477]
+                      - cell "? Maybe" [ref=e1478]
+                      - cell "Fish · ⚠ nuts" [ref=e1479]
+                - generic [ref=e1480]:
+                  - generic [ref=e1481]: Empty state
+                  - generic [ref=e1482]:
+                    - text: No guests yet.
+                    - generic [ref=e1483]: "[ Import CSV ]"
+                    - text: or let the client add them in their portal.
+          - figure "Phone · 390px" [ref=e1484]:
+            - generic [ref=e1488]:
+              - generic [ref=e1489]:
+                - text: "[Business] · ☰"
+                - generic [ref=e1491]: Rivera Wedding
+              - generic [ref=e1493]:
+                - navigation [ref=e1494]:
+                  - generic [ref=e1495]: Overview
+                  - generic [ref=e1496]: Tasks
+                  - generic [ref=e1497]: Guests
+                  - generic [ref=e1498]: Money
+                  - generic [ref=e1499]: Files
+                  - generic [ref=e1500]: Messages
+                - generic [ref=e1501]:
+                  - generic [ref=e1502]:
+                    - generic [ref=e1503]: "64"
+                    - text: attending
+                  - generic [ref=e1504]:
+                    - generic [ref=e1505]: "8"
+                    - text: declined
+                  - generic [ref=e1506]:
+                    - generic [ref=e1507]: "3"
+                    - text: maybe
+                  - generic [ref=e1508]:
+                    - generic [ref=e1509]: "45"
+                    - text: no reply
+                - generic [ref=e1510]:
+                  - text: "Meals:"
+                  - generic [ref=e1511]: Chicken 30
+                  - generic [ref=e1512]: Fish 20
+                  - generic [ref=e1513]: Veg 14
+                  - generic [ref=e1514]: ⚠ Allergies 5
+                - generic [ref=e1515]:
+                  - generic [ref=e1516]: "[ + Add guest ]"
+                  - generic [ref=e1517]: "[ Import CSV ]"
+                  - generic [ref=e1518]: "[ Remind 45 non-responders ]"
+                - list [ref=e1519]:
+                  - listitem [ref=e1520]: Rivera family · 4✓ Attending · Chicken ×2, Veg ×2
+                  - listitem [ref=e1521]: Garcia, Luis (+1) · 2… No reply · -
+                  - listitem [ref=e1522]: Chen household · 3✗ Declined · -
+                  - listitem [ref=e1523]: Ortiz, Maria · 1? Maybe · Fish · ⚠ nuts
+                - generic [ref=e1524]:
+                  - generic [ref=e1525]: Empty state
+                  - generic [ref=e1526]:
+                    - text: No guests yet.
+                    - generic [ref=e1527]: "[ Import CSV ]"
+                    - text: or let the client add them in their portal.
+              - generic [ref=e1528]:
+                - generic [ref=e1529]: Dashboard
+                - generic [ref=e1530]: Leads
+                - generic [ref=e1531]: Calendar
+                - generic [ref=e1532]: Events
+                - generic [ref=e1533]: More
+        - generic [ref=e1534]:
+          - generic [ref=e1535]: "→ System (rsvp.updated): headcount, meal counts, seating pool and potluck targets update live."
+          - generic [ref=e1536]: Allergies are shown prominently and never dropped on import/export.
+    - generic [ref=e1537]:
+      - heading "Client (Host) journey" [level=2] [ref=e1538]
+      - generic [ref=e1539]: "Goal: the portal always answers \"what's next and what do I owe?\" No password, magic link only. Main device: Desktop web (often opened on a phone)."
+      - generic [ref=e1541]:
+        - generic [ref=e1542]: Visits planner's website
+        - generic [ref=e1544]: →
+        - generic [ref=e1545]: Inquiry Form
+        - generic [ref=e1547]: →
+        - generic [ref=e1548]: Books a consult
+        - generic [ref=e1550]: →
+        - generic [ref=e1551]:
+          - generic [ref=e1552]: Opens proposal (magic link)
+          - generic [ref=e1553]: ▼
+          - generic [ref=e1554]: Link expired or forwarded? → new link to email on file / one-time code
+        - generic [ref=e1556]: →
+        - generic [ref=e1557]:
+          - generic [ref=e1558]: Accepts proposal
+          - generic [ref=e1559]: ▼
+          - generic [ref=e1560]: Wants changes? → Request changes + comment → new version
+        - generic [ref=e1562]: →
+        - generic [ref=e1563]: Signs contract
+        - generic [ref=e1565]: →
+        - generic [ref=e1566]:
+          - generic [ref=e1567]: Pays deposit
+          - generic [ref=e1568]: ▼
+          - generic [ref=e1569]: Payment failed? → plain error, retry, other method
+        - generic [ref=e1571]: →
+        - generic [ref=e1572]: Portal Home
+        - generic [ref=e1574]: →
+        - generic [ref=e1575]:
+          - generic [ref=e1576]: Approvals
+          - generic [ref=e1577]: ▼
+          - generic [ref=e1578]: Co-hosts disagree? → show both names; planner decides
+      - generic [ref=e1580]:
+        - generic [ref=e1581]:
+          - generic [ref=e1582]: "1"
+          - text: Inquiry Form
+          - code [ref=e1583]: Inquiry Form
+        - generic [ref=e1584]:
+          - figure "★ Desktop · 1280px (main)" [ref=e1585]:
+            - generic [ref=e1587]:
+              - generic [ref=e1588]: events.yourbiz.com/inquire
+              - generic [ref=e1593]:
+                - generic [ref=e1594]:
+                  - text: "[Business] ·"
+                  - generic [ref=e1596]: Plan your event
+                - generic [ref=e1597]:
+                  - generic [ref=e1598]: Tell us about your event
+                  - generic [ref=e1599]:
+                    - generic [ref=e1600]:
+                      - generic [ref=e1601]: Your name
+                      - generic [ref=e1602]: Ana Rivera
+                    - generic [ref=e1603]:
+                      - generic [ref=e1604]: Email
+                      - generic [ref=e1605]: ana@…
+                    - generic [ref=e1606]: Phone
+                    - generic [ref=e1609]:
+                      - generic [ref=e1610]: Event type
+                      - generic [ref=e1611]: Wedding ▾
+                    - generic [ref=e1612]:
+                      - generic [ref=e1613]: Date
+                      - generic [ref=e1614]: 06 / 12 / 2027
+                    - generic [ref=e1615]:
+                      - generic [ref=e1616]: Guest count
+                      - generic [ref=e1617]: "120"
+                    - generic [ref=e1618]:
+                      - generic [ref=e1619]: Budget range
+                      - generic [ref=e1620]: $15–20k ▾
+                    - generic [ref=e1621]:
+                      - generic [ref=e1622]: How did you hear about us?
+                      - generic [ref=e1623]: Instagram ▾
+                  - generic [ref=e1624]: Services you want
+                  - generic [ref=e1625]:
+                    - generic [ref=e1626]: ☑ Full planning
+                    - generic [ref=e1627]: ☑ Photo booth
+                    - generic [ref=e1628]: ☑ Karaoke
+                    - generic [ref=e1629]: ☐ Rentals
+                    - generic [ref=e1630]: ☐ Potluck organizer
+                    - generic [ref=e1631]: ☐ Donations
+                  - generic [ref=e1632]: Anything else?
+                  - generic [ref=e1635]: "[ Send inquiry ]"
+                  - generic [ref=e1636]:
+                    - generic [ref=e1637]: After submit
+                    - generic [ref=e1638]: ✓ Thanks, Ana! What happens next:1. We reply within 24 hrs · 2. Book a free consult · 3. Get your proposal
+          - figure "Tablet · 820px" [ref=e1639]:
+            - generic [ref=e1642]:
+              - generic [ref=e1643]:
+                - text: "[Business] ·"
+                - generic [ref=e1645]: Plan your event
+              - generic [ref=e1646]:
+                - generic [ref=e1647]: Tell us about your event
+                - generic [ref=e1648]:
+                  - generic [ref=e1649]:
+                    - generic [ref=e1650]: Your name
+                    - generic [ref=e1651]: Ana Rivera
+                  - generic [ref=e1652]:
+                    - generic [ref=e1653]: Email
+                    - generic [ref=e1654]: ana@…
+                  - generic [ref=e1655]: Phone
+                  - generic [ref=e1658]:
+                    - generic [ref=e1659]: Event type
+                    - generic [ref=e1660]: Wedding ▾
+                  - generic [ref=e1661]:
+                    - generic [ref=e1662]: Date
+                    - generic [ref=e1663]: 06 / 12 / 2027
+                  - generic [ref=e1664]:
+                    - generic [ref=e1665]: Guest count
+                    - generic [ref=e1666]: "120"
+                  - generic [ref=e1667]:
+                    - generic [ref=e1668]: Budget range
+                    - generic [ref=e1669]: $15–20k ▾
+                  - generic [ref=e1670]:
+                    - generic [ref=e1671]: How did you hear about us?
+                    - generic [ref=e1672]: Instagram ▾
+                - generic [ref=e1673]: Services you want
+                - generic [ref=e1674]:
+                  - generic [ref=e1675]: ☑ Full planning
+                  - generic [ref=e1676]: ☑ Photo booth
+                  - generic [ref=e1677]: ☑ Karaoke
+                  - generic [ref=e1678]: ☐ Rentals
+                  - generic [ref=e1679]: ☐ Potluck organizer
+                  - generic [ref=e1680]: ☐ Donations
+                - generic [ref=e1681]: Anything else?
+                - generic [ref=e1684]: "[ Send inquiry ]"
+                - generic [ref=e1685]:
+                  - generic [ref=e1686]: After submit
+                  - generic [ref=e1687]: ✓ Thanks, Ana! What happens next:1. We reply within 24 hrs · 2. Book a free consult · 3. Get your proposal
+          - figure "Phone · 390px" [ref=e1688]:
+            - generic [ref=e1692]:
+              - generic [ref=e1693]:
+                - text: "[Business] ·"
+                - generic [ref=e1695]: Plan your event
+              - generic [ref=e1696]:
+                - generic [ref=e1697]: Tell us about your event
+                - generic [ref=e1698]:
+                  - generic [ref=e1699]:
+                    - generic [ref=e1700]: Your name
+                    - generic [ref=e1701]: Ana Rivera
+                  - generic [ref=e1702]:
+                    - generic [ref=e1703]: Email
+                    - generic [ref=e1704]: ana@…
+                  - generic [ref=e1705]: Phone
+                  - generic [ref=e1708]:
+                    - generic [ref=e1709]: Event type
+                    - generic [ref=e1710]: Wedding ▾
+                  - generic [ref=e1711]:
+                    - generic [ref=e1712]: Date
+                    - generic [ref=e1713]: 06 / 12 / 2027
+                  - generic [ref=e1714]:
+                    - generic [ref=e1715]: Guest count
+                    - generic [ref=e1716]: "120"
+                  - generic [ref=e1717]:
+                    - generic [ref=e1718]: Budget range
+                    - generic [ref=e1719]: $15–20k ▾
+                  - generic [ref=e1720]:
+                    - generic [ref=e1721]: How did you hear about us?
+                    - generic [ref=e1722]: Instagram ▾
+                - generic [ref=e1723]: Services you want
+                - generic [ref=e1724]:
+                  - generic [ref=e1725]: ☑ Full planning
+                  - generic [ref=e1726]: ☑ Photo booth
+                  - generic [ref=e1727]: ☑ Karaoke
+                  - generic [ref=e1728]: ☐ Rentals
+                  - generic [ref=e1729]: ☐ Potluck organizer
+                  - generic [ref=e1730]: ☐ Donations
+                - generic [ref=e1731]: Anything else?
+                - generic [ref=e1734]: "[ Send inquiry ]"
+                - generic [ref=e1735]:
+                  - generic [ref=e1736]: After submit
+                  - generic [ref=e1737]: ✓ Thanks, Ana! What happens next:1. We reply within 24 hrs · 2. Book a free consult · 3. Get your proposal
+        - generic [ref=e1738]:
+          - generic [ref=e1739]: No account needed. Embeddable on the website, Instagram and Facebook.
+          - generic [ref=e1740]: "→ System: creates a Lead, checks the date, sends an auto-reply, notifies the planner."
+      - generic [ref=e1741]:
+        - generic [ref=e1742]:
+          - generic [ref=e1743]: "2"
+          - text: Public Booking Page
+          - code [ref=e1744]: Public Booking Page
+        - generic [ref=e1745]:
+          - figure "★ Desktop · 1280px (main)" [ref=e1746]:
+            - generic [ref=e1748]:
+              - generic [ref=e1749]: events.yourbiz.com/book
+              - generic [ref=e1754]:
+                - generic [ref=e1755]:
+                  - text: "[Business] ·"
+                  - generic [ref=e1757]: Book a consult
+                - generic [ref=e1758]:
+                  - generic [ref=e1759]: Book a free 30-min consult
+                  - generic [ref=e1760]:
+                    - generic [ref=e1761]:
+                      - heading "November 2026" [level=5] [ref=e1762]
+                      - generic [ref=e1763]:
+                        - generic [ref=e1764]: S
+                        - generic [ref=e1765]: M
+                        - generic [ref=e1766]: T
+                        - generic [ref=e1767]: W
+                        - generic [ref=e1768]: T
+                        - generic [ref=e1769]: F
+                        - generic [ref=e1770]: S
+                        - generic [ref=e1771]: "1"
+                        - generic [ref=e1772]: "2"
+                        - generic [ref=e1773]: "3"
+                        - generic [ref=e1774]: "4"
+                        - generic [ref=e1775]: "5"
+                        - generic [ref=e1776]: "6"
+                        - generic [ref=e1777]: "7"
+                        - generic [ref=e1778]: "8"
+                        - generic [ref=e1779]: "9"
+                        - generic [ref=e1780]: "10"
+                        - generic [ref=e1781]: "11"
+                        - generic [ref=e1782]: "12"
+                        - generic [ref=e1783]: "13"
+                        - generic [ref=e1784]: "14"
+                        - generic [ref=e1785]: "15"
+                        - generic [ref=e1786]: "16"
+                        - generic [ref=e1787]: "17"
+                        - generic [ref=e1788]: "18"
+                        - generic [ref=e1789]: "19"
+                        - generic [ref=e1790]: "20"
+                        - generic [ref=e1791]: "21"
+                        - generic [ref=e1792]: "22"
+                        - generic [ref=e1793]: "23"
+                        - generic [ref=e1794]: "24"
+                        - generic [ref=e1795]: "25"
+                        - generic [ref=e1796]: "26"
+                        - generic [ref=e1797]: "27"
+                        - generic [ref=e1798]: "28"
+                        - generic [ref=e1799]: "29"
+                        - generic [ref=e1800]: "30"
+                    - generic [ref=e1801]:
+                      - heading "Mon, Nov 2" [level=5] [ref=e1802]
+                      - generic [ref=e1803]:
+                        - generic [ref=e1804]: 10:00 AM
+                        - generic [ref=e1805]: 11:30 AM
+                        - generic [ref=e1806]: 2:00 PM ✓
+                        - generic [ref=e1807]: 4:30 PM
+                      - generic [ref=e1808]:
+                        - generic [ref=e1809]: Name
+                        - generic [ref=e1810]: Ana Rivera
+                      - generic [ref=e1811]:
+                        - generic [ref=e1812]: Email
+                        - generic [ref=e1813]: ana@…
+                      - generic [ref=e1814]: "[ Book consult ]"
+                  - generic [ref=e1815]:
+                    - generic [ref=e1816]: Empty state
+                    - generic [ref=e1817]:
+                      - text: No open times this week.
+                      - generic [ref=e1818]: "[ See next week → ]"
+          - figure "Tablet · 820px" [ref=e1819]:
+            - generic [ref=e1822]:
+              - generic [ref=e1823]:
+                - text: "[Business] ·"
+                - generic [ref=e1825]: Book a consult
+              - generic [ref=e1826]:
+                - generic [ref=e1827]: Book a free 30-min consult
+                - generic [ref=e1828]:
+                  - generic [ref=e1829]:
+                    - heading "November 2026" [level=5] [ref=e1830]
+                    - generic [ref=e1831]:
+                      - generic [ref=e1832]: S
+                      - generic [ref=e1833]: M
+                      - generic [ref=e1834]: T
+                      - generic [ref=e1835]: W
+                      - generic [ref=e1836]: T
+                      - generic [ref=e1837]: F
+                      - generic [ref=e1838]: S
+                      - generic [ref=e1839]: "1"
+                      - generic [ref=e1840]: "2"
+                      - generic [ref=e1841]: "3"
+                      - generic [ref=e1842]: "4"
+                      - generic [ref=e1843]: "5"
+                      - generic [ref=e1844]: "6"
+                      - generic [ref=e1845]: "7"
+                      - generic [ref=e1846]: "8"
+                      - generic [ref=e1847]: "9"
+                      - generic [ref=e1848]: "10"
+                      - generic [ref=e1849]: "11"
+                      - generic [ref=e1850]: "12"
+                      - generic [ref=e1851]: "13"
+                      - generic [ref=e1852]: "14"
+                      - generic [ref=e1853]: "15"
+                      - generic [ref=e1854]: "16"
+                      - generic [ref=e1855]: "17"
+                      - generic [ref=e1856]: "18"
+                      - generic [ref=e1857]: "19"
+                      - generic [ref=e1858]: "20"
+                      - generic [ref=e1859]: "21"
+                      - generic [ref=e1860]: "22"
+                      - generic [ref=e1861]: "23"
+                      - generic [ref=e1862]: "24"
+                      - generic [ref=e1863]: "25"
+                      - generic [ref=e1864]: "26"
+                      - generic [ref=e1865]: "27"
+                      - generic [ref=e1866]: "28"
+                      - generic [ref=e1867]: "29"
+                      - generic [ref=e1868]: "30"
+                  - generic [ref=e1869]:
+                    - heading "Mon, Nov 2" [level=5] [ref=e1870]
+                    - generic [ref=e1871]:
+                      - generic [ref=e1872]: 10:00 AM
+                      - generic [ref=e1873]: 11:30 AM
+                      - generic [ref=e1874]: 2:00 PM ✓
+                      - generic [ref=e1875]: 4:30 PM
+                    - generic [ref=e1876]:
+                      - generic [ref=e1877]: Name
+                      - generic [ref=e1878]: Ana Rivera
+                    - generic [ref=e1879]:
+                      - generic [ref=e1880]: Email
+                      - generic [ref=e1881]: ana@…
+                    - generic [ref=e1882]: "[ Book consult ]"
+                - generic [ref=e1883]:
+                  - generic [ref=e1884]: Empty state
+                  - generic [ref=e1885]:
+                    - text: No open times this week.
+                    - generic [ref=e1886]: "[ See next week → ]"
+          - figure "Phone · 390px" [ref=e1887]:
+            - generic [ref=e1891]:
+              - generic [ref=e1892]:
+                - text: "[Business] ·"
+                - generic [ref=e1894]: Book a consult
+              - generic [ref=e1895]:
+                - generic [ref=e1896]: Book a free 30-min consult
+                - generic [ref=e1897]:
+                  - generic [ref=e1898]:
+                    - heading "November 2026" [level=5] [ref=e1899]
+                    - generic [ref=e1900]:
+                      - generic [ref=e1901]: S
+                      - generic [ref=e1902]: M
+                      - generic [ref=e1903]: T
+                      - generic [ref=e1904]: W
+                      - generic [ref=e1905]: T
+                      - generic [ref=e1906]: F
+                      - generic [ref=e1907]: S
+                      - generic [ref=e1908]: "1"
+                      - generic [ref=e1909]: "2"
+                      - generic [ref=e1910]: "3"
+                      - generic [ref=e1911]: "4"
+                      - generic [ref=e1912]: "5"
+                      - generic [ref=e1913]: "6"
+                      - generic [ref=e1914]: "7"
+                      - generic [ref=e1915]: "8"
+                      - generic [ref=e1916]: "9"
+                      - generic [ref=e1917]: "10"
+                      - generic [ref=e1918]: "11"
+                      - generic [ref=e1919]: "12"
+                      - generic [ref=e1920]: "13"
+                      - generic [ref=e1921]: "14"
+                      - generic [ref=e1922]: "15"
+                      - generic [ref=e1923]: "16"
+                      - generic [ref=e1924]: "17"
+                      - generic [ref=e1925]: "18"
+                      - generic [ref=e1926]: "19"
+                      - generic [ref=e1927]: "20"
+                      - generic [ref=e1928]: "21"
+                      - generic [ref=e1929]: "22"
+                      - generic [ref=e1930]: "23"
+                      - generic [ref=e1931]: "24"
+                      - generic [ref=e1932]: "25"
+                      - generic [ref=e1933]: "26"
+                      - generic [ref=e1934]: "27"
+                      - generic [ref=e1935]: "28"
+                      - generic [ref=e1936]: "29"
+                      - generic [ref=e1937]: "30"
+                  - generic [ref=e1938]:
+                    - heading "Mon, Nov 2" [level=5] [ref=e1939]
+                    - generic [ref=e1940]:
+                      - generic [ref=e1941]: 10:00 AM
+                      - generic [ref=e1942]: 11:30 AM
+                      - generic [ref=e1943]: 2:00 PM ✓
+                      - generic [ref=e1944]: 4:30 PM
+                    - generic [ref=e1945]:
+                      - generic [ref=e1946]: Name
+                      - generic [ref=e1947]: Ana Rivera
+                    - generic [ref=e1948]:
+                      - generic [ref=e1949]: Email
+                      - generic [ref=e1950]: ana@…
+                    - generic [ref=e1951]: "[ Book consult ]"
+                - generic [ref=e1952]:
+                  - generic [ref=e1953]: Empty state
+                  - generic [ref=e1954]:
+                    - text: No open times this week.
+                    - generic [ref=e1955]: "[ See next week → ]"
+        - generic [ref=e1956]:
+          - generic [ref=e1957]: "Like Calendly: buffer times and daily limits come from the planner's settings."
+          - generic [ref=e1958]: "→ System: adds to both calendars and sends reminders 24h and 1h before."
+      - generic [ref=e1959]:
+        - generic [ref=e1960]:
+          - generic [ref=e1961]: "3"
+          - text: Portal › Proposal
+          - code [ref=e1962]: Portal › Proposal
+        - generic [ref=e1963]:
+          - figure "★ Desktop · 1280px (main)" [ref=e1964]:
+            - generic [ref=e1966]:
+              - generic [ref=e1967]: events.yourbiz.com/portal/proposal
+              - generic [ref=e1972]:
+                - generic [ref=e1973]:
+                  - text: "[Business] ·"
+                  - generic [ref=e1975]: Your proposal
+                - generic [ref=e1977]:
+                  - navigation [ref=e1978]:
+                    - generic [ref=e1979]: Home
+                    - generic [ref=e1980]: Proposal
+                    - generic [ref=e1981]: Payments
+                    - generic [ref=e1982]: Guests
+                    - generic [ref=e1983]: Approvals
+                    - generic [ref=e1984]: Messages
+                  - generic [ref=e1985]:
+                    - generic [ref=e1986]:
+                      - generic [ref=e1987]: v2 · updated Oct 29
+                      - generic [ref=e1988]: from [Business]
+                    - generic [ref=e1989]: event photo
+                    - generic [ref=e1991]:
+                      - heading "Gold package · $11,000" [level=5] [ref=e1993]
+                      - generic [ref=e2001]:
+                        - heading "Included add-ons" [level=5] [ref=e2002]
+                        - list [ref=e2003]:
+                          - listitem [ref=e2004]: Photo booth (4 hrs) · $1,500
+                          - listitem [ref=e2005]: Karaoke + KJ (3 hrs) · $900
+                          - listitem [ref=e2006]: 140 chairs · $350
+                    - generic [ref=e2007]:
+                      - heading "Optional upgrades" [level=5] [ref=e2008]
+                      - generic [ref=e2009]: ☐ Photo magnets +$600
+                      - generic [ref=e2010]: ☐ Extra karaoke hour +$250
+                    - generic [ref=e2011]:
+                      - generic [ref=e2012]: Total $14,850
+                      - generic [ref=e2013]: incl. 8% tax
+                    - generic [ref=e2014]:
+                      - generic [ref=e2015]: "[ Ask a question ]"
+                      - generic [ref=e2016]: "[ Request changes ]"
+                      - generic [ref=e2017]: "[ Accept proposal ]"
+                    - generic [ref=e2018]:
+                      - generic [ref=e2019]: Error state
+                      - generic [ref=e2020]:
+                        - text: This link has expired.
+                        - generic [ref=e2021]: "[ Send me a new link ]"
+                        - text: We only send it to the email on file.
+          - figure "Tablet · 820px" [ref=e2022]:
+            - generic [ref=e2025]:
+              - generic [ref=e2026]:
+                - text: "[Business] ·"
+                - generic [ref=e2028]: Your proposal
+              - navigation [ref=e2030]:
+                - generic [ref=e2031]: Home
+                - generic [ref=e2032]: Proposal
+                - generic [ref=e2033]: Payments
+                - generic [ref=e2034]: Guests
+                - generic [ref=e2035]: Approvals
+                - generic [ref=e2036]: Messages
+              - generic [ref=e2037]:
+                - generic [ref=e2038]:
+                  - generic [ref=e2039]: v2 · updated Oct 29
+                  - generic [ref=e2040]: from [Business]
+                - generic [ref=e2041]: event photo
+                - generic [ref=e2043]:
+                  - heading "Gold package · $11,000" [level=5] [ref=e2045]
+                  - generic [ref=e2053]:
+                    - heading "Included add-ons" [level=5] [ref=e2054]
+                    - list [ref=e2055]:
+                      - listitem [ref=e2056]: Photo booth (4 hrs) · $1,500
+                      - listitem [ref=e2057]: Karaoke + KJ (3 hrs) · $900
+                      - listitem [ref=e2058]: 140 chairs · $350
+                - generic [ref=e2059]:
+                  - heading "Optional upgrades" [level=5] [ref=e2060]
+                  - generic [ref=e2061]: ☐ Photo magnets +$600
+                  - generic [ref=e2062]: ☐ Extra karaoke hour +$250
+                - generic [ref=e2063]:
+                  - generic [ref=e2064]: Total $14,850
+                  - generic [ref=e2065]: incl. 8% tax
+                - generic [ref=e2066]:
+                  - generic [ref=e2067]: "[ Ask a question ]"
+                  - generic [ref=e2068]: "[ Request changes ]"
+                  - generic [ref=e2069]: "[ Accept proposal ]"
+                - generic [ref=e2070]:
+                  - generic [ref=e2071]: Error state
+                  - generic [ref=e2072]:
+                    - text: This link has expired.
+                    - generic [ref=e2073]: "[ Send me a new link ]"
+                    - text: We only send it to the email on file.
+          - figure "Phone · 390px" [ref=e2074]:
+            - generic [ref=e2078]:
+              - generic [ref=e2079]:
+                - text: "[Business] · ☰"
+                - generic [ref=e2081]: Your proposal
+              - generic [ref=e2083]:
+                - generic [ref=e2084]:
+                  - generic [ref=e2085]: v2 · updated Oct 29
+                  - generic [ref=e2086]: from [Business]
+                - generic [ref=e2087]: event photo
+                - generic [ref=e2089]:
+                  - heading "Gold package · $11,000" [level=5] [ref=e2091]
+                  - generic [ref=e2099]:
+                    - heading "Included add-ons" [level=5] [ref=e2100]
+                    - list [ref=e2101]:
+                      - listitem [ref=e2102]: Photo booth (4 hrs) · $1,500
+                      - listitem [ref=e2103]: Karaoke + KJ (3 hrs) · $900
+                      - listitem [ref=e2104]: 140 chairs · $350
+                - generic [ref=e2105]:
+                  - heading "Optional upgrades" [level=5] [ref=e2106]
+                  - generic [ref=e2107]: ☐ Photo magnets +$600
+                  - generic [ref=e2108]: ☐ Extra karaoke hour +$250
+                - generic [ref=e2109]:
+                  - generic [ref=e2110]: Total $14,850
+                  - generic [ref=e2111]: incl. 8% tax
+                - generic [ref=e2112]:
+                  - generic [ref=e2113]: "[ Ask a question ]"
+                  - generic [ref=e2114]: "[ Request changes ]"
+                  - generic [ref=e2115]: "[ Accept proposal ]"
+                - generic [ref=e2116]:
+                  - generic [ref=e2117]: Error state
+                  - generic [ref=e2118]:
+                    - text: This link has expired.
+                    - generic [ref=e2119]: "[ Send me a new link ]"
+                    - text: We only send it to the email on file.
+              - generic [ref=e2120]:
+                - generic [ref=e2121]: Home
+                - generic [ref=e2122]: Proposal
+                - generic [ref=e2123]: Payments
+                - generic [ref=e2124]: Guests
+                - generic [ref=e2125]: More
+        - generic [ref=e2126]:
+          - generic [ref=e2127]: Ticking an upgrade updates the total live. "Ask a question" opens Messages.
+          - generic [ref=e2128]: "→ System: tracks when the proposal is opened. Accept → contract generated (proposal.accepted)."
+      - generic [ref=e2129]:
+        - generic [ref=e2130]:
+          - generic [ref=e2131]: "4"
+          - text: Portal › Contract
+          - code [ref=e2132]: Portal › Contract
+        - generic [ref=e2133]:
+          - figure "★ Desktop · 1280px (main)" [ref=e2134]:
+            - generic [ref=e2136]:
+              - generic [ref=e2137]: events.yourbiz.com/portal/contract
+              - generic [ref=e2142]:
+                - generic [ref=e2143]:
+                  - text: "[Business] ·"
+                  - generic [ref=e2145]: Sign your contract
+                - generic [ref=e2147]:
+                  - navigation [ref=e2148]:
+                    - generic [ref=e2149]: Home
+                    - generic [ref=e2150]: Proposal
+                    - generic [ref=e2151]: Payments
+                    - generic [ref=e2152]: Guests
+                    - generic [ref=e2153]: Approvals
+                    - generic [ref=e2154]: Messages
+                  - generic [ref=e2155]:
+                    - generic [ref=e2156]:
+                      - generic [ref=e2157]: Event Services Agreement
+                      - generic [ref=e2163]: Cancellation policy
+                      - generic [ref=e2167]: "[ Download PDF ]"
+                    - generic [ref=e2168]: ☐ I agree to sign electronically
+                    - generic [ref=e2169]:
+                      - generic [ref=e2170]: Type
+                      - generic [ref=e2171]: Draw
+                    - generic [ref=e2172]:
+                      - generic [ref=e2173]: Type your full name
+                      - generic [ref=e2174]: Ana Rivera
+                    - generic [ref=e2175]: "[ Sign contract ]"
+                    - generic [ref=e2176]:
+                      - generic [ref=e2177]: Small screen
+                      - generic [ref=e2178]: Typed signature is the default on phones. Tap Draw to switch to landscape draw mode.
+          - figure "Tablet · 820px" [ref=e2179]:
+            - generic [ref=e2182]:
+              - generic [ref=e2183]:
+                - text: "[Business] ·"
+                - generic [ref=e2185]: Sign your contract
+              - navigation [ref=e2187]:
+                - generic [ref=e2188]: Home
+                - generic [ref=e2189]: Proposal
+                - generic [ref=e2190]: Payments
+                - generic [ref=e2191]: Guests
+                - generic [ref=e2192]: Approvals
+                - generic [ref=e2193]: Messages
+              - generic [ref=e2194]:
+                - generic [ref=e2195]:
+                  - generic [ref=e2196]: Event Services Agreement
+                  - generic [ref=e2202]: Cancellation policy
+                  - generic [ref=e2206]: "[ Download PDF ]"
+                - generic [ref=e2207]: ☐ I agree to sign electronically
+                - generic [ref=e2208]:
+                  - generic [ref=e2209]: Type
+                  - generic [ref=e2210]: Draw
+                - generic [ref=e2211]:
+                  - generic [ref=e2212]: Type your full name
+                  - generic [ref=e2213]: Ana Rivera
+                - generic [ref=e2214]: "[ Sign contract ]"
+                - generic [ref=e2215]:
+                  - generic [ref=e2216]: Small screen
+                  - generic [ref=e2217]: Typed signature is the default on phones. Tap Draw to switch to landscape draw mode.
+          - figure "Phone · 390px" [ref=e2218]:
+            - generic [ref=e2222]:
+              - generic [ref=e2223]:
+                - text: "[Business] · ☰"
+                - generic [ref=e2225]: Sign your contract
+              - generic [ref=e2227]:
+                - generic [ref=e2228]:
+                  - generic [ref=e2229]: Event Services Agreement
+                  - generic [ref=e2235]: Cancellation policy
+                  - generic [ref=e2239]: "[ Download PDF ]"
+                - generic [ref=e2240]: ☐ I agree to sign electronically
+                - generic [ref=e2241]:
+                  - generic [ref=e2242]: Type
+                  - generic [ref=e2243]: Draw
+                - generic [ref=e2244]:
+                  - generic [ref=e2245]: Type your full name
+                  - generic [ref=e2246]: Ana Rivera
+                - generic [ref=e2247]: "[ Sign contract ]"
+                - generic [ref=e2248]:
+                  - generic [ref=e2249]: Small screen
+                  - generic [ref=e2250]: Typed signature is the default on phones. Tap Draw to switch to landscape draw mode.
+              - generic [ref=e2251]:
+                - generic [ref=e2252]: Home
+                - generic [ref=e2253]: Proposal
+                - generic [ref=e2254]: Payments
+                - generic [ref=e2255]: Guests
+                - generic [ref=e2256]: More
+        - generic [ref=e2257]: "→ System: stores the signed PDF and asks the planner to countersign."
+      - generic [ref=e2259]:
+        - generic [ref=e2260]:
+          - generic [ref=e2261]: "5"
+          - text: Portal › Pay
+          - code [ref=e2262]: Portal › Pay
+        - generic [ref=e2263]:
+          - figure "★ Desktop · 1280px (main)" [ref=e2264]:
+            - generic [ref=e2266]:
+              - generic [ref=e2267]: events.yourbiz.com/portal/pay
+              - generic [ref=e2272]:
+                - generic [ref=e2273]:
+                  - text: "[Business] ·"
+                  - generic [ref=e2275]: Pay deposit
+                - generic [ref=e2277]:
+                  - navigation [ref=e2278]:
+                    - generic [ref=e2279]: Home
+                    - generic [ref=e2280]: Proposal
+                    - generic [ref=e2281]: Payments
+                    - generic [ref=e2282]: Guests
+                    - generic [ref=e2283]: Approvals
+                    - generic [ref=e2284]: Messages
+                  - generic [ref=e2285]:
+                    - generic [ref=e2286]:
+                      - heading "Deposit due today" [level=5] [ref=e2287]
+                      - generic [ref=e2288]: $4,455
+                    - table [ref=e2289]:
+                      - rowgroup [ref=e2290]:
+                        - row [ref=e2291]:
+                          - columnheader "Payment" [ref=e2292]
+                          - columnheader "Due" [ref=e2293]
+                          - columnheader "Amount" [ref=e2294]
+                        - row [ref=e2295]:
+                          - cell "Deposit 30%" [ref=e2296]
+                          - cell "Today" [ref=e2297]
+                          - cell "$4,455" [ref=e2298]
+                        - row [ref=e2299]:
+                          - cell "Payment 2 · 40%" [ref=e2300]
+                          - cell "Apr 13" [ref=e2301]
+                          - cell "$5,940" [ref=e2302]
+                        - row [ref=e2303]:
+                          - cell "Final · 30%" [ref=e2304]
+                          - cell "May 29" [ref=e2305]
+                          - cell "$4,455" [ref=e2306]
+                    - generic [ref=e2307]:
+                      - generic [ref=e2308]: Card
+                      - generic [ref=e2309]: Apple Pay
+                      - generic [ref=e2310]: Bank (ACH)
+                    - generic [ref=e2311]:
+                      - generic [ref=e2312]:
+                        - generic [ref=e2313]: Card number
+                        - generic [ref=e2314]: •••• •••• •••• ____
+                      - generic [ref=e2315]:
+                        - generic [ref=e2316]: Exp · CVC
+                        - generic [ref=e2317]: __/__ · ___
+                    - generic [ref=e2318]: ☐ Turn on autopay for future payments
+                    - generic [ref=e2319]: "[ Pay $4,455 ]"
+                    - generic [ref=e2320]:
+                      - generic [ref=e2321]: Error state
+                      - generic [ref=e2322]:
+                        - text: ✗ Your card was declined. Nothing was charged.
+                        - generic [ref=e2323]:
+                          - generic [ref=e2324]: "[ Try again ]"
+                          - generic [ref=e2325]: "[ Use another method ]"
+          - figure "Tablet · 820px" [ref=e2326]:
+            - generic [ref=e2329]:
+              - generic [ref=e2330]:
+                - text: "[Business] ·"
+                - generic [ref=e2332]: Pay deposit
+              - navigation [ref=e2334]:
+                - generic [ref=e2335]: Home
+                - generic [ref=e2336]: Proposal
+                - generic [ref=e2337]: Payments
+                - generic [ref=e2338]: Guests
+                - generic [ref=e2339]: Approvals
+                - generic [ref=e2340]: Messages
+              - generic [ref=e2341]:
+                - generic [ref=e2342]:
+                  - heading "Deposit due today" [level=5] [ref=e2343]
+                  - generic [ref=e2344]: $4,455
+                - table [ref=e2345]:
+                  - rowgroup [ref=e2346]:
+                    - row [ref=e2347]:
+                      - columnheader "Payment" [ref=e2348]
+                      - columnheader "Due" [ref=e2349]
+                      - columnheader "Amount" [ref=e2350]
+                    - row [ref=e2351]:
+                      - cell "Deposit 30%" [ref=e2352]
+                      - cell "Today" [ref=e2353]
+                      - cell "$4,455" [ref=e2354]
+                    - row [ref=e2355]:
+                      - cell "Payment 2 · 40%" [ref=e2356]
+                      - cell "Apr 13" [ref=e2357]
+                      - cell "$5,940" [ref=e2358]
+                    - row [ref=e2359]:
+                      - cell "Final · 30%" [ref=e2360]
+                      - cell "May 29" [ref=e2361]
+                      - cell "$4,455" [ref=e2362]
+                - generic [ref=e2363]:
+                  - generic [ref=e2364]: Card
+                  - generic [ref=e2365]: Apple Pay
+                  - generic [ref=e2366]: Bank (ACH)
+                - generic [ref=e2367]:
+                  - generic [ref=e2368]:
+                    - generic [ref=e2369]: Card number
+                    - generic [ref=e2370]: •••• •••• •••• ____
+                  - generic [ref=e2371]:
+                    - generic [ref=e2372]: Exp · CVC
+                    - generic [ref=e2373]: __/__ · ___
+                - generic [ref=e2374]: ☐ Turn on autopay for future payments
+                - generic [ref=e2375]: "[ Pay $4,455 ]"
+                - generic [ref=e2376]:
+                  - generic [ref=e2377]: Error state
+                  - generic [ref=e2378]:
+                    - text: ✗ Your card was declined. Nothing was charged.
+                    - generic [ref=e2379]:
+                      - generic [ref=e2380]: "[ Try again ]"
+                      - generic [ref=e2381]: "[ Use another method ]"
+          - figure "Phone · 390px" [ref=e2382]:
+            - generic [ref=e2386]:
+              - generic [ref=e2387]:
+                - text: "[Business] · ☰"
+                - generic [ref=e2389]: Pay deposit
+              - generic [ref=e2391]:
+                - generic [ref=e2392]:
+                  - heading "Deposit due today" [level=5] [ref=e2393]
+                  - generic [ref=e2394]: $4,455
+                - table [ref=e2395]:
+                  - rowgroup [ref=e2396]:
+                    - row [ref=e2397]:
+                      - columnheader "Payment" [ref=e2398]
+                      - columnheader "Due" [ref=e2399]
+                      - columnheader "Amount" [ref=e2400]
+                    - row [ref=e2401]:
+                      - cell "Deposit 30%" [ref=e2402]
+                      - cell "Today" [ref=e2403]
+                      - cell "$4,455" [ref=e2404]
+                    - row [ref=e2405]:
+                      - cell "Payment 2 · 40%" [ref=e2406]
+                      - cell "Apr 13" [ref=e2407]
+                      - cell "$5,940" [ref=e2408]
+                    - row [ref=e2409]:
+                      - cell "Final · 30%" [ref=e2410]
+                      - cell "May 29" [ref=e2411]
+                      - cell "$4,455" [ref=e2412]
+                - generic [ref=e2413]:
+                  - generic [ref=e2414]: Card
+                  - generic [ref=e2415]: Apple Pay
+                  - generic [ref=e2416]: Bank (ACH)
+                - generic [ref=e2417]:
+                  - generic [ref=e2418]:
+                    - generic [ref=e2419]: Card number
+                    - generic [ref=e2420]: •••• •••• •••• ____
+                  - generic [ref=e2421]:
+                    - generic [ref=e2422]: Exp · CVC
+                    - generic [ref=e2423]: __/__ · ___
+                - generic [ref=e2424]: ☐ Turn on autopay for future payments
+                - generic [ref=e2425]: "[ Pay $4,455 ]"
+                - generic [ref=e2426]:
+                  - generic [ref=e2427]: Error state
+                  - generic [ref=e2428]:
+                    - text: ✗ Your card was declined. Nothing was charged.
+                    - generic [ref=e2429]:
+                      - generic [ref=e2430]: "[ Try again ]"
+                      - generic [ref=e2431]: "[ Use another method ]"
+              - generic [ref=e2432]:
+                - generic [ref=e2433]: Home
+                - generic [ref=e2434]: Proposal
+                - generic [ref=e2435]: Payments
+                - generic [ref=e2436]: Guests
+                - generic [ref=e2437]: More
+        - generic [ref=e2438]:
+          - generic [ref=e2439]: Payments not connected? Only "pay by check/cash" shows here.
+          - generic [ref=e2440]: "→ System (payment.succeeded): receipt email, planner notified, portal planning area unlocks. Planner alerted after 2 failures."
+      - generic [ref=e2441]:
+        - generic [ref=e2442]:
+          - generic [ref=e2443]: "6"
+          - text: Portal › Home + Approvals
+          - code [ref=e2444]: Portal › Home
+        - generic [ref=e2445]:
+          - figure "★ Desktop · 1280px (main)" [ref=e2446]:
+            - generic [ref=e2448]:
+              - generic [ref=e2449]: events.yourbiz.com/portal
+              - generic [ref=e2454]:
+                - generic [ref=e2455]:
+                  - text: "[Business] ·"
+                  - generic [ref=e2457]: Home
+                - generic [ref=e2459]:
+                  - navigation [ref=e2460]:
+                    - generic [ref=e2461]: Home
+                    - generic [ref=e2462]: Proposal
+                    - generic [ref=e2463]: Payments
+                    - generic [ref=e2464]: Guests
+                    - generic [ref=e2465]: Approvals
+                    - generic [ref=e2466]: Messages
+                  - generic [ref=e2467]:
+                    - generic [ref=e2468]:
+                      - generic [ref=e2469]:
+                        - generic [ref=e2470]: "224"
+                        - text: days until your wedding
+                      - generic [ref=e2471]:
+                        - heading "Next payment" [level=5] [ref=e2472]
+                        - text: $5,940 · Apr 13
+                        - generic [ref=e2473]: "[ Pay now ]"
+                    - generic [ref=e2474]:
+                      - heading "Needs your action (3)" [level=5] [ref=e2475]
+                      - list [ref=e2476]:
+                        - listitem [ref=e2477]: ☐ Approve menu v2
+                        - listitem [ref=e2478]: ☐ Fill "Wedding details" questionnaire
+                        - listitem [ref=e2479]: ☐ Add your guests
+                    - generic [ref=e2480]:
+                      - heading "Approvals" [level=5] [ref=e2481]
+                      - generic [ref=e2482]:
+                        - generic [ref=e2483]: Menu v2
+                        - generic [ref=e2484]:
+                          - generic [ref=e2485]: "[ Approve ]"
+                          - generic [ref=e2486]: "[ Request changes ]"
+                      - generic [ref=e2487]:
+                        - generic [ref=e2488]: Timeline draft
+                        - generic [ref=e2489]: ✓ Approved by Marco · Oct 30
+                    - generic [ref=e2490]:
+                      - heading "Messages" [level=5] [ref=e2491]
+                      - generic [ref=e2492]: "[Business]: Tasting is set for Nov 14!"
+                      - generic [ref=e2493]: "[ Reply ]"
+                    - generic [ref=e2494]:
+                      - generic [ref=e2495]: Empty state
+                      - generic [ref=e2496]: ✓ You're all caught up. Nothing needs you right now.
+          - figure "Tablet · 820px" [ref=e2497]:
+            - generic [ref=e2500]:
+              - generic [ref=e2501]:
+                - text: "[Business] ·"
+                - generic [ref=e2503]: Home
+              - navigation [ref=e2505]:
+                - generic [ref=e2506]: Home
+                - generic [ref=e2507]: Proposal
+                - generic [ref=e2508]: Payments
+                - generic [ref=e2509]: Guests
+                - generic [ref=e2510]: Approvals
+                - generic [ref=e2511]: Messages
+              - generic [ref=e2512]:
+                - generic [ref=e2513]:
+                  - generic [ref=e2514]:
+                    - generic [ref=e2515]: "224"
+                    - text: days until your wedding
+                  - generic [ref=e2516]:
+                    - heading "Next payment" [level=5] [ref=e2517]
+                    - text: $5,940 · Apr 13
+                    - generic [ref=e2518]: "[ Pay now ]"
+                - generic [ref=e2519]:
+                  - heading "Needs your action (3)" [level=5] [ref=e2520]
+                  - list [ref=e2521]:
+                    - listitem [ref=e2522]: ☐ Approve menu v2
+                    - listitem [ref=e2523]: ☐ Fill "Wedding details" questionnaire
+                    - listitem [ref=e2524]: ☐ Add your guests
+                - generic [ref=e2525]:
+                  - heading "Approvals" [level=5] [ref=e2526]
+                  - generic [ref=e2527]:
+                    - generic [ref=e2528]: Menu v2
+                    - generic [ref=e2529]:
+                      - generic [ref=e2530]: "[ Approve ]"
+                      - generic [ref=e2531]: "[ Request changes ]"
+                  - generic [ref=e2532]:
+                    - generic [ref=e2533]: Timeline draft
+                    - generic [ref=e2534]: ✓ Approved by Marco · Oct 30
+                - generic [ref=e2535]:
+                  - heading "Messages" [level=5] [ref=e2536]
+                  - generic [ref=e2537]: "[Business]: Tasting is set for Nov 14!"
+                  - generic [ref=e2538]: "[ Reply ]"
+                - generic [ref=e2539]:
+                  - generic [ref=e2540]: Empty state
+                  - generic [ref=e2541]: ✓ You're all caught up. Nothing needs you right now.
+          - figure "Phone · 390px" [ref=e2542]:
+            - generic [ref=e2546]:
+              - generic [ref=e2547]:
+                - text: "[Business] · ☰"
+                - generic [ref=e2549]: Home
+              - generic [ref=e2551]:
+                - generic [ref=e2552]:
+                  - generic [ref=e2553]:
+                    - generic [ref=e2554]: "224"
+                    - text: days until your wedding
+                  - generic [ref=e2555]:
+                    - heading "Next payment" [level=5] [ref=e2556]
+                    - text: $5,940 · Apr 13
+                    - generic [ref=e2557]: "[ Pay now ]"
+                - generic [ref=e2558]:
+                  - heading "Needs your action (3)" [level=5] [ref=e2559]
+                  - list [ref=e2560]:
+                    - listitem [ref=e2561]: ☐ Approve menu v2
+                    - listitem [ref=e2562]: ☐ Fill "Wedding details" questionnaire
+                    - listitem [ref=e2563]: ☐ Add your guests
+                - generic [ref=e2564]:
+                  - heading "Approvals" [level=5] [ref=e2565]
+                  - generic [ref=e2566]:
+                    - generic [ref=e2567]: Menu v2
+                    - generic [ref=e2568]:
+                      - generic [ref=e2569]: "[ Approve ]"
+                      - generic [ref=e2570]: "[ Request changes ]"
+                  - generic [ref=e2571]:
+                    - generic [ref=e2572]: Timeline draft
+                    - generic [ref=e2573]: ✓ Approved by Marco · Oct 30
+                - generic [ref=e2574]:
+                  - heading "Messages" [level=5] [ref=e2575]
+                  - generic [ref=e2576]: "[Business]: Tasting is set for Nov 14!"
+                  - generic [ref=e2577]: "[ Reply ]"
+                - generic [ref=e2578]:
+                  - generic [ref=e2579]: Empty state
+                  - generic [ref=e2580]: ✓ You're all caught up. Nothing needs you right now.
+              - generic [ref=e2581]:
+                - generic [ref=e2582]: Home
+                - generic [ref=e2583]: Proposal
+                - generic [ref=e2584]: Payments
+                - generic [ref=e2585]: Guests
+                - generic [ref=e2586]: More
+        - generic [ref=e2587]:
+          - generic [ref=e2588]: "First visit: a 3-screen tour + optional password/passkey setup."
+          - generic [ref=e2589]: "→ System: logs who approved what and when. Nothing auto-proceeds if co-hosts disagree."
+    - generic [ref=e2590]:
+      - heading "Guest journey" [level=2] [ref=e2591]
+      - generic [ref=e2592]: "Goal: RSVP fast. No account, no app download; a unique token in the link identifies them. Main device: Phone (mobile web)."
+      - generic [ref=e2594]:
+        - generic [ref=e2595]: Gets text / email / QR
+        - generic [ref=e2597]: →
+        - generic [ref=e2598]: Invitation
+        - generic [ref=e2600]: →
+        - generic [ref=e2601]:
+          - generic [ref=e2602]: Event Website
+          - generic [ref=e2603]: ▼
+          - generic [ref=e2604]: "Not on the list? → public: ask name + contact; private: \"Ask the host\""
+        - generic [ref=e2606]: →
+        - generic [ref=e2607]:
+          - generic [ref=e2608]: RSVP form
+          - generic [ref=e2609]: ▼
+          - generic [ref=e2610]: Plus-one limit exceeded? → blocked, polite explanation
+        - generic [ref=e2612]: →
+        - generic [ref=e2613]: Confirmation
+        - generic [ref=e2615]: →
+        - generic [ref=e2616]:
+          - generic [ref=e2617]: Can edit RSVP via same link
+          - generic [ref=e2618]: ▼
+          - generic [ref=e2619]: After cutoff? → "RSVPs are closed" + message the host
+      - generic [ref=e2621]:
+        - generic [ref=e2622]:
+          - generic [ref=e2623]: "1"
+          - text: Invitation (basic, P1)
+          - code [ref=e2624]: Invitation
+        - generic [ref=e2625]:
+          - figure "★ Phone · 390px (main)" [ref=e2626]:
+            - generic [ref=e2630]:
+              - generic [ref=e2631]:
+                - generic [ref=e2632]: Ana & Marco
+                - generic [ref=e2633]: EN | ES
+              - generic [ref=e2634]:
+                - generic [ref=e2635]: couple photo
+                - generic [ref=e2637]:
+                  - generic [ref=e2638]: Together with their families
+                  - generic [ref=e2639]: Ana & Marco
+                  - generic [ref=e2640]: invite you to celebrate their wedding
+                  - generic [ref=e2641]: Saturday, June 12, 2027 · 4 PM
+                  - generic [ref=e2642]: Hacienda Venue · San Antonio, TX
+                  - generic [ref=e2643]: "[ View details & RSVP ]"
+                  - generic [ref=e2644]: Please reply by May 1
+          - figure "Tablet · 820px" [ref=e2645]:
+            - generic [ref=e2648]:
+              - generic [ref=e2649]:
+                - generic [ref=e2650]: Ana & Marco
+                - generic [ref=e2651]: EN | ES
+              - generic [ref=e2652]:
+                - generic [ref=e2653]: couple photo
+                - generic [ref=e2655]:
+                  - generic [ref=e2656]: Together with their families
+                  - generic [ref=e2657]: Ana & Marco
+                  - generic [ref=e2658]: invite you to celebrate their wedding
+                  - generic [ref=e2659]: Saturday, June 12, 2027 · 4 PM
+                  - generic [ref=e2660]: Hacienda Venue · San Antonio, TX
+                  - generic [ref=e2661]: "[ View details & RSVP ]"
+                  - generic [ref=e2662]: Please reply by May 1
+          - figure "Desktop · 1280px" [ref=e2663]:
+            - generic [ref=e2665]:
+              - generic [ref=e2666]: events.yourbiz.com/i/abc123
+              - generic [ref=e2671]:
+                - generic [ref=e2672]:
+                  - generic [ref=e2673]: Ana & Marco
+                  - generic [ref=e2674]: EN | ES
+                - generic [ref=e2676]:
+                  - generic [ref=e2677]: couple photo
+                  - generic [ref=e2679]:
+                    - generic [ref=e2680]: Together with their families
+                    - generic [ref=e2681]: Ana & Marco
+                    - generic [ref=e2682]: invite you to celebrate their wedding
+                    - generic [ref=e2683]: Saturday, June 12, 2027 · 4 PM
+                    - generic [ref=e2684]: Hacienda Venue · San Antonio, TX
+                    - generic [ref=e2685]: "[ View details & RSVP ]"
+                    - generic [ref=e2686]: Please reply by May 1
+        - generic [ref=e2687]:
+          - generic [ref=e2688]: P1 = simple branded template. P3 adds the designer, animated envelope and music (with Skip).
+          - generic [ref=e2689]: "→ System: tracks delivered / opened. The link carries the guest's token."
+      - generic [ref=e2690]:
+        - generic [ref=e2691]:
+          - generic [ref=e2692]: "2"
+          - text: Event Website
+          - code [ref=e2693]: Event Website
+        - generic [ref=e2694]:
+          - figure "★ Phone · 390px (main)" [ref=e2695]:
+            - generic [ref=e2699]:
+              - generic [ref=e2700]:
+                - generic [ref=e2701]: Ana & Marco
+                - generic [ref=e2702]: EN | ES
+              - generic [ref=e2703]:
+                - generic [ref=e2704]:
+                  - generic [ref=e2705]:
+                    - heading "When & where" [level=5] [ref=e2706]
+                    - text: Sat, Jun 12 · 4 PMHacienda Venue
+                    - generic [ref=e2707]: map
+                    - generic [ref=e2709]:
+                      - generic [ref=e2710]: "[ Add to calendar ]"
+                      - generic [ref=e2711]: "[ Directions ]"
+                  - generic [ref=e2712]:
+                    - heading "Schedule" [level=5] [ref=e2713]
+                    - list [ref=e2714]:
+                      - listitem [ref=e2715]: 4:00 Ceremony
+                      - listitem [ref=e2716]: 5:00 Cocktails + photo booth
+                      - listitem [ref=e2717]: 6:30 Dinner
+                      - listitem [ref=e2718]: 8:30 Karaoke
+                  - generic [ref=e2719]:
+                    - heading "Dress code" [level=5] [ref=e2720]
+                    - text: Garden formal
+                  - generic [ref=e2721]:
+                    - heading "Hotel block" [level=5] [ref=e2722]
+                    - text: Riverwalk Inn · code RIVERA
+                    - generic [ref=e2723]: "[ Book ]"
+                  - heading "FAQ" [level=5] [ref=e2725]
+                  - generic [ref=e2730]:
+                    - heading "Honeymoon fund" [level=5] [ref=e2731]
+                    - generic [ref=e2734]: "[ Contribute ]"
+                - generic [ref=e2735]:
+                  - generic [ref=e2736]: Reply by May 1
+                  - generic [ref=e2737]: "[ RSVP ]"
+                - generic [ref=e2738]:
+                  - generic [ref=e2739]: Edge case
+                  - generic [ref=e2740]: Opened from a public link and not on the list? Private event → "Ask the host". Public event → RSVP asks name + contact.
+          - figure "Tablet · 820px" [ref=e2741]:
+            - generic [ref=e2744]:
+              - generic [ref=e2745]:
+                - generic [ref=e2746]: Ana & Marco
+                - generic [ref=e2747]: EN | ES
+              - generic [ref=e2748]:
+                - navigation [ref=e2749]:
+                  - generic [ref=e2750]: Details
+                  - generic [ref=e2751]: Schedule
+                  - generic [ref=e2752]: Travel
+                  - generic [ref=e2753]: FAQ
+                  - generic [ref=e2754]: Fund
+                - generic [ref=e2755]:
+                  - generic [ref=e2756]:
+                    - heading "When & where" [level=5] [ref=e2757]
+                    - text: Sat, Jun 12 · 4 PMHacienda Venue
+                    - generic [ref=e2758]: map
+                    - generic [ref=e2760]:
+                      - generic [ref=e2761]: "[ Add to calendar ]"
+                      - generic [ref=e2762]: "[ Directions ]"
+                  - generic [ref=e2763]:
+                    - heading "Schedule" [level=5] [ref=e2764]
+                    - list [ref=e2765]:
+                      - listitem [ref=e2766]: 4:00 Ceremony
+                      - listitem [ref=e2767]: 5:00 Cocktails + photo booth
+                      - listitem [ref=e2768]: 6:30 Dinner
+                      - listitem [ref=e2769]: 8:30 Karaoke
+                  - generic [ref=e2770]:
+                    - heading "Dress code" [level=5] [ref=e2771]
+                    - text: Garden formal
+                  - generic [ref=e2772]:
+                    - heading "Hotel block" [level=5] [ref=e2773]
+                    - text: Riverwalk Inn · code RIVERA
+                    - generic [ref=e2774]: "[ Book ]"
+                  - heading "FAQ" [level=5] [ref=e2776]
+                  - generic [ref=e2781]:
+                    - heading "Honeymoon fund" [level=5] [ref=e2782]
+                    - generic [ref=e2785]: "[ Contribute ]"
+                - generic [ref=e2786]:
+                  - generic [ref=e2787]: "[ RSVP now ]"
+                  - generic [ref=e2788]: Reply by May 1
+                - generic [ref=e2789]:
+                  - generic [ref=e2790]: Edge case
+                  - generic [ref=e2791]: Opened from a public link and not on the list? Private event → "Ask the host". Public event → RSVP asks name + contact.
+          - figure "Desktop · 1280px" [ref=e2792]:
+            - generic [ref=e2794]:
+              - generic [ref=e2795]: events.yourbiz.com/rivera
+              - generic [ref=e2800]:
+                - generic [ref=e2801]:
+                  - generic [ref=e2802]: Ana & Marco
+                  - generic [ref=e2803]: EN | ES
+                - generic [ref=e2804]:
+                  - navigation [ref=e2805]:
+                    - generic [ref=e2806]: Details
+                    - generic [ref=e2807]: Schedule
+                    - generic [ref=e2808]: Travel
+                    - generic [ref=e2809]: FAQ
+                    - generic [ref=e2810]: Fund
+                  - generic [ref=e2811]:
+                    - generic [ref=e2812]:
+                      - heading "When & where" [level=5] [ref=e2813]
+                      - text: Sat, Jun 12 · 4 PMHacienda Venue
+                      - generic [ref=e2814]: map
+                      - generic [ref=e2816]:
+                        - generic [ref=e2817]: "[ Add to calendar ]"
+                        - generic [ref=e2818]: "[ Directions ]"
+                    - generic [ref=e2819]:
+                      - heading "Schedule" [level=5] [ref=e2820]
+                      - list [ref=e2821]:
+                        - listitem [ref=e2822]: 4:00 Ceremony
+                        - listitem [ref=e2823]: 5:00 Cocktails + photo booth
+                        - listitem [ref=e2824]: 6:30 Dinner
+                        - listitem [ref=e2825]: 8:30 Karaoke
+                    - generic [ref=e2826]:
+                      - heading "Dress code" [level=5] [ref=e2827]
+                      - text: Garden formal
+                    - generic [ref=e2828]:
+                      - heading "Hotel block" [level=5] [ref=e2829]
+                      - text: Riverwalk Inn · code RIVERA
+                      - generic [ref=e2830]: "[ Book ]"
+                    - heading "FAQ" [level=5] [ref=e2832]
+                    - generic [ref=e2837]:
+                      - heading "Honeymoon fund" [level=5] [ref=e2838]
+                      - generic [ref=e2841]: "[ Contribute ]"
+                  - generic [ref=e2842]:
+                    - generic [ref=e2843]: "[ RSVP now ]"
+                    - generic [ref=e2844]: Reply by May 1
+                  - generic [ref=e2845]:
+                    - generic [ref=e2846]: Edge case
+                    - generic [ref=e2847]: Opened from a public link and not on the list? Private event → "Ask the host". Public event → RSVP asks name + contact.
+        - generic [ref=e2848]: Must load in under 2 seconds on a phone. Meets WCAG 2.1 AA. English/Spanish toggle.
+      - generic [ref=e2850]:
+        - generic [ref=e2851]:
+          - generic [ref=e2852]: "3"
+          - text: RSVP
+          - code [ref=e2853]: RSVP
+        - generic [ref=e2854]:
+          - figure "★ Phone · 390px (main)" [ref=e2855]:
+            - generic [ref=e2859]:
+              - generic [ref=e2860]:
+                - generic [ref=e2861]: Ana & Marco
+                - generic [ref=e2862]: EN | ES
+              - generic [ref=e2863]:
+                - generic [ref=e2864]: Hi, Rivera household!
+                - generic [ref=e2865]: Please reply by May 1
+                - generic [ref=e2866]:
+                  - generic [ref=e2867]:
+                    - heading "Who's coming?" [level=5] [ref=e2868]
+                    - generic [ref=e2869]:
+                      - generic [ref=e2870]: Lucia Rivera
+                      - generic [ref=e2871]:
+                        - generic [ref=e2872]: Attending
+                        - generic [ref=e2873]: Not attending
+                      - generic [ref=e2874]:
+                        - generic [ref=e2875]: Meal
+                        - generic [ref=e2876]: Chicken ▾
+                    - generic [ref=e2877]:
+                      - generic [ref=e2878]: Jorge Rivera
+                      - generic [ref=e2879]:
+                        - generic [ref=e2880]: Attending
+                        - generic [ref=e2881]: Not attending
+                  - generic [ref=e2882]:
+                    - heading "Plus-one (1 allowed)" [level=5] [ref=e2883]
+                    - generic [ref=e2884]:
+                      - generic [ref=e2885]: Guest name
+                      - generic [ref=e2886]: Sam Torres
+                    - generic [ref=e2887]:
+                      - generic [ref=e2888]: Meal
+                      - generic [ref=e2889]: Vegetarian ▾
+                - generic [ref=e2890]:
+                  - generic [ref=e2891]: Allergies / dietary needs
+                  - generic [ref=e2892]: "Sam: tree nuts"
+                - generic [ref=e2893]:
+                  - generic [ref=e2894]: Song request
+                  - generic [ref=e2895]: "\"September\" by Earth, Wind & Fire"
+                - generic [ref=e2896]: "[ Submit RSVP ]"
+                - generic [ref=e2897]:
+                  - generic [ref=e2898]: Error state
+                  - generic [ref=e2899]:
+                    - text: You can bring 1 guest. Need more?
+                    - generic [ref=e2900]: "[ Message the host ]"
+                - generic [ref=e2901]:
+                  - generic [ref=e2902]: Error state
+                  - generic [ref=e2903]:
+                    - text: RSVPs closed on May 1.
+                    - generic [ref=e2904]: "[ Message the host ]"
+          - figure "Tablet · 820px" [ref=e2905]:
+            - generic [ref=e2908]:
+              - generic [ref=e2909]:
+                - generic [ref=e2910]: Ana & Marco
+                - generic [ref=e2911]: EN | ES
+              - generic [ref=e2912]:
+                - generic [ref=e2913]: Hi, Rivera household!
+                - generic [ref=e2914]: Please reply by May 1
+                - generic [ref=e2915]:
+                  - generic [ref=e2916]:
+                    - heading "Who's coming?" [level=5] [ref=e2917]
+                    - generic [ref=e2918]:
+                      - generic [ref=e2919]: Lucia Rivera
+                      - generic [ref=e2920]:
+                        - generic [ref=e2921]: Attending
+                        - generic [ref=e2922]: Not attending
+                      - generic [ref=e2923]:
+                        - generic [ref=e2924]: Meal
+                        - generic [ref=e2925]: Chicken ▾
+                    - generic [ref=e2926]:
+                      - generic [ref=e2927]: Jorge Rivera
+                      - generic [ref=e2928]:
+                        - generic [ref=e2929]: Attending
+                        - generic [ref=e2930]: Not attending
+                  - generic [ref=e2931]:
+                    - heading "Plus-one (1 allowed)" [level=5] [ref=e2932]
+                    - generic [ref=e2933]:
+                      - generic [ref=e2934]: Guest name
+                      - generic [ref=e2935]: Sam Torres
+                    - generic [ref=e2936]:
+                      - generic [ref=e2937]: Meal
+                      - generic [ref=e2938]: Vegetarian ▾
+                - generic [ref=e2939]:
+                  - generic [ref=e2940]: Allergies / dietary needs
+                  - generic [ref=e2941]: "Sam: tree nuts"
+                - generic [ref=e2942]:
+                  - generic [ref=e2943]: Song request
+                  - generic [ref=e2944]: "\"September\" by Earth, Wind & Fire"
+                - generic [ref=e2945]: "[ Submit RSVP ]"
+                - generic [ref=e2946]:
+                  - generic [ref=e2947]: Error state
+                  - generic [ref=e2948]:
+                    - text: You can bring 1 guest. Need more?
+                    - generic [ref=e2949]: "[ Message the host ]"
+                - generic [ref=e2950]:
+                  - generic [ref=e2951]: Error state
+                  - generic [ref=e2952]:
+                    - text: RSVPs closed on May 1.
+                    - generic [ref=e2953]: "[ Message the host ]"
+          - figure "Desktop · 1280px" [ref=e2954]:
+            - generic [ref=e2956]:
+              - generic [ref=e2957]: events.yourbiz.com/rivera/rsvp?t=abc123
+              - generic [ref=e2962]:
+                - generic [ref=e2963]:
+                  - generic [ref=e2964]: Ana & Marco
+                  - generic [ref=e2965]: EN | ES
+                - generic [ref=e2966]:
+                  - generic [ref=e2967]: Hi, Rivera household!
+                  - generic [ref=e2968]: Please reply by May 1
+                  - generic [ref=e2969]:
+                    - generic [ref=e2970]:
+                      - heading "Who's coming?" [level=5] [ref=e2971]
+                      - generic [ref=e2972]:
+                        - generic [ref=e2973]: Lucia Rivera
+                        - generic [ref=e2974]:
+                          - generic [ref=e2975]: Attending
+                          - generic [ref=e2976]: Not attending
+                        - generic [ref=e2977]:
+                          - generic [ref=e2978]: Meal
+                          - generic [ref=e2979]: Chicken ▾
+                      - generic [ref=e2980]:
+                        - generic [ref=e2981]: Jorge Rivera
+                        - generic [ref=e2982]:
+                          - generic [ref=e2983]: Attending
+                          - generic [ref=e2984]: Not attending
+                    - generic [ref=e2985]:
+                      - heading "Plus-one (1 allowed)" [level=5] [ref=e2986]
+                      - generic [ref=e2987]:
+                        - generic [ref=e2988]: Guest name
+                        - generic [ref=e2989]: Sam Torres
+                      - generic [ref=e2990]:
+                        - generic [ref=e2991]: Meal
+                        - generic [ref=e2992]: Vegetarian ▾
+                  - generic [ref=e2993]:
+                    - generic [ref=e2994]: Allergies / dietary needs
+                    - generic [ref=e2995]: "Sam: tree nuts"
+                  - generic [ref=e2996]:
+                    - generic [ref=e2997]: Song request
+                    - generic [ref=e2998]: "\"September\" by Earth, Wind & Fire"
+                  - generic [ref=e2999]: "[ Submit RSVP ]"
+                  - generic [ref=e3000]:
+                    - generic [ref=e3001]: Error state
+                    - generic [ref=e3002]:
+                      - text: You can bring 1 guest. Need more?
+                      - generic [ref=e3003]: "[ Message the host ]"
+                  - generic [ref=e3004]:
+                    - generic [ref=e3005]: Error state
+                    - generic [ref=e3006]:
+                      - text: RSVPs closed on May 1.
+                      - generic [ref=e3007]: "[ Message the host ]"
+        - generic [ref=e3008]:
+          - generic [ref=e3009]: Name is prefilled from the link token. Plus-one field only appears if allowed.
+          - generic [ref=e3010]: Forwarded link? RSVP stays tied to the original guest; host sees a flag.
+      - generic [ref=e3011]:
+        - generic [ref=e3012]:
+          - generic [ref=e3013]: "4"
+          - text: RSVP Confirmation
+          - code [ref=e3014]: RSVP › Confirmation
+        - generic [ref=e3015]:
+          - figure "★ Phone · 390px (main)" [ref=e3016]:
+            - generic [ref=e3020]:
+              - generic [ref=e3021]:
+                - generic [ref=e3022]: Ana & Marco
+                - generic [ref=e3023]: EN | ES
+              - generic [ref=e3024]:
+                - generic [ref=e3025]:
+                  - generic [ref=e3026]: ✓ You're coming!
+                  - generic [ref=e3027]: See you Saturday, June 12.
+                - generic [ref=e3028]:
+                  - heading "Your reply" [level=5] [ref=e3029]
+                  - list [ref=e3030]:
+                    - listitem [ref=e3031]: Lucia · Attending · Chicken
+                    - listitem [ref=e3032]: Jorge · Not attending
+                    - listitem [ref=e3033]: Sam (guest) · Vegetarian · tree nuts
+                - generic [ref=e3034]:
+                  - generic [ref=e3035]: "[ Add to calendar ]"
+                  - generic [ref=e3036]: "[ Directions ]"
+                - generic [ref=e3037]:
+                  - generic [ref=e3038]:
+                    - heading "Honeymoon fund" [level=5] [ref=e3039]
+                    - text: Want to contribute?
+                    - generic [ref=e3040]: "[ Give ]"
+                  - generic [ref=e3041]:
+                    - heading "Bring a dish?" [level=5] [ref=e3042]
+                    - text: Only shows when potluck is on (P2).
+                    - generic [ref=e3043]: "[ Sign up ]"
+                - generic [ref=e3044]: Need to change something? Use this same link until May 1.
+          - figure "Tablet · 820px" [ref=e3045]:
+            - generic [ref=e3048]:
+              - generic [ref=e3049]:
+                - generic [ref=e3050]: Ana & Marco
+                - generic [ref=e3051]: EN | ES
+              - generic [ref=e3052]:
+                - generic [ref=e3053]:
+                  - generic [ref=e3054]: ✓ You're coming!
+                  - generic [ref=e3055]: See you Saturday, June 12.
+                - generic [ref=e3056]:
+                  - heading "Your reply" [level=5] [ref=e3057]
+                  - list [ref=e3058]:
+                    - listitem [ref=e3059]: Lucia · Attending · Chicken
+                    - listitem [ref=e3060]: Jorge · Not attending
+                    - listitem [ref=e3061]: Sam (guest) · Vegetarian · tree nuts
+                - generic [ref=e3062]:
+                  - generic [ref=e3063]: "[ Add to calendar ]"
+                  - generic [ref=e3064]: "[ Directions ]"
+                - generic [ref=e3065]:
+                  - generic [ref=e3066]:
+                    - heading "Honeymoon fund" [level=5] [ref=e3067]
+                    - text: Want to contribute?
+                    - generic [ref=e3068]: "[ Give ]"
+                  - generic [ref=e3069]:
+                    - heading "Bring a dish?" [level=5] [ref=e3070]
+                    - text: Only shows when potluck is on (P2).
+                    - generic [ref=e3071]: "[ Sign up ]"
+                - generic [ref=e3072]: Need to change something? Use this same link until May 1.
+          - figure "Desktop · 1280px" [ref=e3073]:
+            - generic [ref=e3075]:
+              - generic [ref=e3076]: events.yourbiz.com/rivera/rsvp/done
+              - generic [ref=e3081]:
+                - generic [ref=e3082]:
+                  - generic [ref=e3083]: Ana & Marco
+                  - generic [ref=e3084]: EN | ES
+                - generic [ref=e3085]:
+                  - generic [ref=e3086]:
+                    - generic [ref=e3087]: ✓ You're coming!
+                    - generic [ref=e3088]: See you Saturday, June 12.
+                  - generic [ref=e3089]:
+                    - heading "Your reply" [level=5] [ref=e3090]
+                    - list [ref=e3091]:
+                      - listitem [ref=e3092]: Lucia · Attending · Chicken
+                      - listitem [ref=e3093]: Jorge · Not attending
+                      - listitem [ref=e3094]: Sam (guest) · Vegetarian · tree nuts
+                  - generic [ref=e3095]:
+                    - generic [ref=e3096]: "[ Add to calendar ]"
+                    - generic [ref=e3097]: "[ Directions ]"
+                  - generic [ref=e3098]:
+                    - generic [ref=e3099]:
+                      - heading "Honeymoon fund" [level=5] [ref=e3100]
+                      - text: Want to contribute?
+                      - generic [ref=e3101]: "[ Give ]"
+                    - generic [ref=e3102]:
+                      - heading "Bring a dish?" [level=5] [ref=e3103]
+                      - text: Only shows when potluck is on (P2).
+                      - generic [ref=e3104]: "[ Sign up ]"
+                  - generic [ref=e3105]: Need to change something? Use this same link until May 1.
+        - generic [ref=e3106]: "→ System (rsvp.updated): headcount, meals, seating pool and potluck targets update; confirmation email/text; host notified if set."
+  - generic [ref=e3108]:
+    - heading "Next round (not drawn yet)" [level=2] [ref=e3109]
+    - generic [ref=e3110]:
+      - generic [ref=e3111]: "Other P1 planner screens: Sign Up, Calendar, Settings, Invoice, Event Hub tabs Tasks, Money, Files, Messages."
+      - generic [ref=e3112]: "Client portal: Payments history, Guests, Messages."
+      - generic [ref=e3113]: "Staff (P1 only): Invite → Profile. Their real journey (shifts, day-of) starts in Phase 2."
