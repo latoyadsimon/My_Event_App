@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repo is
 
-Design-stage repo for an all-in-one **event planner app** (multi-tenant SaaS for event planners: leads → proposals → contracts → payments → guests/RSVPs, later equipment, staff, photo booth, karaoke, donations). No application code exists yet. The repo holds the product design, a Supabase Postgres schema with server functions, and database tests. The user is a beginner developer (Code Platoon), so explain decisions and keep code commented for learning.
+Design-stage repo for an all-in-one **event planner app** (multi-tenant SaaS for event planners: leads → proposals → contracts → payments → guests/RSVPs, later equipment, staff, photo booth, karaoke, donations). The repo holds the product design, a Supabase Postgres schema with server functions, database tests, and a fresh Vite + React scaffold (`src/`, `package.json`) where the app will be built. The user is a beginner developer (Code Platoon), so explain decisions and keep code commented for learning.
 
 Build phases: **P1** core business (the current focus), P2 event operations, P3 guest experience, P4 growth. Running example used everywhere: the **Rivera wedding** (Sat Jun 12, 2027, 120 guests, total $14,850 = deposit $4,455 + $5,940 + $4,455). Keep new examples consistent with its timeline (see `wireframes/walkthrough_rivera.md`).
 
@@ -21,7 +21,12 @@ bash app_outline/erd/tests/run_tests.sh
 bash qa/run_qa_db_probes.sh
 python3 -B qa/test_generators.py -v     # generators in sync, counts, Markdown links
 #   Run one test file: temporarily move/rename the others, or copy the runner loop for a single file.
-#   PGTEST_PORT overrides the port (default 54330).
+#   PGTEST_PORT overrides the port (default 54330). PG_BIN=/usr/lib/postgresql/16/bin picks a PostgreSQL version.
+
+# Front end (Vite + React)
+npm run dev      # local dev server
+npm run lint     # ESLint (ignores .claude/ and the generated erd_data.js)
+npm run build
 
 # Regenerate ERD data + data dictionary after editing schema.sql
 python3 app_outline/erd/build_erd.py
@@ -60,7 +65,7 @@ Several files are **generated**. Edit the source, then re-run the generator:
 
 ## Data model architecture (`app_outline/erd/`)
 
-Supabase Postgres, verified on Postgres 18. Read `erd/README.md` and `data_dictionary.md` for details. The cross-file ideas:
+Supabase Postgres, verified on Postgres 16 (CI) and 18. Read `erd/README.md` and `data_dictionary.md` for details. The cross-file ideas:
 
 - **Multi-tenant:** every business table has `business_id → businesses`. RLS is enabled on every table, with helper functions `is_member`, `has_permission(b, 'see_budgets'|…)`, `is_owner`, `is_manager` (owner/coordinator), `is_event_host`, `is_full_host` (money), `host_can_plan`, `is_lead_client`. Policies are split per command (read/add/edit/delete); records we keep have no delete policy (soft delete). A `_check_same_business` trigger on every child table keeps references inside one tenant.
 - **Guard triggers (schema.sql section 10b):** policies pick rows, not columns, so `_guard_*` triggers stop app users (`current_user` = `authenticated`/`anon`) from changing server-owned state: contract signatures, `portal_unlocked_at`, Booked status, invoice totals/paid, installment paid/amount, proposal accepted, change-order decisions, the last owner. `is_server()` is true inside `security definer` functions and for `service_role`, so functions and the webhook pass. New server-owned columns need a guard too.
@@ -71,9 +76,21 @@ Supabase Postgres, verified on Postgres 18. Read `erd/README.md` and `data_dicti
 - **`functions.sql`:** `client_*` / `planner_*` functions check the caller inside (`security definer`), run in one transaction, and raise plain-language errors meant to be shown to users. `_name` helpers are not callable. Grants are explicit at the bottom of the file; give new functions the same treatment.
 - **Tests:** `tests/helpers.sql` provides `test.eq(label, actual, expected)` and `test.expect_error(sql, fragment)`. Tests switch identity with `set role authenticated; set request.jwt.claim.sub = '<uuid>';` (`supabase_stub.sql` fakes `auth.uid()` and the anon/authenticated/service_role roles).
 
-## Course workflow (`setup.md`)
+## Style system (`app_outline/style_guide.md`)
 
-The intended workflow is: branches `main` / `dev` / `feature`; Dockerfiles for running and for testing; write tests first, then code, refactor, document and comment. There's no git repo or Docker setup yet.
+- **Layers:** app mode (Calm default / Bold opt-in, `data-mode` on `<html>`) → business branding (NFR-15) → per-event theme (`events.theme` stores a theme id) → respectful tone (`data-tone="respectful"`, automatic for `tone: 'respectful'` themes and `memorial` events, also quiets the planner's Event Hub for that event).
+- **Code:** `src/styles/tokens.css` (app tokens; keep its `/* @mode … */` comments, the contrast script parses them), `src/styles/themes.js` (27 event themes as data, `themeToCssVars`, status-chip maps, `APP_NAME` / `BRAND_NAME` / `APP_BYLINE`: the app is "Crowned", brought to you by Simon Says: Celebrate), `src/styles/contrast.js`, fonts in `src/assets/fonts/` (self-hosted, licences alongside).
+- **Rules:** components use CSS variables only (never raw hex); display fonts only for headings ≥ 24px; errors/money/legal text never playful. Adding a theme = one object in `themes.js`, then `npm run check:contrast` (also runs in CI and fails below WCAG AA).
+- **Preview:** `python3 -m http.server 8767` from the repo root → `/app_outline/style_guide/theme_gallery.html` (imports the real tokens and themes). Re-take its `theme_gallery_*.png` screenshots when the look changes.
+
+## Course workflow (`setup.md`) and CI
+
+The intended workflow is: branches `main` / `dev` / `feature/...`; Dockerfiles for running and for testing; write tests first, then code, refactor, document and comment. Work on a `feature/...` branch and open a pull request into `dev`; merge `dev` into `main` when it's stable. There's no Docker setup yet.
+
+GitHub Actions (`.github/workflows/ci.yml`) runs on every push and on pull requests into `main`/`dev`, as three parallel jobs:
+- **database:** `run_tests.sh` and `run_qa_db_probes.sh`, using the runner's PostgreSQL 16
+- **generators:** `qa/test_generators.py`, so generated files must be committed in sync
+- **frontend:** `npm ci`, `npm run lint`, `npm run build`
 
 ## Notes
 
