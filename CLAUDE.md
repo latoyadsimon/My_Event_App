@@ -79,7 +79,7 @@ Supabase Postgres, verified on Postgres 16 (CI) and 18. Read `erd/README.md` and
 ## Style system (`app_outline/style_guide.md`)
 
 - **Layers:** app mode (Calm default / Bold opt-in, `data-mode` on `<html>`) → business branding (NFR-15) → per-event theme (`events.theme` stores a theme id) → respectful tone (`data-tone="respectful"`, automatic for `tone: 'respectful'` themes and `memorial` events, also quiets the planner's Event Hub for that event).
-- **Code:** `src/styles/tokens.css` (app tokens; keep its `/* @mode … */` comments, the contrast script parses them), `src/styles/themes.js` (27 event themes as data, `themeToCssVars`, status-chip maps, `APP_NAME`), `src/styles/contrast.js`, fonts in `src/assets/fonts/` (self-hosted, licences alongside).
+- **Code:** `src/styles/tokens.css` (app tokens; keep its `/* @mode … */` comments, the contrast script parses them), `src/styles/themes.js` (27 event themes as data, `themeToCssVars`, status-chip maps, `APP_NAME` / `BRAND_NAME` / `APP_BYLINE`: the app is "Crowned", brought to you by Simon Says: Celebrate), `src/styles/contrast.js`, fonts in `src/assets/fonts/` (self-hosted, licences alongside).
 - **Rules:** components use CSS variables only (never raw hex); display fonts only for headings ≥ 24px; errors/money/legal text never playful. Adding a theme = one object in `themes.js`, then `npm run check:contrast` (also runs in CI and fails below WCAG AA).
 - **Preview:** `python3 -m http.server 8767` from the repo root → `/app_outline/style_guide/theme_gallery.html` (imports the real tokens and themes). Re-take its `theme_gallery_*.png` screenshots when the look changes.
 

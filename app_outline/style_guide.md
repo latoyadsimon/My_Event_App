@@ -1,4 +1,6 @@
-# Style Guide: Tag & Tiara *(working name)*
+# Style Guide: Crowned
+
+*Brought to you by Simon Says: Celebrate*
 
 The look and feel of the event planner app. **The real values live in code**, and this guide explains how to use them:
 
@@ -31,16 +33,19 @@ Format modelled on [`style_guide_example.md`](style_guide_example.md).
   - **Guests:** a beautiful event page and an RSVP in under a minute, with no account.
 
 ### Name and wordmark
-The working name is **Tag & Tiara**: a graffiti *tag* plus a princess *tiara*.
+The app is **Crowned**, brought to you by **Simon Says: Celebrate** (the owner's business brand).
 
-| Option | Why |
-|---|---|
-| **Tag & Tiara** *(working name)* | Both halves of the vibe; works in Calm and Bold |
-| Crowned | Short "queen energy"; good for an app icon |
-| Confetti Crown | Celebratory, and fits every event type |
-| Party Royale | Arcade/battle-royale wink plus royalty |
+```
+👑 Crowned                                  ← --font-display at wordmark size; crown in --color-gold
+   brought to you by Simon Says: Celebrate  ← Inter, --text-sm (14px), --color-muted; brand name semibold
+```
 
-The wordmark is the name in `--font-display` with a small crown icon in `--color-gold`. In Bold mode it gets the neon `--glow`. The name lives in one constant (`APP_NAME` in `themes.js`). **Check trademark and domain availability before launch.**
+- **The name** uses `--font-display` with a small crown icon in `--color-gold`. In Bold mode it gets the neon `--glow`.
+- **The byline** is always smaller than the name and always in the body font (never a display font: those start at 24px). It uses `--color-muted`, which passes 4.5:1 in every mode. On a phone it sits on its own line under the name.
+- **Where the full lockup shows:** Crowned's own pages: the landing page, sign-in and sign-up, the sidebar footer in the planner workspace, Settings → About, and the footer of platform emails.
+- **Where it doesn't:** client portal and guest pages carry the *planner's* brand (§12), so they get only a small "Powered by Crowned" footer. That also keeps "Celebrate" off memorial and vigil pages.
+- **In code:** `APP_NAME`, `BRAND_NAME` and `APP_BYLINE` in `themes.js`. Never type the name by hand.
+- Other names considered: Tag & Tiara, Confetti Crown, Party Royale.
 
 ## 2. How the look is layered
 
@@ -157,10 +162,10 @@ Build these once, as reusable React components, and use them everywhere.
 
 ## 7. Navigation
 
-- **Planner desktop:** sidebar with the wordmark at the top, then Dashboard, Leads, Events, Calendar, Money, Messages and Settings. The current page uses the accent background and `aria-current="page"`.
+- **Planner desktop:** sidebar with the wordmark at the top, then Dashboard, Leads, Events, Calendar, Money, Messages and Settings, and the byline ("brought to you by Simon Says: Celebrate") in the sidebar footer. The current page uses the accent background and `aria-current="page"`.
 - **Planner phone:** a bottom bar with 4 items plus **More (n)**; the active item is moved into view if it would be hidden.
 - **Client portal:** a top bar with the planner's logo, then tabs (Overview, Proposal, Payments, Planning, Guests, Mood Board, Messages). Locked tabs (before the deposit) show a lock icon and the words "Unlocks after your deposit". They are never just greyed out.
-- **Guest pages:** no app navigation, just the event's sections (Details, Schedule, RSVP, Registry) as in-page links.
+- **Guest pages:** no app navigation, just the event's sections (Details, Schedule, RSVP, Registry) as in-page links. The footer shows the planner's logo, then a small "Powered by Crowned".
 - Keep navigation identical across pages, and keep search one tap away for planners.
 
 ## 8. Motion
@@ -282,7 +287,7 @@ Build in this order:
 
 ## 15. Open questions
 
-- **App name:** pick from the four options in §1 (the working name is Tag & Tiara), then check trademarks and domains.
+- **Name check before launch:** *Crowned* and *Simon Says: Celebrate* are both common phrases. Check trademarks (USPTO search), domains and app-store names before going public.
 - **Virtual events:** the data model has no "virtual" flag or meeting link (`events` has only venue fields). That needs a user story (for example "As a planner, I want to add a stream or game link so remote guests can join") and a schema change before the virtual themes are fully usable.
 - **Spanish copy** for each theme's `copy` strings (NFR-10).
 - **Photo booth overlays** (P3) will reuse each theme's colors, display font and motif; their design is still to come.

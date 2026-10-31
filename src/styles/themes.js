@@ -21,8 +21,10 @@
 //   respectful = no confetti, sparkle, glow, sound or motion, anywhere (style guide §11)
 // =====================================================================
 
-// Working name until the owner picks one (style guide: "Open questions").
-export const APP_NAME = 'Tag & Tiara';
+// The app's name and its maker (style guide §1). Use these; never type the name by hand.
+export const APP_NAME = 'Crowned';
+export const BRAND_NAME = 'Simon Says: Celebrate';
+export const APP_BYLINE = `brought to you by ${BRAND_NAME}`;
 
 // Small repeating background patterns, drawn with simple shapes (all original art).
 // {c} is replaced with the theme's accent color. Used at low opacity, decoration only.

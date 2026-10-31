@@ -30,7 +30,10 @@
     .wordmark { display: flex; align-items: center; gap: var(--space-2); font-family: var(--font-display);
                 font-size: var(--text-3xl); color: var(--color-text); text-shadow: var(--glow); }
     .wordmark svg { width: 2.25rem; height: 2.25rem; color: var(--color-gold); opacity: max(var(--sparkle-opacity), .9); }
-    .wordmark .amp { color: var(--color-accent); }
+    .lockup { display: flex; flex-direction: column; gap: var(--space-1); }
+    .byline { margin: 0; padding-left: calc(2.25rem + var(--space-2)); font-family: var(--font-body);
+              font-size: var(--text-sm); color: var(--color-muted); }
+    .byline strong { font-weight: 600; }
     .switches { display: flex; flex-wrap: wrap; gap: var(--space-2); }
 
     /* Buttons */
@@ -130,9 +133,12 @@
 <body>
 <div class="wrap">
   <header class="masthead">
-    <div class="wordmark" aria-label="Tag and Tiara">
+    <div class="lockup">
+    <div class="wordmark">
       <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M6 30l4-16 7 9 3-14 3 14 7-9 4 16z" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linejoin="round"/><circle cx="20" cy="7" r="2.5" fill="currentColor"/></svg>
-      <span id="app-name">Tag &amp; Tiara</span>
+      <span id="app-name">Crowned</span>
+    </div>
+    <p class="byline">brought to you by <strong id="brand-name">Simon Says: Celebrate</strong></p>
     </div>
     <div class="switches" role="group" aria-label="Preview settings">
       <button class="btn btn-ghost" id="mode-calm" aria-pressed="true">Calm</button>
@@ -206,10 +212,11 @@
 </div>
 
 <script type="module">
-  import { APP_NAME, THEMES, EVENT_STATUS_STYLE, themeToCssVars } from '../../src/styles/themes.js';
+  import { APP_NAME, BRAND_NAME, THEMES, EVENT_STATUS_STYLE, themeToCssVars } from '../../src/styles/themes.js';
   import { contrast } from '../../src/styles/contrast.js';
 
   document.getElementById('app-name').textContent = APP_NAME;
+  document.getElementById('brand-name').textContent = BRAND_NAME;
 
   // ---- Status chips from the same map the app will use ----
   document.getElementById('status-row').innerHTML = Object.entries(EVENT_STATUS_STYLE)
