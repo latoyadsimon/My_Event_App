@@ -21,38 +21,61 @@ export const business = {
   name: 'Bella Events',
   slug: 'bella-events',
   initials: 'BE',
+  logo: null,                       // data URL of an uploaded logo (null = show initials)
   email: 'hello@bellaevents.com',
   phone: '(512) 555-0142',
   city: 'Austin, TX',
   timezone: 'America/Chicago',
-  brandColor: '#A3336A',
+  customDomain: 'events.bellaevents.com',
+  brandColors: ['#A3336A', '#2E1A3A'],  // first = main brand color (schema: businesses.brand_colors)
   taxRatePercent: 8,
   depositPercent: 30,
-  paymentsConnected: true,
-  // Onboarding wizard progress (Dashboard shows what's left)
-  onboarding: { business: true, branding: true, packages: true, payments: true, calendar: false },
+  paymentProvider: 'stripe',        // 'stripe' | 'square' | null (null = not connected: check/cash only)
+  calendarProvider: null,           // 'google' | 'apple' | 'outlook' | null
+  inquiryFormShared: false,         // getting-started checklist item
+  // Onboarding wizard: which steps are done (Dashboard checklist resumes from here)
+  onboarding: { business: true, payments: true, packages: true, calendar: false, team: true, templates: true },
+  templates: {
+    checklists: { wedding: 'Wedding · 12 months', birthday: 'Birthday · 8 weeks', baby_shower: 'Shower · 6 weeks', bridal_shower: 'Shower · 6 weeks', corporate: 'Corporate · 10 weeks', fundraiser: 'Fundraiser · 16 weeks', memorial: 'Memorial · 2 weeks', other: 'General · 8 weeks' },
+    messages: {
+      autoReply: 'Thanks for reaching out! We got your inquiry and will reply within one business day. Want to talk sooner? Book a free consult here: {booking_link}',
+      paymentReminder: 'Hi {first_name}, a friendly reminder that {amount} for {event} is due {due_date}. Pay securely here: {pay_link}',
+    },
+  },
 }
 
-// The person using the planner side in this demo, plus the team.
+// Permission switches per person (schema: memberships.permissions). Profit is owner-only.
+export const PERMISSIONS = [
+  { id: 'see_budgets', label: 'See event budgets' },
+  { id: 'see_profit', label: 'See profit margins', ownerOnly: true },
+  { id: 'take_payments', label: 'Take payments (tap-to-pay)' },
+  { id: 'edit_vendors', label: 'Edit vendors' },
+]
+export const JOB_TITLES = ['Lead coordinator', 'Coordinator', 'KJ', 'Photo booth attendant', 'Server', 'Bartender']
+
+// The team (schema: memberships). role: owner | coordinator | staff; status: invited | active | deactivated
 export const team = [
-  { id: 'latoya', name: 'LaToya Simon', role: 'owner', email: 'latoya@bellaevents.com', phone: '(512) 555-0142', permissions: { see_budgets: true } },
-  { id: 'devon', name: 'Devon Brooks', role: 'coordinator', email: 'devon@bellaevents.com', phone: '(512) 555-0177', permissions: { see_budgets: true } },
-  { id: 'sam', name: 'Sam Ortiz', role: 'staff', email: 'sam.ortiz@gmail.com', phone: '(512) 555-0109', permissions: { see_budgets: false } },
+  { id: 'latoya', name: 'LaToya Simon', role: 'owner', jobTitle: 'Owner', email: 'latoya@bellaevents.com', phone: '(512) 555-0142', status: 'active', twoFactor: 'passkey',
+    permissions: { see_budgets: true, see_profit: true, take_payments: true, edit_vendors: true } },
+  { id: 'devon', name: 'Devon Brooks', role: 'coordinator', jobTitle: 'Lead coordinator', email: 'devon@bellaevents.com', phone: '(512) 555-0177', status: 'active',
+    permissions: { see_budgets: true, see_profit: false, take_payments: true, edit_vendors: true } },
+  { id: 'sam', name: 'Sam Ortiz', role: 'staff', jobTitle: 'Photo booth attendant', email: 'sam.ortiz@gmail.com', phone: '(512) 555-0109', status: 'active',
+    permissions: { see_budgets: false, see_profit: false, take_payments: false, edit_vendors: false } },
 ]
 
 export const packages = [
-  { id: 'silver', name: 'Silver', priceCents: 800000, includes: ['Day-of coordination', 'Timeline', '1 planning meeting'] },
-  { id: 'gold', name: 'Gold', priceCents: 1100000, includes: ['Partial planning', 'Vendor booking', '3 planning meetings', 'Photo magnets'] },
-  { id: 'platinum', name: 'Platinum', priceCents: 1550000, includes: ['Full planning', 'Design + décor', 'Unlimited meetings', 'Photo magnets'] },
+  { id: 'silver', name: 'Silver', priceCents: 800000, description: 'Day-of coordination, a timeline and one planning meeting.', archived: false },
+  { id: 'gold', name: 'Gold', priceCents: 1100000, description: 'Partial planning: vendor booking, three planning meetings and day-of coordination.', archived: false },
+  { id: 'platinum', name: 'Platinum', priceCents: 1550000, description: 'Full planning and design, unlimited meetings and day-of coordination.', archived: false },
 ]
 
 // Add-ons the planner can put on a proposal. `owned` = how many the business has (gear check).
 export const addons = [
-  { id: 'photo-booth', name: 'Photo booth (4 hrs)', priceCents: 150000, unit: 'each' },
-  { id: 'karaoke', name: 'Karaoke + KJ (3 hrs)', priceCents: 90000, unit: 'each' },
-  { id: 'chairs', name: 'Chairs', priceCents: 250, unit: 'chair', owned: 120 },
-  { id: 'photo-magnets', name: 'Photo magnets', priceCents: 60000, unit: 'each' },
-  { id: 'extra-karaoke-hour', name: 'Extra karaoke hour', priceCents: 25000, unit: 'hour' },
+  { id: 'photo-booth', name: 'Photo booth (4 hrs)', priceCents: 150000, unit: 'each', owned: 2, archived: false },
+  { id: 'karaoke', name: 'Karaoke + KJ (3 hrs)', priceCents: 90000, unit: 'each', owned: 1, archived: false },
+  { id: 'chairs', name: 'Chairs', priceCents: 250, unit: 'chair', owned: 120, archived: false },
+  { id: 'photo-magnets', name: 'Photo magnets', priceCents: 60000, unit: 'each', owned: null, archived: false },
+  { id: 'extra-karaoke-hour', name: 'Extra karaoke hour', priceCents: 25000, unit: 'hour', owned: null, archived: false },
 ]
 
 export const clients = [
@@ -64,6 +87,10 @@ export const clients = [
   { id: 'lee', name: 'Grace Lee', email: 'grace.lee@gmail.com', phone: '(512) 555-0150' },
   { id: 'kim', name: 'Daniel Kim', email: 'dkim@gmail.com', phone: '(512) 555-0114' },
   { id: 'nguyen', name: 'Linh Nguyen', email: 'linh.nguyen@yahoo.com', phone: '(512) 555-0172' },
+  { id: 'garza', name: 'Elena Garza', partner: 'Mateo Reyes', email: 'elena.garza@gmail.com', phone: '(512) 555-0126' },
+  { id: 'morales', name: 'Rosa Morales', email: 'rosa.morales@gmail.com', phone: '(512) 555-0103' },
+  { id: 'westlake', name: 'Karen Holt', company: 'Westlake Elementary PTA', email: 'pta@westlakeelem.org', phone: '(512) 555-0158' },
+  { id: 'okafor', name: 'Chidi Okafor', email: 'chidi.okafor@gmail.com', phone: '(512) 555-0191' },
 ]
 
 // Lead stages, in kanban order
@@ -112,6 +139,10 @@ export const leads = [
   { id: 'acme', clientId: 'acme', title: 'Acme holiday party', eventType: 'corporate', eventDate: '2026-12-12', guestCount: 150, budget: '$12k', services: ['Karaoke', 'Photo booth'], venue: 'The Driskill Ballroom', source: 'The Knot', stage: 'won', receivedAt: '2026-09-02T10:00:00', activity: [] },
   { id: 'hope', clientId: 'hope', title: 'Hope Church potluck', eventType: 'potluck', eventDate: '2027-01-09', guestCount: 200, budget: '$1–2k', services: ['Chairs'], venue: 'Hope Community Church hall', source: 'Facebook', stage: 'won', receivedAt: '2026-09-20T10:00:00', activity: [] },
   { id: 'patel', clientId: 'patel', title: 'Patel family reunion', eventType: 'reunion', eventDate: '2027-03-03', guestCount: 80, budget: '$6k', services: ['Karaoke'], venue: 'Zilker Clubhouse', source: 'Referral', stage: 'won', receivedAt: '2026-08-14T10:00:00', activity: [] },
+  { id: 'garza', clientId: 'garza', title: 'Garza wedding', eventType: 'wedding', eventDate: '2027-09-18', guestCount: 150, budget: '$9–11k', services: ['Photo booth'], venue: 'Laguna Gloria', source: 'Instagram', stage: 'won', receivedAt: '2026-10-12T10:00:00', activity: [] },
+  { id: 'morales', clientId: 'morales', title: 'Morales quinceañera', eventType: 'birthday', eventDate: '2026-09-12', guestCount: 160, budget: '$8k', services: ['Photo booth', 'Karaoke'], venue: 'Salón Las Palmas', source: 'Referral', stage: 'won', receivedAt: '2026-05-02T10:00:00', activity: [] },
+  { id: 'westlake', clientId: 'westlake', title: 'Westlake PTA gala', eventType: 'fundraiser', eventDate: '2026-10-03', guestCount: 220, budget: '$10k', services: ['Photo booth'], venue: 'Westlake Elementary gym', source: 'Google', stage: 'won', receivedAt: '2026-06-15T10:00:00', activity: [] },
+  { id: 'okafor', clientId: 'okafor', title: 'Okafor 50th birthday', eventType: 'birthday', eventDate: '2026-10-17', guestCount: 60, budget: '$4k', services: ['Karaoke'], venue: 'Home (Pflugerville)', source: 'Referral', stage: 'won', receivedAt: '2026-08-20T10:00:00', activity: [] },
   { id: 'thompson', clientId: 'thompson', title: 'Celebration of life for Harold Thompson', eventType: 'memorial', eventDate: '2026-11-14', guestCount: 90, budget: '$4k', services: ['Chairs'], venue: 'St. Mark\'s Fellowship Hall', source: 'Referral', stage: 'won', receivedAt: '2026-10-26T10:00:00', activity: [] },
 ]
 
@@ -147,6 +178,10 @@ export const contracts = [
   { id: 'hope', leadId: 'hope', eventId: 'hope', clientSignedAt: '2026-10-01T10:00:00', plannerSignedAt: '2026-10-01T12:00:00' },
   { id: 'patel', leadId: 'patel', eventId: 'patel', clientSignedAt: '2026-09-01T10:00:00', plannerSignedAt: '2026-09-01T15:00:00' },
   { id: 'thompson', leadId: 'thompson', eventId: 'thompson', clientSignedAt: '2026-10-27T09:00:00', plannerSignedAt: '2026-10-27T11:00:00' },
+  { id: 'garza', leadId: 'garza', eventId: 'garza', clientSignedAt: '2026-11-02T13:20:00', plannerSignedAt: '2026-11-02T15:00:00' },
+  { id: 'morales', leadId: 'morales', eventId: 'morales', clientSignedAt: '2026-05-20T10:00:00', plannerSignedAt: '2026-05-20T12:00:00' },
+  { id: 'westlake', leadId: 'westlake', eventId: 'westlake', clientSignedAt: '2026-07-01T10:00:00', plannerSignedAt: '2026-07-01T12:00:00' },
+  { id: 'okafor', leadId: 'okafor', eventId: 'okafor', clientSignedAt: '2026-09-01T10:00:00', plannerSignedAt: '2026-09-01T12:00:00' },
 ]
 
 // status: awaiting_countersign | booked | in_planning | final_week | event_day | wrap_up | closed | cancelled
@@ -154,6 +189,11 @@ export const events = [
   { id: 'acme', leadId: 'acme', clientId: 'acme', name: 'Acme holiday party', type: 'corporate', date: '2026-12-12', startTime: '19:00', venue: 'The Driskill Ballroom', status: 'in_planning', guestCount: 150, theme: 'gala-night', portalUnlockedAt: '2026-09-18T13:05:00' },
   { id: 'hope', leadId: 'hope', clientId: 'hope', name: 'Hope Church potluck', type: 'potluck', date: '2027-01-09', startTime: '12:00', venue: 'Hope Community Church hall', status: 'booked', guestCount: 200, theme: 'community-potluck', portalUnlockedAt: '2026-10-01T10:00:00' },
   { id: 'patel', leadId: 'patel', clientId: 'patel', name: 'Patel family reunion', type: 'reunion', date: '2027-03-03', startTime: '13:00', venue: 'Zilker Clubhouse', status: 'booked', guestCount: 80, theme: 'throwback', portalUnlockedAt: '2026-09-01T10:05:00' },
+  { id: 'garza', leadId: 'garza', clientId: 'garza', name: 'Garza wedding', type: 'wedding', date: '2027-09-18', startTime: '17:00', venue: 'Laguna Gloria', status: 'booked', guestCount: 150, theme: 'boho-garden', portalUnlockedAt: '2026-11-02T13:25:00' },
+  // Past events (closed), for the pipeline and the Events list's "Past" tab
+  { id: 'morales', leadId: 'morales', clientId: 'morales', name: 'Morales quinceañera', type: 'birthday', date: '2026-09-12', startTime: '18:00', venue: 'Salón Las Palmas', status: 'closed', guestCount: 160, theme: 'quinceanera', portalUnlockedAt: '2026-05-20T10:05:00' },
+  { id: 'westlake', leadId: 'westlake', clientId: 'westlake', name: 'Westlake PTA gala', type: 'fundraiser', date: '2026-10-03', startTime: '18:30', venue: 'Westlake Elementary gym', status: 'closed', guestCount: 220, theme: 'gala-night', portalUnlockedAt: '2026-07-01T10:05:00' },
+  { id: 'okafor', leadId: 'okafor', clientId: 'okafor', name: 'Okafor 50th birthday', type: 'birthday', date: '2026-10-17', startTime: '19:00', venue: 'Home (Pflugerville)', status: 'closed', guestCount: 60, theme: 'throwback', portalUnlockedAt: '2026-09-01T10:05:00' },
   { id: 'thompson', leadId: 'thompson', clientId: 'thompson', name: 'Celebration of life for Harold Thompson', type: 'memorial', date: '2026-11-14', startTime: '11:00', venue: 'St. Mark\'s Fellowship Hall', status: 'final_week', guestCount: 90, theme: 'celebration-of-life', portalUnlockedAt: '2026-10-27T09:05:00' },
 ]
 
@@ -174,6 +214,38 @@ export const invoices = [
   invoice('hope', 1035, 'hope', 150000, ['2026-10-01', '2026-12-01', '2026-12-26'], 1),
   invoice('patel', 1028, 'patel', 600000, ['2026-09-01', '2027-01-15', '2027-02-17'], 1),
   invoice('thompson', 1040, 'thompson', 400000, ['2026-10-27', '2026-11-06', '2026-11-13'], 1),
+  invoice('garza', 1041, 'garza', 965000, ['2026-11-02', '2027-05-18', '2027-08-18'], 1),
+  invoice('morales', 1012, 'morales', 800000, ['2026-05-20', '2026-07-12', '2026-08-29'], 3),
+  invoice('westlake', 1019, 'westlake', 1000000, ['2026-07-01', '2026-08-15', '2026-09-19'], 3),
+  invoice('okafor', 1026, 'okafor', 400000, ['2026-09-01', '2026-09-20', '2026-10-03'], 3),
+]
+
+// Checklist tasks per event (Event Hub › Tasks builds on these in Phase 4)
+const task = (id, eventId, title, due, assignee = 'latoya') => ({ id, eventId, title, due, assignee, done: false })
+export const tasks = [
+  task('t1', 'acme', 'Confirm final headcount with Priya', '2026-11-04'),   // late
+  task('t2', 'acme', 'Book the DJ', '2026-11-10', 'devon'),
+  task('t3', 'acme', 'Send the karaoke song list', '2026-11-20', 'devon'),
+  task('t4', 'acme', 'Pick up the photo booth backdrop', '2026-12-10', 'sam'),
+  task('t5', 'acme', 'Day-of timeline to the venue', '2026-12-05'),
+  task('t6', 'hope', 'Confirm chair delivery time', '2026-12-15', 'devon'),
+  task('t7', 'hope', 'Share the sign-up sheet link', '2026-12-01'),
+  task('t8', 'hope', 'Print table cards', '2027-01-05', 'sam'),
+  task('t9', 'patel', 'Tasting with the caterer', '2026-11-07'),
+  task('t10', 'patel', 'Send the save-the-date', '2026-12-01'),
+  task('t11', 'thompson', 'Print the memorial programs', '2026-11-11'),
+  task('t12', 'thompson', 'Set up the photo slideshow', '2026-11-13', 'devon'),
+  task('t13', 'thompson', 'Confirm the reception food order', '2026-11-09'),
+  task('t14', 'garza', 'Send the welcome questionnaire', '2026-11-09'),
+]
+
+// Consults, site visits, tastings and pickups (Dashboard "Today & this week", Calendar)
+export const appointments = [
+  { id: 'a1', at: '2026-11-06T10:00:00', title: 'Site visit', with: 'Lee bridal shower', to: '/app/leads/lee' },
+  { id: 'a2', at: '2026-11-07T11:00:00', title: 'Tasting', with: 'Patel family reunion', to: '/app/events/patel' },
+  { id: 'a3', at: '2026-11-07T16:00:00', title: 'Gear pickup', with: 'Acme holiday party', to: '/app/events/acme' },
+  { id: 'a4', at: '2026-11-09T13:00:00', title: 'Call', with: 'Nguyen (new lead)', to: '/app/leads/nguyen' },
+  { id: 'a5', at: '2026-11-19T15:00:00', title: 'Planning meeting', with: 'Garza wedding', to: '/app/events/garza' },
 ]
 
 // The demo Outbox: every email / text / push the app "sent". Links inside open real screens;
@@ -204,6 +276,28 @@ export const outbox = [
 /** A fresh copy of the whole world. Called once on load (and by tests). */
 export function createSeedState() {
   return structuredClone({
-    business, team, packages, addons, clients, leads, proposals, contracts, events, invoices, outbox,
+    business, team, packages, addons, clients, leads, proposals, contracts, events, invoices, tasks, appointments, outbox,
   })
+}
+
+/**
+ * A brand-new business right after sign up: nothing set up yet, so the Dashboard
+ * shows the getting-started checklist and the onboarding wizard has work to do.
+ */
+export function createNewBusinessState({ ownerName, businessName, email }) {
+  const slug = businessName.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || 'my-business'
+  const initials = businessName.split(/\s+/).filter(Boolean).slice(0, 2).map((w) => w[0].toUpperCase()).join('') || 'MB'
+  return {
+    business: {
+      ...structuredClone(business),
+      id: slug, slug, name: businessName, initials, logo: null, email, phone: '', city: '', customDomain: '',
+      paymentProvider: null, calendarProvider: null, inquiryFormShared: false,
+      onboarding: { business: false, payments: false, packages: false, calendar: false, team: false, templates: false },
+    },
+    team: [{
+      id: 'owner', name: ownerName, role: 'owner', jobTitle: 'Owner', email, phone: '', status: 'active', twoFactor: null,
+      permissions: { see_budgets: true, see_profit: true, take_payments: true, edit_vendors: true },
+    }],
+    packages: [], addons: [], clients: [], leads: [], proposals: [], contracts: [], events: [], invoices: [], tasks: [], appointments: [], outbox: [],
+  }
 }

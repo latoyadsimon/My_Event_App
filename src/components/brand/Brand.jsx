@@ -9,6 +9,7 @@
 import { Link } from 'react-router-dom'
 import { APP_NAME, BRAND_NAME } from '../../styles/themes'
 import { Crown } from '../ui/Icon'
+import { brandInk } from '../../lib/brand'
 import styles from './Brand.module.css'
 
 export function Lockup({ size = 'md', byline = true, to = '/' }) {
@@ -28,7 +29,12 @@ export function Lockup({ size = 'md', byline = true, to = '/' }) {
 export function BusinessMark({ business, sub, to }) {
   const inner = (
     <>
-      <span className={styles.logo} aria-hidden="true">{business.initials}</span>
+      {business.logo
+        ? <img className={styles.logoImg} src={business.logo} alt="" />
+        : (
+          // The planner's color, darkened if needed so white initials stay readable (style guide §12)
+          <span className={styles.logo} style={{ background: brandInk(business.brandColors?.[0]) }} aria-hidden="true">{business.initials}</span>
+        )}
       <span className={styles.bizText}>
         <span className={styles.bizName}>{business.name}</span>
         {sub && <span className={styles.bizSub}>{sub}</span>}

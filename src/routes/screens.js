@@ -9,12 +9,6 @@
 
 export const SCREENS = {
   // ---------- Planner ----------
-  signup: { title: 'Sign up', phase: 1, folder: 'planner/sign-up', next: [{ label: 'Onboarding', to: '/app/onboarding/business' }] },
-  onboarding: { title: 'Set up your business', phase: 1, folder: 'planner/onboarding', next: [{ label: 'Dashboard', to: '/app/dashboard' }] },
-  dashboard: {
-    title: 'Dashboard', phase: 1, folder: 'planner/dashboard',
-    next: [{ label: 'Leads', to: '/app/leads' }, { label: 'Countersign Rivera', to: '/app/contracts/rivera' }, { label: 'Events', to: '/app/events' }],
-  },
   calendar: { title: 'Calendar', phase: 4, folder: 'planner/calendar', next: [{ label: 'Acme holiday party', to: '/app/events/acme' }, { label: 'Kim lead (hold)', to: '/app/leads/kim' }] },
   leads: { title: 'Leads', phase: 2, folder: 'planner/leads', next: [{ label: 'Rivera lead', to: '/app/leads/rivera' }, { label: 'Nguyen lead', to: '/app/leads/nguyen' }] },
   leadDetail: { title: 'Lead', phase: 2, folder: 'planner/lead-detail', next: [{ label: 'Proposal builder', to: '/app/proposals/rivera' }, { label: 'Back to leads', to: '/app/leads' }] },
@@ -32,7 +26,6 @@ export const SCREENS = {
   hubMessages: { title: 'Messages', phase: 4, folder: 'planner/event-hub-messages', next: [{ label: 'Overview', to: '..' }] },
   reschedule: { title: 'Change the date', phase: 4, folder: 'planner/reschedule-event', next: [{ label: 'Back to the event', to: '..' }] },
   cancelEvent: { title: 'Cancel the event', phase: 4, folder: 'planner/cancel-event', next: [{ label: 'Back to the event', to: '..' }] },
-  settings: { title: 'Settings', phase: 1, folder: 'planner/settings', next: [{ label: 'Appearance', to: '/app/settings/appearance' }] },
 
   // ---------- Client ----------
   inquiry: { title: 'Plan your event with us', phase: 2, folder: 'client/inquiry-form', next: [{ label: 'Book a consult', to: '/b/bella-events/book' }] },

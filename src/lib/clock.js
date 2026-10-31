@@ -34,6 +34,13 @@ export function daysUntil(value) {
 export const formatDay = (value) =>
   parseDay(value).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })
 
+/** Fri, Nov 6 (no year: for dates in the next few months) */
+export const formatWeekdayDay = (value) =>
+  parseDay(value).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
+
+/** 4:12 PM */
+export const formatTime = (value) => parseDay(value).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
+
 /** Jun 12 */
 export const formatDayShort = (value) =>
   parseDay(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })

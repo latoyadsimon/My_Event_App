@@ -10,6 +10,7 @@ import styles from './ui.module.css'
 
 export { default as Button } from './Button'
 export { default as Icon, Crown } from './Icon'
+export { default as ConfirmDialog } from './ConfirmDialog'
 
 /** The noun title at the top of a screen, with optional subtitle and actions. */
 export function PageHeader({ title, sub, actions, children }) {
@@ -43,10 +44,13 @@ export function Card({ title, action, as: Tag = 'section', className = '', child
 
 const words = (s) => s.replaceAll('_', ' ').replace(/^./, (c) => c.toUpperCase())
 
-/** Event or money status: a dot plus words. kind = 'event' | 'money' */
-export function StatusChip({ status, kind = 'event', label }) {
+/**
+ * A status as a dot plus words. kind = 'event' | 'money' picks the color from themes.js;
+ * or pass tone ('success' | 'warning' | 'danger' | 'info' | 'neutral') directly.
+ */
+export function StatusChip({ status, kind = 'event', label, tone }) {
   const map = kind === 'money' ? MONEY_STATUS_STYLE : EVENT_STATUS_STYLE
-  return <span className={`${styles.chip} ${styles[map[status] ?? 'neutral']}`}>{label ?? words(status)}</span>
+  return <span className={`${styles.chip} ${styles[tone ?? map[status] ?? 'neutral']}`}>{label ?? words(status)}</span>
 }
 
 /** A row of key numbers. items: [{ label, value, note }] */
@@ -98,6 +102,19 @@ export function EmptyState({ title, children, action }) {
       <p className={styles.emptyTitle}>{title}</p>
       {children && <p className={styles.emptyText}>{children}</p>}
       {action}
+    </div>
+  )
+}
+
+/**
+ * A notice across the top of a section (style guide: status colors + words).
+ *   <Notice tone="warning" action={<Button …>Connect now</Button>}>Payments not connected…</Notice>
+ */
+export function Notice({ tone = 'info', action, children }) {
+  return (
+    <div className={`${styles.notice} ${styles[tone]}`} role={tone === 'danger' ? 'alert' : 'status'}>
+      <p>{children}</p>
+      {action && <div className={styles.noticeAction}>{action}</div>}
     </div>
   )
 }

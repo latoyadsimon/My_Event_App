@@ -41,7 +41,7 @@ cd wireframes && python3 -m http.server 8765        # wireframe.html
 cd app_outline/erd && python3 -m http.server 8766    # erd.html
 ```
 
-Environment gotchas (WSL + zsh): `rm` is aliased to `rm -i` (use `command rm`); `diff` is a broken zsh function (use `/usr/bin/diff`); zsh doesn't word-split variables holding commands; Postgres Unix sockets fail on long paths, so start servers with `-k ''` and connect via `-h 127.0.0.1`.
+Environment gotchas (WSL + zsh): the Vite dev server sometimes misses files changed from the shell (sed/python), so `touch` the file or restart `npm run dev` if the browser shows stale code; `rm` is aliased to `rm -i` (use `command rm`); `diff` is a broken zsh function (use `/usr/bin/diff`); zsh doesn't word-split variables holding commands; Postgres Unix sockets fail on long paths, so start servers with `-k ''` and connect via `-h 127.0.0.1`.
 
 ## Sources of truth and generated files
 
@@ -91,6 +91,7 @@ React 19 + Vite + React Router 7 (declarative `BrowserRouter`). **No backend yet
 - **Demo:**
   - The demo bar's role switcher (`ui.role`) decides which area opens. `RequireRole` shows the friendly no-access page otherwise.
   - Emails/SMS/push go to the Outbox via `dispatch({ type: 'outbox/send', message })`. `message.link.role` switches the role when the link is opened.
+- **Planner setup (phase 1):** `src/pages/planner/setup/` holds the forms shared by the onboarding wizard and Settings (BusinessFields, BrandingFields, PackagesManager, ConnectCards, TeamManager, TemplatesEditor). Form checks live in `src/lib/validate.js`, and the brand color is made readable with `src/lib/brand.js` (`brandInk`). Dashboard numbers come from `getDashboard()` in `selectors.js`. Destructive actions use `ConfirmDialog`.
 - **Layouts:** `AppShell` (sidebar ≥1024px, top tabs 768–1023, phone bottom bar with 4 items + "More (n)") is shared by the planner, portal and staff layouts.
   - The portal locks Home/Guests/Mood Board/Approvals until the deposit.
   - `GuestLayout` applies the event theme via `themeToCssVars`.

@@ -44,8 +44,9 @@
   .kpi:nth-child(n + 3) { border-top: 1px solid var(--color-border); }
 }
 .kpiLabel { font-size: var(--text-sm); color: var(--color-muted); }
-.kpiValue { font-size: var(--text-2xl); font-weight: 600; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.kpiValue { font-size: var(--text-xl); font-weight: 600; font-variant-numeric: tabular-nums; line-height: 1.1; }
 .kpiNote { font-size: var(--text-xs); color: var(--color-muted); }
+@media (min-width: 768px) { .kpiValue { font-size: var(--text-2xl); } }
 
 /* ---------- Form fields ---------- */
 .field { display: flex; flex-direction: column; gap: var(--space-1); min-width: 0; }
@@ -70,3 +71,11 @@ textarea.control { min-height: 6rem; resize: vertical; }
 
 /* ---------- Money ---------- */
 .money { font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+/* ---------- Notice: a banner with words and one action ---------- */
+.notice {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-4);
+  padding: var(--space-3) var(--space-4); border-radius: var(--radius-md); font-size: var(--text-sm); font-weight: 550;
+}
+.notice p { flex: 1 1 16rem; }
+.noticeAction { display: flex; gap: var(--space-2); }

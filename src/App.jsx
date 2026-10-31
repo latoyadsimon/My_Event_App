@@ -31,8 +31,15 @@ import SignIn from './pages/shared/SignIn'
 import Outbox from './pages/shared/Outbox'
 import NotFound from './pages/shared/NotFound'
 import Planned from './pages/shared/Planned'
+import SignUp from './pages/planner/SignUp'
+import Onboarding from './pages/planner/Onboarding'
+import Dashboard from './pages/planner/Dashboard'
 import SettingsLayout from './pages/planner/settings/SettingsLayout'
 import Appearance from './pages/planner/settings/Appearance'
+import {
+  BusinessSettings, BrandingSettings, PackagesSettings, PaymentsSettings, CalendarSettings,
+  TeamSettings, TemplatesSettings, ExportSettings,
+} from './pages/planner/settings/sections'
 
 export default function App() {
   return (
@@ -44,14 +51,15 @@ export default function App() {
 
         {/* ---------- Planner: getting started ---------- */}
         <Route element={<CrownedLayout />}>
-          <Route path="app/signup" element={<Planned id="signup" />} />
-          <Route path="app/onboarding/:step" element={<Planned id="onboarding" />} />
+          <Route path="app/signup" element={<SignUp />} />
+          <Route path="app/onboarding" element={<Navigate to="business" replace />} />
+          <Route path="app/onboarding/:step" element={<Onboarding />} />
         </Route>
 
         {/* ---------- Planner workspace ---------- */}
         <Route path="app" element={<RequireRole role="planner"><PlannerLayout /></RequireRole>}>
           <Route index element={<Navigate to="dashboard" replace />} />
-          <Route path="dashboard" element={<Planned id="dashboard" />} />
+          <Route path="dashboard" element={<Dashboard />} />
           <Route path="calendar" element={<Planned id="calendar" />} />
           <Route path="leads" element={<Planned id="leads" />} />
           <Route path="leads/:leadId" element={<Planned id="leadDetail" />} />
@@ -75,8 +83,15 @@ export default function App() {
           </Route>
           <Route path="settings" element={<SettingsLayout />}>
             <Route index element={<Navigate to="business" replace />} />
+            <Route path="business" element={<BusinessSettings />} />
+            <Route path="branding" element={<BrandingSettings />} />
+            <Route path="packages" element={<PackagesSettings />} />
+            <Route path="payments" element={<PaymentsSettings />} />
+            <Route path="calendar" element={<CalendarSettings />} />
+            <Route path="team" element={<TeamSettings />} />
+            <Route path="templates" element={<TemplatesSettings />} />
+            <Route path="export" element={<ExportSettings />} />
             <Route path="appearance" element={<Appearance />} />
-            <Route path=":section" element={<Planned id="settings" nested />} />
           </Route>
         </Route>
 

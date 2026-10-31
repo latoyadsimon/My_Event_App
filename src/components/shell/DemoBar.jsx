@@ -7,6 +7,7 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useStore } from '../../store/StoreContext'
 import { ROLE_HOME } from '../../lib/roles'
+import { getMe } from '../../store/selectors'
 import Icon from '../ui/Icon'
 import styles from './DemoBar.module.css'
 
@@ -27,7 +28,11 @@ export default function DemoBar() {
       <label className={styles.role}>
         <span>Viewing as</span>
         <select value={state.ui.role} onChange={(e) => switchRole(e.target.value)}>
-          {Object.entries(ROLE_HOME).map(([id, r]) => <option key={id} value={id}>{r.label}</option>)}
+          {Object.entries(ROLE_HOME).map(([id, r]) => (
+            <option key={id} value={id}>
+              {id === 'planner' ? `Planner (${getMe(state)?.name.split(' ')[0] ?? 'you'})` : r.label}
+            </option>
+          ))}
         </select>
       </label>
       <span className={styles.today}>Today is Thu, Nov 5, 2026</span>
