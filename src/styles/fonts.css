@@ -1,0 +1,21 @@
+/* =====================================================================
+   Self-hosted fonts (no Google Fonts requests: faster, private, works offline).
+   Licences sit next to each file in src/assets/fonts/ (SIL OFL 1.1; Permanent Marker: Apache 2.0).
+   A browser only downloads a font file when some text actually uses it, so declaring
+   all of them here costs nothing on pages that don't use them.
+   font-display: swap = show the fallback font immediately, swap when the file arrives.
+   ===================================================================== */
+
+/* Body text everywhere (variable font: one file covers weights 100–900) */
+@font-face { font-family: 'Inter'; src: url('../assets/fonts/inter-latin-wght.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }
+
+/* Display fonts: headings 24px and larger only, never body text, buttons or forms */
+@font-face { font-family: 'Playfair Display'; src: url('../assets/fonts/playfair-display-latin-wght.woff2') format('woff2'); font-weight: 400 900; font-display: swap; }
+@font-face { font-family: 'Fredoka'; src: url('../assets/fonts/fredoka-latin-wght.woff2') format('woff2'); font-weight: 300 700; font-display: swap; }
+@font-face { font-family: 'Sedgwick Ave Display'; src: url('../assets/fonts/sedgwick-ave-display-latin.woff2') format('woff2'); font-display: swap; }
+@font-face { font-family: 'Permanent Marker'; src: url('../assets/fonts/permanent-marker-latin.woff2') format('woff2'); font-display: swap; }
+@font-face { font-family: 'Press Start 2P'; src: url('../assets/fonts/press-start-2p-latin.woff2') format('woff2'); font-display: swap; }
+@font-face { font-family: 'Bebas Neue'; src: url('../assets/fonts/bebas-neue-latin.woff2') format('woff2'); font-display: swap; }
+@font-face { font-family: 'Graduate'; src: url('../assets/fonts/graduate-latin.woff2') format('woff2'); font-display: swap; }
+@font-face { font-family: 'Cormorant Garamond'; src: url('../assets/fonts/cormorant-garamond-latin-600.woff2') format('woff2'); font-weight: 600; font-display: swap; }
+@font-face { font-family: 'Great Vibes'; src: url('../assets/fonts/great-vibes-latin.woff2') format('woff2'); font-display: swap; }
