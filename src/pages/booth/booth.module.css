@@ -1,0 +1,49 @@
+/* The kiosk and slideshow wear the event theme; the attendant panel is a normal app screen. */
+.kiosk, .slideshow {
+  min-height: 100vh; display: flex; flex-direction: column; align-items: center; gap: var(--space-6); padding: clamp(1.25rem, 4vw, 3rem);
+  background: var(--theme-surface); color: var(--theme-text); font-family: var(--theme-font-body); text-align: center;
+  /* Map the app tokens onto the event theme so shared components (Button, Field) match it, like guest pages */
+  --color-bg: var(--theme-bg); --color-surface: var(--theme-surface); --color-text: var(--theme-text); --color-muted: var(--theme-muted);
+  --color-accent: var(--theme-accent); --color-on-accent: var(--theme-on-accent); --color-border: var(--theme-border);
+  --color-input-border: var(--theme-border); --color-focus: var(--theme-text);
+}
+.kioskTitle { font-family: var(--theme-font-display); font-size: clamp(1.5rem, 4vw, 2.75rem); color: var(--theme-accent); }
+.bigStart {
+  width: min(22rem, 80vw); aspect-ratio: 1; border-radius: 50%; border: 0; cursor: pointer;
+  background: var(--theme-accent); color: var(--theme-on-accent); font-size: clamp(1.5rem, 5vw, 2.5rem); font-weight: 800;
+  box-shadow: 0 0 0 10px color-mix(in srgb, var(--theme-accent) 25%, transparent);
+}
+.bigStart:focus-visible { outline: 3px solid var(--theme-text); outline-offset: 8px; }
+.count { font-size: clamp(5rem, 22vw, 12rem); font-weight: 800; line-height: 1; color: var(--theme-accent); font-variant-numeric: tabular-nums; }
+.review { display: flex; flex-direction: column; gap: var(--space-4); width: min(48rem, 100%); }
+.strip { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-3); }
+.kioskButtons { display: flex; flex-wrap: wrap; gap: var(--space-3); justify-content: center; }
+.kioskButtons > * { min-height: 3.25rem; min-width: 8rem; }
+.panel {
+  display: flex; flex-direction: column; gap: var(--space-4); width: min(32rem, 100%); text-align: left; padding: var(--space-5);
+  border-radius: var(--theme-radius, var(--radius-lg)); background: var(--theme-surface); border: 1px solid var(--theme-border);
+}
+.fieldset { border: 0; padding: 0; margin: 0; display: flex; flex-direction: column; gap: var(--space-3); }
+.legend { font-weight: 700; font-size: var(--text-lg); margin-bottom: var(--space-2); }
+.check { display: flex; align-items: center; gap: var(--space-3); min-height: var(--tap-min); cursor: pointer; }
+.check input { width: 1.3rem; height: 1.3rem; accent-color: var(--theme-accent); }
+.qr { display: flex; align-items: center; gap: var(--space-2); font-size: var(--text-sm); color: var(--theme-muted); }
+.doneText { font-size: var(--text-xl); font-weight: 700; }
+
+/* Attendant */
+.attendant { display: flex; flex-direction: column; gap: var(--space-4); max-width: 60rem; width: 100%; margin: 0 auto; }
+.inline { display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: flex-end; }
+.inline > :first-child { flex: 1 1 10rem; }
+.queue { display: flex; flex-direction: column; gap: var(--space-3); }
+.queue > li { display: grid; grid-template-columns: 6rem minmax(0, 1fr); gap: var(--space-3); align-items: start; padding-top: var(--space-3); border-top: 1px solid var(--color-border); }
+.queue > li:first-child { border-top: 0; padding-top: 0; }
+.queueInfo { display: flex; flex-direction: column; gap: var(--space-1); font-size: var(--text-sm); }
+.rows { display: flex; flex-direction: column; font-size: var(--text-sm); }
+.rows > li { display: flex; align-items: center; justify-content: space-between; gap: var(--space-2); min-height: var(--tap-min); border-top: 1px solid var(--color-border); }
+.rows > li:first-child { border-top: 0; }
+.grid { display: grid; gap: var(--space-3); grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr)); }
+
+/* Slideshow */
+.wall { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr)); width: 100%; }
+.foot { margin-top: auto; color: var(--theme-muted); display: flex; align-items: center; gap: var(--space-4); }
+.kiosk:focus, .slideshow:focus { outline: none; }

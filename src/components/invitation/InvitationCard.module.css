@@ -1,0 +1,45 @@
+/* The card wears the (designed) theme. The words sit on a solid panel so they stay readable over the motif. */
+.card {
+  display: flex; flex-direction: column; gap: var(--space-3); text-align: center; align-items: stretch; overflow: hidden;
+  padding: var(--space-5); border-radius: var(--theme-radius, var(--radius-md));
+  background: var(--theme-surface); color: var(--theme-text); border: 1px solid var(--theme-border);
+  background-image: var(--theme-motif); background-repeat: repeat; background-size: 160px;
+  --color-text: var(--theme-text); --color-muted: var(--theme-muted);   /* app text helpers (.muted) follow the card */
+}
+.card[data-layout='photo-top'] { padding-top: 0; }
+.photo { width: calc(100% + 2 * var(--space-5)); margin: 0 calc(-1 * var(--space-5)); aspect-ratio: 16 / 9; object-fit: cover; display: block; }
+.card[data-layout='classic'] .photo { width: 7rem; height: 7rem; aspect-ratio: 1; margin: 0 auto; border-radius: 50%; border: 3px solid var(--theme-accent); }
+.inner {
+  display: flex; flex-direction: column; gap: var(--space-2); align-items: center;
+  padding: var(--space-5) var(--space-4); border-radius: var(--theme-radius, var(--radius-md)); background: var(--theme-surface);
+}
+.kicker { font-size: var(--text-xs); letter-spacing: .12em; text-transform: uppercase; color: var(--theme-muted); font-weight: 650; }
+.title { font-family: var(--theme-font-display); font-size: var(--text-2xl); line-height: 1.15; color: var(--theme-accent); }
+
+/* Envelope: a paper rectangle with a flap that lifts away when opened */
+.envelope {
+  display: flex; flex-direction: column; align-items: center; gap: var(--space-4); padding: var(--space-6) var(--space-4);
+  color: var(--theme-text); font-family: var(--theme-font-body);
+  background: var(--theme-bg); border-radius: var(--theme-radius, var(--radius-lg));   /* its own backdrop: the invitation's theme, not the page's */
+  --color-text: var(--theme-text); --color-surface: var(--theme-surface); --color-accent: var(--theme-accent);
+  --color-on-accent: var(--theme-on-accent); --color-border: var(--theme-border); --color-input-border: var(--theme-border);
+}
+.paper {
+  position: relative; width: min(20rem, 80vw); aspect-ratio: 3 / 2; border-radius: 6px; perspective: 600px;
+  background: var(--theme-surface); border: 1px solid var(--theme-border); box-shadow: 0 10px 30px rgb(0 0 0 / .18);
+}
+.flap {
+  position: absolute; inset: 0 0 auto; height: 60%; transform-origin: top;
+  background: var(--theme-accent); clip-path: polygon(0 0, 100% 0, 50% 100%); transition: transform 800ms var(--ease, ease);
+}
+.seal {
+  position: absolute; left: 50%; top: 52%; transform: translate(-50%, -50%); width: 2.75rem; height: 2.75rem; border-radius: 50%;
+  display: grid; place-items: center; font-family: var(--theme-font-display); font-weight: 700;
+  background: var(--theme-on-accent); color: var(--theme-accent); border: 2px solid var(--theme-accent);
+  transition: opacity 300ms ease;
+}
+.envelope[data-opening] .flap { transform: rotateX(180deg); }
+.envelope[data-opening] .seal { opacity: 0; }
+.to { font-family: var(--theme-font-display); font-size: var(--text-xl); }
+.envelopeButtons { display: flex; flex-wrap: wrap; gap: var(--space-2); justify-content: center; }
+@media (prefers-reduced-motion: reduce) { .flap, .seal { transition: none; } }
