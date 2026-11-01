@@ -2,17 +2,17 @@
 
 ## 1. What this project is
 
-This is an all-in-one event planner app called **Crowned** (brought to you by Simon Says: Celebrate). It is a multi-tenant SaaS: each planning business is a "tenant" with its own private data. The app is meant to run a planner's whole business: leads, proposals, contracts, payments, then guests and RSVPs. Later phases add equipment, staff, photo booth, karaoke and donations.
+This is an all-in-one event planner app called **Crowned** (brought to you by Simon Says: Celebrate). It is a multi-tenant SaaS: each planning business is a "tenant" with its own private data. The app is meant to run a planner's whole business: leads, proposals, contracts, payments, then guests and RSVPs. Later phases add vendors, equipment, staff, the event day, potluck, karaoke, photo booth, an invitation designer, fundraising, tickets and seating, and business reports.
 
 **The front end is complete; the back end is next.** The repository holds:
 
 - written designs, clickable wireframes and one folder per screen
-- **the front-end app** (`src/`): a React single-page app with every Phase 1 screen for all four roles. Its data lives in the browser and resets on refresh (section 3.5)
-- a Supabase Postgres database design (tables, security rules and server functions), not connected yet
-- automated tests: 263 front-end tests (Vitest) and the database tests
+- **the front-end app** (`src/`): a React single-page app with every screen of product phases P1–P4, for all five roles (planner, client, guest, staff, vendor). Its data lives in the browser and resets on refresh (section 3.5)
+- a Supabase Postgres database design (tables, security rules and server functions) for P1, not connected yet; the P2–P4 tables are sketched
+- automated tests: 502 front-end tests (Vitest) and the database tests
 - a user guide: [`HOW_TO.md`](HOW_TO.md), also inside the app at `/help`
 
-Build phases are P1 core business (the current focus), P2 event operations, P3 guest experience and P4 growth. The running example in every document is the **Rivera wedding**: Sat Jun 12, 2027, 120 guests, total $14,850, paid as $4,455 + $5,940 + $4,455 (`wireframes/walkthrough_rivera.md`).
+Product phases are P1 core business, P2 event operations, P3 guest experience and P4 growth. The owner's build order is: the whole front end first (done), then the database, then the APIs. The running example in every document is the **Rivera wedding**: Sat Jun 12, 2027, 120 guests, total $14,850, paid as $4,455 + $5,940 + $4,455 (`wireframes/walkthrough_rivera.md`).
 
 ## 2. Folder layout
 
@@ -180,13 +180,15 @@ RLS is switched on for every `public` table by a loop (`schema.sql:758`). The po
 
 ### 3.5 The front end (`src/`)
 
-A React 19 + Vite single-page app with React Router. It was built in eight phases, each with a review in `qa/frontend/phase_N_review.md`.
+A React 19 + Vite single-page app with React Router. It was built in nineteen phases (0–7 = P1, 8–11 = P2, 12–14 = P3, 15–17 = P4, 18 = docs), each with a review in `qa/frontend/phase_N_review.md`. Only P1 screens have wireframes; P2–P4 screens were designed straight from the user stories.
 
-**What a visitor can do.** Every screen from the wireframes works:
-- **Planner:** set up, leads, proposals, contracts, invoices, events, the Event Hub's tabs, calendar and settings.
-- **Client:** inquiry, booking a consult, and the portal before and after the deposit.
-- **Guest:** invitation, event website, RSVP and confirmation, in English or Spanish.
-- **Staff:** join by phone code, and a profile.
+**What a visitor can do.**
+- **Planner:** set up, leads, proposals, contracts, invoices, events, the Event Hub's tabs, calendar and settings (P1). Logistics (run of show, vendors, staff, gear), day-of mode and wrap-up, potluck (P2). The KJ console, photo booth and invitation designer (P3). Fundraising, tickets and seating, and Grow (reports, marketing, templates, reviews) (P4).
+- **Client:** inquiry, booking a consult, and the portal before and after the deposit; later the day-of view, entertainment, gallery, thank-yous and a review.
+- **Guest:** invitation, event website, RSVP and confirmation, in English or Spanish; potluck sign-up, song requests, gallery and magnets, giving and bidding, tickets, find my seat and a one-question survey.
+- **Staff:** join by phone code, a profile, then shifts, swaps, availability, clock in/out, packing and team chat.
+- **Vendor:** a magic link with their details, paperwork and messages.
+- **Venue screens** with no app frame: the karaoke screen, the booth kiosk, the live gallery and the giving total.
 
 A **demo bar** switches who you're viewing as. An **Outbox** shows every email, text and push the app "sent", with buttons that open the real screen.
 
@@ -206,6 +208,21 @@ A **demo bar** switches who you're viewing as. An **Outbox** shows every email, 
 | `approval/decide` (change orders) | `client_decide_change_order` |
 | `rsvp/submit` | `guest_submit_rsvp` |
 | everything else (tasks, guests, files, threads…) | plain inserts/updates under row-level security |
+
+**P2–P4 actions.** These handler files have no server functions yet. The tables are the sketches in `data_dictionary.md` › "Later phases"; the right-hand column is a proposal for the database step, not a decision.
+
+| Front-end actions (`src/store/actions/`) | Tables (sketched) | Likely server functions / notes |
+|---|---|---|
+| `logistics.js`: `vendor/*`, `eventVendor/*`, `timeline/*`, `budget/*`, `equipment/save`, `kit/save`, `gear/*`, `pack/*` | `vendors`, `event_vendors`, `timeline_items`, `budget_lines`, `equipment_items`, `kits`, `reservations` | Vendor pages use a token, like guests (`vendor_*` functions). `gear/reserve` runs inside `planner_countersign` (PL-3.4). `eventVendor/recordPayment` needs a vendor-payments table |
+| `staff.js`: `shift/*`, `staff/setAvailability`, `pack/scan`, `timesheet/*`, `thread/postTeam` | `shifts`, `shift_assignments`, `time_entries`, `equipment_scans` | `staff_clock_in/out` with a location check; availability and team chat need tables |
+| `eventDay.js`: `event/startDay`, `guest/checkIn`, `sale/onsite`, `incident/log`, `event/teardownDone`, `deposit/*`, `event/close` | `incidents`, `equipment_scans`, plus columns on `guests`/`events` | Security-deposit release/apply go through the payment processor, like refunds |
+| `potluck.js`: `potluck/*`, `volunteer/*` | `potluck_slots`, `potluck_signups` | Guests sign up through token functions, like `guest_submit_rsvp` |
+| `karaoke.js`: `karaoke/*` | `songs`, `song_requests` | The queue needs Realtime (KJ console ↔ screen ↔ phones) |
+| `booth.js`: `booth/*`, `photo/*`, `magnet/*`, `gallery/*`, `guest/thankYou` | `photos`, `booth_sessions`, `prints` | Photos go to Storage; booth settings, gifts and thank-yous need tables or columns |
+| `designer.js`: `invitation/design`, `invitation/*Template` | (none yet) | Probably a jsonb design on the event's invitation, plus business templates |
+| `giving.js`: `donation/*`, `bidder/register`, `bid/place`, `auction/*`, `paddle/*`, `sponsor/*` | `donations`, `auction_items`, `bids` | Every charge is idempotent (`idempotency_key`), like `record_payment`. Paddle pledges and sponsors need tables |
+| `seating.js`: `ticketing/configure`, `ticket/*`, `waitlist/join`, `floor/*`, `seat/assign`, `guest/avoid` | `ticket_tiers`, `tickets`, `floor_plans`, `seat_assignments` | `floor/lock` becomes a Realtime presence channel; the waitlist and promo codes need tables |
+| `grow.js`: `quickbooks/*`, `marketing/*`, `event/duplicate`, `template/*`, `review/request`, `survey/send`, `feedback/submit` | (none yet) | Reports are read-only queries over existing tables; marketing dates, feedback and event templates need tables |
 
 The pricing rules in `src/lib/proposal.js` mirror `_recalc_proposal()`. The front end can keep them for live previews; the server's numbers stay the source of truth.
 
@@ -386,13 +403,13 @@ Notes:
   - forwarded-link detection on RSVPs;
   - co-hosts disagreeing on an approval;
   - automatic reminder timing (7 days / 1 day);
-  - task attachments;
-  - the P3 Invitation Designer.
+  - task attachments.
 - There is no worker that processes `domain_events`.
 - `client_sign_contract` sets the event start to noon on the requested date, because leads store only a date. The planner is expected to set the real time (`functions.sql:256`).
-- Equipment reservation at countersign (PL-3.4) waits for the Phase 2 equipment tables.
+- Equipment reservation at countersign (PL-3.4) works in the front end, but the database still waits for the P2 equipment tables.
 - The RSVP cutoff check in `guest_submit_rsvp` compares against `current_date`. Its own comment says the real function should use the event's time zone (`schema.sql:912`).
-- The Phase 2-4 tables are sketches only (`LATER` in `build_erd.py`, not in `schema.sql`).
+- The P2–P4 tables are sketches only (`LATER` in `build_erd.py`, not in `schema.sql`), and the front end needs a few more than the sketch has (see the P2–P4 table in section 3.5). Adding them is the next build step.
+- P2–P4 stand-ins (camera, printer, GPS, audio, QuickBooks, wallet passes, Realtime) are listed in `qa/frontend/phase_8_review.md` to `phase_17_review.md`.
 - The script or procedure that exports `_wireframe_screens.json` and the PNG crops is not in the repo. CLAUDE.md describes it only as "Playwright, by hand". `pages/README.md` is said to document "Refreshing wireframe images", but that section was not reviewed.
 - Figures such as "37 tables" and "67 policies" in `app_outline/erd/README.md` were not re-verified here.
 - `setup.md` (course workflow) and `product_spec.md` beyond its first 25 lines were not reviewed in detail. Docker is not set up yet.

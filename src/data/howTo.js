@@ -12,9 +12,9 @@ export const HOW_TO_INTRO = {
   title: 'How to use Crowned',
   lead: 'Crowned runs an event business from the first inquiry to the last thank-you. This guide walks through it the way you’ll use it: as the planner, as a client, as a guest and as a team member.',
   demo: [
-    'This is a demo with no backend yet. Everything you do lives in your browser and resets when you refresh, so try anything.',
+    'Phases 1–4 are all here: booking, then event operations, the guest experience (karaoke, photo booth, invitation designer) and growth (fundraising, tickets, seating, reports). This is a demo with no backend yet. Everything you do lives in your browser and resets when you refresh, so try anything.',
     'The demo always lives on Thursday, November 5, 2026. Bella Events is the business; LaToya Simon is the owner.',
-    'Use the **Viewing as** menu in the dark bar at the top to switch between the planner (LaToya), a coordinator (Devon), two clients (Ana, before booking; Priya, after), a guest (Dana) and a staff member (Sam).',
+    'Use the **Viewing as** menu in the dark bar at the top to switch between the planner (LaToya), a coordinator (Devon), two clients (Ana, before booking; Priya, after), a guest (Dana), a staff member (Sam) and a vendor.',
     'Every email, text and notification the app "sends" lands in the **Outbox** (top bar). Their buttons open the real screen as the person it was sent to.',
   ],
 }
@@ -99,6 +99,95 @@ export const HOW_TO = [
       { title: 'Invite and set permissions', text: 'Settings › Team & roles: invite by text or email with a role and job. Turn on budgets, payments or vendor editing per person. Profit is always owner-only. Deactivate keeps history; “Sign out everywhere” handles a lost phone.', show: { to: '/app/settings/team', role: 'planner' }, shot: 'team' },
       { title: 'See what a teammate sees', text: 'Switch “Viewing as” to Coordinator (Devon): the Money tab hides profit. Sam (staff) can’t see money at all.', show: { to: '/app/events/acme/money', role: 'planner', memberId: 'devon' } },
       { title: 'Join as staff', text: 'The invite text opens a sign-in with a phone number and a 6-digit code (demo code 123456), then the profile: photo, emergency contact, skills and shirt size.', show: { to: '/join/inv-jo', role: 'staff' }, shot: 'staff-join' },
+    ],
+  },
+  // ---- Product Phase 2: event operations ------------------------------
+  {
+    id: 'logistics', role: 'Planner', title: 'Vendors, gear and the run of show',
+    intro: 'Event Hub › Logistics. The Acme holiday party has all of it filled in.',
+    steps: [
+      { title: 'Build the run of show', text: 'Start from a template for the event type, then add cues with a time, who’s responsible and notes. Print it, or share it with staff and vendors. A cue that overlaps another is flagged.', show: { to: '/app/events/acme/logistics', role: 'planner' }, shot: 'run-of-show' },
+      { title: 'Book and pay vendors', text: 'Add a vendor from your directory, track the contract, insurance and W-9, and record payments (paid in the app by bank transfer, or by hand). Each vendor gets a magic link with their arrival time, the run of show and a message thread; they’re told automatically when the headcount locks or the date changes.', show: { to: '/app/events/acme/logistics/vendors', role: 'planner' }, shot: 'vendors' },
+      { title: 'See it as the vendor', text: 'The vendor’s link needs no account: event details, their load-in, paperwork to upload, and messages with you.', show: { to: '/v/v-acme-hcc', role: 'vendor' } },
+      { title: 'Reserve and pack gear', text: 'Countersigning reserves the equipment the proposal sold. Gear shows what’s reserved per event, with a buffer for cleaning, conflicts with other events, and a packing list built from kits plus the always-bring items.', show: { to: '/app/events/acme/logistics/gear', role: 'planner' }, shot: 'gear' },
+    ],
+  },
+  {
+    id: 'staff-app', role: 'Planner & staff', title: 'Schedule staff (and the staff app)',
+    intro: 'Shifts go out by text; staff answer from their phone.',
+    steps: [
+      { title: 'Create shifts', text: 'Logistics › Staff: add a shift with a role and times. Crowned suggests who’s free and qualified and shows the labor cost. Offer it, then watch it be accepted, declined or swapped.', show: { to: '/app/events/acme/logistics/staff', role: 'planner' }, shot: 'staff-shifts' },
+      { title: 'My shifts on the phone', text: 'Staff see their shifts, accept or decline, ask for a swap, set their availability, clock in and out at the venue, check off their packing list and chat with the team.', show: { to: '/app/staff/shifts', role: 'staff' }, shot: 'staff-app' },
+    ],
+  },
+  {
+    id: 'event-day', role: 'Planner', title: 'Run the event day, then wrap up',
+    intro: 'The demo never reaches an event day, so each screen has a “Start event day” or practice button.',
+    steps: [
+      { title: 'Day-of mode', text: 'One phone-friendly screen with live counts (guests checked in, vendors arrived, sales, booth and karaoke) and five tabs: Run (the cue that’s on “now” and what’s next), Door (check in guests and tickets by QR or name), Sell, Incidents and Teardown.', show: { to: '/app/day-of/acme', role: 'planner' }, shot: 'day-of' },
+      { title: 'What the client sees on the day', text: 'Portal › Day of shows the schedule as it happens and who to call. Guests and photos come later.', show: { to: '/portal/day-of', role: 'client', clientId: 'acme' } },
+      { title: 'Wrap-up', text: 'After teardown, the Wrap-up tab appears: return the gear (with damage notes), pay the last vendors, refund the security deposit, close the books, and send the review request and the guest survey.', show: { to: '/app/events/thompson/wrap-up', role: 'planner' }, shot: 'wrap-up' },
+    ],
+  },
+  {
+    id: 'potluck', role: 'Planner & guest', title: 'Potluck and volunteer sign-ups',
+    intro: 'For community events. The Hope dinner uses both.',
+    steps: [
+      { title: 'Set up the sign-up', text: 'Guests › Potluck: choose categories with how many of each you need, and volunteer slots. The sheet shows what’s still missing and who brings what, with dietary tags.', show: { to: '/app/events/hope/guests/potluck', role: 'planner' }, shot: 'potluck' },
+      { title: 'Guests sign up', text: 'From the event website: pick a dish or a slot, tag it (vegan, nut-free…), and get a reminder. No account, English or Spanish.', show: { to: '/e/hope/potluck', role: 'guest' } },
+    ],
+  },
+  // ---- Product Phase 3: guest experience ------------------------------
+  {
+    id: 'karaoke', role: 'Planner & guest', title: 'Karaoke',
+    intro: 'Logistics › Booth & karaoke turns it on for an event; your KJ runs the show.',
+    steps: [
+      { title: 'Guests request songs', text: 'Guests scan the QR code and search the song list or request a song. They see their place in line.', show: { to: '/e/acme/karaoke', role: 'guest' } },
+      { title: 'The KJ console', text: 'Approve requests, reorder the queue, skip, and mark “now singing”. The big screen shows who’s up next and the QR code to join.', show: { to: '/app/kj/acme', role: 'planner' }, shot: 'kj-console' },
+    ],
+  },
+  {
+    id: 'booth', role: 'Planner & guest', title: 'Photo booth and galleries',
+    intro: 'The booth runs on a tablet at the event; photos flow into a live gallery.',
+    steps: [
+      { title: 'Set up the booth', text: 'Pick overlays and magnet frames, print settings and a PIN for the attendant. Logistics › Booth & karaoke links to the kiosk and the attendant screen.', show: { to: '/app/booth/acme', role: 'planner' }, shot: 'booth' },
+      { title: 'The kiosk', text: 'Guests tap to start, strike a pose, and send their photo to their phone. The attendant (PIN 2468) reprints and prints magnets.', show: { to: '/booth/acme', role: 'planner' } },
+      { title: 'Galleries and thank-yous', text: 'Guests browse and download the gallery from the event website; the client gets the full gallery and a thank-you note list in the portal.', show: { to: '/e/westlake/gallery', role: 'guest' }, shot: 'gallery' },
+    ],
+  },
+  {
+    id: 'designer', role: 'Planner', title: 'Design the invitation',
+    intro: 'Guests › Design: start from a layout in the event’s theme.',
+    steps: [
+      { title: 'Lay out the card', text: 'Choose a layout, colors, fonts and a photo, then edit the words. Preview it as the envelope guests open, as an email and as a printable card, then send it for the client’s approval.', show: { to: '/app/events/garza/guests/design', role: 'planner' }, shot: 'designer' },
+    ],
+  },
+  // ---- Product Phase 4: growth ----------------------------------------
+  {
+    id: 'fundraising', role: 'Planner & guest', title: 'Fundraising: donations, auction and sponsors',
+    intro: 'Event Hub › Fundraising. The Hope dinner raises money for a cause.',
+    steps: [
+      { title: 'Set the goal', text: 'Turn on donations, a silent auction, a paddle raise and sponsorship levels. The tab shows progress to the goal, bids, pledges and receipts (with the tax-deductible amount).', show: { to: '/app/events/hope/fundraising', role: 'planner' }, shot: 'fundraising' },
+      { title: 'Guests give and bid', text: 'From their phone: give, bid on auction items (outbid alerts), pledge during the paddle raise, or sponsor. A double tap never charges twice. The venue screen shows the live total.', show: { to: '/e/hope/auction', role: 'guest' } },
+    ],
+  },
+  {
+    id: 'seating', role: 'Planner & guest', title: 'Tickets, floor plan and seating',
+    intro: 'Sell tickets for public events; seat guests for any event.',
+    steps: [
+      { title: 'Sell tickets', text: 'Guests › Tickets: tiers with capacity, promo codes and a waitlist. Each buyer gets a QR ticket, scanned at the door on Day-of.', show: { to: '/app/events/hope/guests/tickets', role: 'planner' }, shot: 'tickets' },
+      { title: 'Draw the floor plan and seat guests', text: 'Drag tables, the stage and the dance floor (or use the arrow keys), then seat each household. Tables warn about “don’t seat near”, meals and allergies. Print escort cards, table numbers and place cards.', show: { to: '/app/events/acme/guests/seating', role: 'planner' }, shot: 'seating' },
+      { title: 'Guests find their seat', text: 'Type a name to see the table lit up on a small map.', show: { to: '/e/acme/seat?t=acme-g1-t', role: 'guest' } },
+    ],
+  },
+  {
+    id: 'grow', role: 'Planner', title: 'Grow the business',
+    intro: 'Grow, in the planner menu.',
+    steps: [
+      { title: 'Reports', text: 'Booked vs collected by month, lead sources, best-selling add-ons, gear use and sales tax by city. “Show as table” on every chart. Connect QuickBooks to sync invoices and payments.', show: { to: '/app/grow', role: 'planner' }, shot: 'grow' },
+      { title: 'Marketing reminders', text: 'For past clients who opted in, Crowned reminds you about two months before a key date (an anniversary, a first birthday) so you can send a note. Memorial families are never marketed to.', show: { to: '/app/grow?tab=marketing', role: 'planner' } },
+      { title: 'Duplicate and templates', text: 'In an event’s header, Duplicate copies it to a new date; Save as template keeps its tasks, timeline and gear for next time (Settings › Templates).', show: { to: '/app/settings/templates', role: 'planner' } },
+      { title: 'Reviews', text: 'The client gets one-tap links to Google, Yelp, The Knot and WeddingWire plus a private rating; guests answer one question. Grow › Reviews collects them.', show: { to: '/portal/review', role: 'client', clientId: 'acme' } },
     ],
   },
 ]

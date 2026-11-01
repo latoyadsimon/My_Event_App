@@ -2,14 +2,15 @@
 
 *Brought to you by **Simon Says: Celebrate***
 
-Crowned is an all-in-one app for event planners: leads → proposals → contracts → payments → guests and RSVPs. Each planner's brand appears on everything their clients and guests see. It serves four kinds of people:
+Crowned is an all-in-one app for event planners: leads → proposals → contracts → payments → guests and RSVPs, then the event itself (vendors, gear, staff, run of show, day-of mode), the guest experience (invitation designer, photo booth, karaoke) and growth (fundraising, tickets, seating, reports). Each planner's brand appears on everything their clients and guests see. It serves five kinds of people:
 
 - **Planners** run their business in a workspace.
 - **Clients** review, sign, pay and plan in a portal.
 - **Guests** RSVP from an event website, with no account.
-- **Staff** join the team from a text message.
+- **Staff** pick up shifts, clock in and pack gear from their phone.
+- **Vendors** get their details and paperwork from a magic link.
 
-> **Status:** the front end is complete: every screen, for all four roles. There's no backend yet. All data lives in your browser's memory and **resets on refresh**. Supabase comes next. The database design (schema, security rules, server functions and their tests) is already in `app_outline/erd/`.
+> **Status:** the front end is complete for every product phase (P1–P4): every screen, for all five roles. There's no backend yet. All data lives in your browser's memory and **resets on refresh**. Supabase comes next. The database design (schema, security rules, server functions and their tests) is already in `app_outline/erd/`.
 >
 > **New here?** Read the **[How-To guide](documentation/HOW_TO.md)**, or open **Help** in the app's top bar.
 
@@ -28,7 +29,8 @@ The demo always lives on **Thursday, Nov 5, 2026**, in the middle of the Rivera 
   - **Client (Ana Rivera)**, before booking;
   - **Client (Priya Shah, Acme)**, with an unlocked portal;
   - **Guest (Dana)**;
-  - **Staff (Sam)**.
+  - **Staff (Sam)**;
+  - **Vendor (Hill Country Catering)**.
 - **Outbox** shows every email, text and push notification the app "sent". Their buttons open the real screens as the person they were sent to.
 - **Help** is the How-To guide, with a "Show me" button on every step.
 - **Reset demo** starts over.
@@ -64,25 +66,38 @@ All of these run in CI (GitHub Actions) on every push and pull request.
 |---|---|
 | `src/` | The single-page app. Routes are in `src/App.jsx`; every change to data is an action in `src/store/actions/`; demo data is in `src/data/` |
 | `app_outline/` | Product spec, user journeys, 151 user stories, one folder per screen (`pages/`), the style guide, and the database design (`erd/`) |
-| `wireframes/` | Lo-fi wireframes for every Phase 1 screen, plus the Rivera walkthrough |
-| `qa/frontend/` | One review per build phase, screenshots compared against the wireframes, and `rivera-walkthrough.js` (the whole story, clicked end to end) |
-| `documentation/HOW_TO.md` | The user guide for planners, clients, guests and staff |
+| `wireframes/` | Lo-fi wireframes for every P1 screen, plus the Rivera walkthrough (P2–P4 screens were designed from the stories) |
+| `qa/frontend/` | One review per build phase, screenshots (compared against the wireframes for P1), and `rivera-walkthrough.js` (the whole story, clicked end to end) |
+| `documentation/HOW_TO.md` | The user guide for planners, clients, guests, staff and vendors |
 | `documentation/README.md` | The long-form project guide: how the pieces connect, and how the front end maps onto Supabase |
 | `CLAUDE.md` | Architecture notes and commands for AI-assisted development |
 
 ## Build phases (front end)
 
-| Phase | Scope | Status |
-|---|---|---|
-| 0 | Foundation: routes, layouts, store, demo bar, Outbox | ✅ |
-| 1 | Planner setup: sign up, onboarding, dashboard, settings | ✅ |
-| 2 | Leads and selling: inquiry form, booking page, leads, proposals | ✅ |
-| 3 | Booking: accept, sign, pay deposit, countersign, invoice, events list | ✅ |
-| 4 | Event Hub: tasks, guests, invitations, website, money, files, messages, reschedule, cancel, calendar | ✅ |
-| 5 | Client portal after booking | ✅ |
-| 6 | Guests (invitation, website, RSVP, EN/ES) and staff | ✅ |
-| 7 | Polish: code splitting, error screen, motion, Help + How-To, the full walkthrough | ✅ |
-| Next | Supabase: sign-in, the database, server functions, Stripe/Square, email/SMS | |
+"Phase" here means the order the screens were built in. Product phases P1–P4 (what features) come from `app_outline/product_spec.md`.
+
+| Phase | Product | Scope | Status |
+|---|---|---|---|
+| 0 | P1 | Foundation: routes, layouts, store, demo bar, Outbox | ✅ |
+| 1 | P1 | Planner setup: sign up, onboarding, dashboard, settings | ✅ |
+| 2 | P1 | Leads and selling: inquiry form, booking page, leads, proposals | ✅ |
+| 3 | P1 | Booking: accept, sign, pay deposit, countersign, invoice, events list | ✅ |
+| 4 | P1 | Event Hub: tasks, guests, invitations, website, money, files, messages, reschedule, cancel, calendar | ✅ |
+| 5 | P1 | Client portal after booking | ✅ |
+| 6 | P1 | Guests (invitation, website, RSVP, EN/ES) and staff | ✅ |
+| 7 | P1 | Polish: code splitting, error screen, motion, Help + How-To, the full walkthrough | ✅ |
+| 8 | P2 | Logistics: vendors (and the vendor's magic link), run of show, budget, gear | ✅ |
+| 9 | P2 | Staff app: shifts, swaps, availability, clock in/out, packing, team chat | ✅ |
+| 10 | P2 | Event day: day-of mode, check-in, sales, incidents, teardown, wrap-up | ✅ |
+| 11 | P2 | Potluck and volunteer sign-ups | ✅ |
+| 12 | P3 | Karaoke: song requests, KJ console, venue screen | ✅ |
+| 13 | P3 | Photo booth: kiosk, attendant, magnets, live and client galleries, thank-yous | ✅ |
+| 14 | P3 | Invitation designer (envelope, email, print) | ✅ |
+| 15 | P4 | Fundraising: donations, silent auction, paddle raise, sponsors | ✅ |
+| 16 | P4 | Tickets, floor plan and seating, find my seat | ✅ |
+| 17 | P4 | Grow: reports, marketing reminders, duplicate and templates, reviews | ✅ |
+| 18 | | Docs: the How-To for P2–P4, these READMEs | ✅ |
+| Next | | The database: add the later-phase tables to `schema.sql`, then the APIs (Stripe/Square, email/SMS, calendars) | |
 
 Each phase ends with a review in `qa/frontend/phase_N_review.md`.
 

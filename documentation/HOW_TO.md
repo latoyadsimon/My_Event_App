@@ -6,9 +6,9 @@ Crowned runs an event business from the first inquiry to the last thank-you. Thi
 
 ## About this demo
 
-- This is a demo with no backend yet. Everything you do lives in your browser and resets when you refresh, so try anything.
+- Phases 1–4 are all here: booking, then event operations, the guest experience (karaoke, photo booth, invitation designer) and growth (fundraising, tickets, seating, reports). This is a demo with no backend yet. Everything you do lives in your browser and resets when you refresh, so try anything.
 - The demo always lives on Thursday, November 5, 2026. Bella Events is the business; LaToya Simon is the owner.
-- Use the **Viewing as** menu in the dark bar at the top to switch between the planner (LaToya), a coordinator (Devon), two clients (Ana, before booking; Priya, after), a guest (Dana) and a staff member (Sam).
+- Use the **Viewing as** menu in the dark bar at the top to switch between the planner (LaToya), a coordinator (Devon), two clients (Ana, before booking; Priya, after), a guest (Dana), a staff member (Sam) and a vendor.
 - Every email, text and notification the app "sends" lands in the **Outbox** (top bar). Their buttons open the real screen as the person it was sent to.
 
 ## Contents
@@ -21,7 +21,17 @@ Crowned runs an event business from the first inquiry to the last thank-you. Thi
 6. [Plan together (the client’s portal)](#portal) · *Client*
 7. [RSVP (the guest’s side)](#guests) · *Guest*
 8. [Run your team](#team) · *Planner & staff*
-9. [Tips](#tips)
+9. [Vendors, gear and the run of show](#logistics) · *Planner*
+10. [Schedule staff (and the staff app)](#staff-app) · *Planner & staff*
+11. [Run the event day, then wrap up](#event-day) · *Planner*
+12. [Potluck and volunteer sign-ups](#potluck) · *Planner & guest*
+13. [Karaoke](#karaoke) · *Planner & guest*
+14. [Photo booth and galleries](#booth) · *Planner & guest*
+15. [Design the invitation](#designer) · *Planner*
+16. [Fundraising: donations, auction and sponsors](#fundraising) · *Planner & guest*
+17. [Tickets, floor plan and seating](#seating) · *Planner & guest*
+18. [Grow the business](#grow) · *Planner*
+19. [Tips](#tips)
 
 <a id="setup"></a>
 
@@ -310,6 +320,254 @@ The invite text opens a sign-in with a phone number and a 6-digit code (demo cod
 **Try it:** open `/join/inv-jo` (viewing as staff), or use **Show me** on the Help page.
 
 ![Join as staff](how_to/staff-join.png)
+
+<a id="logistics"></a>
+
+## Vendors, gear and the run of show
+
+*Planner.* Event Hub › Logistics. The Acme holiday party has all of it filled in.
+
+### 1. Build the run of show
+
+Start from a template for the event type, then add cues with a time, who’s responsible and notes. Print it, or share it with staff and vendors. A cue that overlaps another is flagged.
+
+**Try it:** open `/app/events/acme/logistics`, or use **Show me** on the Help page.
+
+![Build the run of show](how_to/run-of-show.png)
+
+### 2. Book and pay vendors
+
+Add a vendor from your directory, track the contract, insurance and W-9, and record payments (paid in the app by bank transfer, or by hand). Each vendor gets a magic link with their arrival time, the run of show and a message thread; they’re told automatically when the headcount locks or the date changes.
+
+**Try it:** open `/app/events/acme/logistics/vendors`, or use **Show me** on the Help page.
+
+![Book and pay vendors](how_to/vendors.png)
+
+### 3. See it as the vendor
+
+The vendor’s link needs no account: event details, their load-in, paperwork to upload, and messages with you.
+
+**Try it:** open `/v/v-acme-hcc` (viewing as vendor), or use **Show me** on the Help page.
+
+### 4. Reserve and pack gear
+
+Countersigning reserves the equipment the proposal sold. Gear shows what’s reserved per event, with a buffer for cleaning, conflicts with other events, and a packing list built from kits plus the always-bring items.
+
+**Try it:** open `/app/events/acme/logistics/gear`, or use **Show me** on the Help page.
+
+![Reserve and pack gear](how_to/gear.png)
+
+<a id="staff-app"></a>
+
+## Schedule staff (and the staff app)
+
+*Planner & staff.* Shifts go out by text; staff answer from their phone.
+
+### 1. Create shifts
+
+Logistics › Staff: add a shift with a role and times. Crowned suggests who’s free and qualified and shows the labor cost. Offer it, then watch it be accepted, declined or swapped.
+
+**Try it:** open `/app/events/acme/logistics/staff`, or use **Show me** on the Help page.
+
+![Create shifts](how_to/staff-shifts.png)
+
+### 2. My shifts on the phone
+
+Staff see their shifts, accept or decline, ask for a swap, set their availability, clock in and out at the venue, check off their packing list and chat with the team.
+
+**Try it:** open `/app/staff/shifts` (viewing as staff), or use **Show me** on the Help page.
+
+![My shifts on the phone](how_to/staff-app.png)
+
+<a id="event-day"></a>
+
+## Run the event day, then wrap up
+
+*Planner.* The demo never reaches an event day, so each screen has a “Start event day” or practice button.
+
+### 1. Day-of mode
+
+One phone-friendly screen with live counts (guests checked in, vendors arrived, sales, booth and karaoke) and five tabs: Run (the cue that’s on “now” and what’s next), Door (check in guests and tickets by QR or name), Sell, Incidents and Teardown.
+
+**Try it:** open `/app/day-of/acme`, or use **Show me** on the Help page.
+
+![Day-of mode](how_to/day-of.png)
+
+### 2. What the client sees on the day
+
+Portal › Day of shows the schedule as it happens and who to call. Guests and photos come later.
+
+**Try it:** open `/portal/day-of` (viewing as acme), or use **Show me** on the Help page.
+
+### 3. Wrap-up
+
+After teardown, the Wrap-up tab appears: return the gear (with damage notes), pay the last vendors, refund the security deposit, close the books, and send the review request and the guest survey.
+
+**Try it:** open `/app/events/thompson/wrap-up`, or use **Show me** on the Help page.
+
+![Wrap-up](how_to/wrap-up.png)
+
+<a id="potluck"></a>
+
+## Potluck and volunteer sign-ups
+
+*Planner & guest.* For community events. The Hope dinner uses both.
+
+### 1. Set up the sign-up
+
+Guests › Potluck: choose categories with how many of each you need, and volunteer slots. The sheet shows what’s still missing and who brings what, with dietary tags.
+
+**Try it:** open `/app/events/hope/guests/potluck`, or use **Show me** on the Help page.
+
+![Set up the sign-up](how_to/potluck.png)
+
+### 2. Guests sign up
+
+From the event website: pick a dish or a slot, tag it (vegan, nut-free…), and get a reminder. No account, English or Spanish.
+
+**Try it:** open `/e/hope/potluck` (viewing as guest), or use **Show me** on the Help page.
+
+<a id="karaoke"></a>
+
+## Karaoke
+
+*Planner & guest.* Logistics › Booth & karaoke turns it on for an event; your KJ runs the show.
+
+### 1. Guests request songs
+
+Guests scan the QR code and search the song list or request a song. They see their place in line.
+
+**Try it:** open `/e/acme/karaoke` (viewing as guest), or use **Show me** on the Help page.
+
+### 2. The KJ console
+
+Approve requests, reorder the queue, skip, and mark “now singing”. The big screen shows who’s up next and the QR code to join.
+
+**Try it:** open `/app/kj/acme`, or use **Show me** on the Help page.
+
+![The KJ console](how_to/kj-console.png)
+
+<a id="booth"></a>
+
+## Photo booth and galleries
+
+*Planner & guest.* The booth runs on a tablet at the event; photos flow into a live gallery.
+
+### 1. Set up the booth
+
+Pick overlays and magnet frames, print settings and a PIN for the attendant. Logistics › Booth & karaoke links to the kiosk and the attendant screen.
+
+**Try it:** open `/app/booth/acme`, or use **Show me** on the Help page.
+
+![Set up the booth](how_to/booth.png)
+
+### 2. The kiosk
+
+Guests tap to start, strike a pose, and send their photo to their phone. The attendant (PIN 2468) reprints and prints magnets.
+
+**Try it:** open `/booth/acme`, or use **Show me** on the Help page.
+
+### 3. Galleries and thank-yous
+
+Guests browse and download the gallery from the event website; the client gets the full gallery and a thank-you note list in the portal.
+
+**Try it:** open `/e/westlake/gallery` (viewing as guest), or use **Show me** on the Help page.
+
+![Galleries and thank-yous](how_to/gallery.png)
+
+<a id="designer"></a>
+
+## Design the invitation
+
+*Planner.* Guests › Design: start from a layout in the event’s theme.
+
+### 1. Lay out the card
+
+Choose a layout, colors, fonts and a photo, then edit the words. Preview it as the envelope guests open, as an email and as a printable card, then send it for the client’s approval.
+
+**Try it:** open `/app/events/garza/guests/design`, or use **Show me** on the Help page.
+
+![Lay out the card](how_to/designer.png)
+
+<a id="fundraising"></a>
+
+## Fundraising: donations, auction and sponsors
+
+*Planner & guest.* Event Hub › Fundraising. The Hope dinner raises money for a cause.
+
+### 1. Set the goal
+
+Turn on donations, a silent auction, a paddle raise and sponsorship levels. The tab shows progress to the goal, bids, pledges and receipts (with the tax-deductible amount).
+
+**Try it:** open `/app/events/hope/fundraising`, or use **Show me** on the Help page.
+
+![Set the goal](how_to/fundraising.png)
+
+### 2. Guests give and bid
+
+From their phone: give, bid on auction items (outbid alerts), pledge during the paddle raise, or sponsor. A double tap never charges twice. The venue screen shows the live total.
+
+**Try it:** open `/e/hope/auction` (viewing as guest), or use **Show me** on the Help page.
+
+<a id="seating"></a>
+
+## Tickets, floor plan and seating
+
+*Planner & guest.* Sell tickets for public events; seat guests for any event.
+
+### 1. Sell tickets
+
+Guests › Tickets: tiers with capacity, promo codes and a waitlist. Each buyer gets a QR ticket, scanned at the door on Day-of.
+
+**Try it:** open `/app/events/hope/guests/tickets`, or use **Show me** on the Help page.
+
+![Sell tickets](how_to/tickets.png)
+
+### 2. Draw the floor plan and seat guests
+
+Drag tables, the stage and the dance floor (or use the arrow keys), then seat each household. Tables warn about “don’t seat near”, meals and allergies. Print escort cards, table numbers and place cards.
+
+**Try it:** open `/app/events/acme/guests/seating`, or use **Show me** on the Help page.
+
+![Draw the floor plan and seat guests](how_to/seating.png)
+
+### 3. Guests find their seat
+
+Type a name to see the table lit up on a small map.
+
+**Try it:** open `/e/acme/seat?t=acme-g1-t` (viewing as guest), or use **Show me** on the Help page.
+
+<a id="grow"></a>
+
+## Grow the business
+
+*Planner.* Grow, in the planner menu.
+
+### 1. Reports
+
+Booked vs collected by month, lead sources, best-selling add-ons, gear use and sales tax by city. “Show as table” on every chart. Connect QuickBooks to sync invoices and payments.
+
+**Try it:** open `/app/grow`, or use **Show me** on the Help page.
+
+![Reports](how_to/grow.png)
+
+### 2. Marketing reminders
+
+For past clients who opted in, Crowned reminds you about two months before a key date (an anniversary, a first birthday) so you can send a note. Memorial families are never marketed to.
+
+**Try it:** open `/app/grow?tab=marketing`, or use **Show me** on the Help page.
+
+### 3. Duplicate and templates
+
+In an event’s header, Duplicate copies it to a new date; Save as template keeps its tasks, timeline and gear for next time (Settings › Templates).
+
+**Try it:** open `/app/settings/templates`, or use **Show me** on the Help page.
+
+### 4. Reviews
+
+The client gets one-tap links to Google, Yelp, The Knot and WeddingWire plus a private rating; guests answer one question. Grow › Reviews collects them.
+
+**Try it:** open `/portal/review` (viewing as acme), or use **Show me** on the Help page.
 
 <a id="tips"></a>
 

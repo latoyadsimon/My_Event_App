@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repo is
 
-Repo for **Crowned**, an all-in-one **event planner app** (multi-tenant SaaS for event planners: leads → proposals → contracts → payments → guests/RSVPs, later equipment, staff, photo booth, karaoke, donations). The repo holds the product design, a Supabase Postgres schema with server functions, database tests, and the front end (`src/`, React + Vite) for product Phase 1, running on in-memory demo data. The user is a beginner developer (Code Platoon), so explain decisions and keep code commented for learning.
+Repo for **Crowned**, an all-in-one **event planner app** (multi-tenant SaaS for event planners: leads → proposals → contracts → payments → guests/RSVPs, later equipment, staff, photo booth, karaoke, donations). The repo holds the product design, a Supabase Postgres schema with server functions (product Phase 1 tables only), database tests, and the front end (`src/`, React + Vite) for **every product phase (P1–P4)**, running on in-memory demo data. The user is a beginner developer (Code Platoon), so explain decisions and keep code commented for learning.
 
 Running example used everywhere: the **Rivera wedding** (Sat Jun 12, 2027, 120 guests, total $14,850 = deposit $4,455 + $5,940 + $4,455). Keep new examples consistent with its timeline (see `wireframes/walkthrough_rivera.md`).
 
@@ -14,9 +14,9 @@ Say which one you mean; mixing them up has confused the owner before.
 
 - **Product phases (P1–P4), what features:** from `app_outline/product_spec.md` ("Suggested phases"). P1 core business; P2 event operations (equipment, staff shifts, run-of-show, day-of mode, vendors, potluck); P3 guest experience (invitation designer, photo booth, live gallery, karaoke jockey); P4 growth (ticketing, donations/auctions, floor plans and seating, rental store, reports). Every story in `app_outline/user_stories.md` is tagged on its header line (`· P1`, `· P2`, `· P2 / P4`…).
 - **Build steps, how we build:** the owner's order is **(1) all the front end → (2) the database attached to the ERD → (3) the APIs** (payments, email/SMS, calendars…). The owner chose to finish step 1 for *every* product phase before starting the database.
-- **Front-end build phases 0–7:** only the order product Phase 1's screens were built in (one PR and one `qa/frontend/phase_N_review.md` each).
+- **Front-end build phases 0–18:** the order the screens were built in, one stacked PR and one `qa/frontend/phase_N_review.md` each. 0–7 = P1, 8–11 = P2 (logistics, staff app, event day, potluck), 12–14 = P3 (karaoke, photo booth, invitation designer), 15–17 = P4 (fundraising, tickets/seating, Grow), 18 = docs.
 
-**Status:** the front end is done for P1 (stacked PRs #3–#10 into `dev`, merge in order). **Next:** front-end screens for the P2–P4 stories (about 75), still on demo data. Then the database, then the APIs. Wait for the owner's go-ahead before starting.
+**Status:** the front end covers P1–P4 (stacked PRs #3–#20 into `dev`, merge in order; #21 = docs). **Next:** build step 2, the database: add the later-phase tables (sketched in `data_dictionary.md` › "Later phases") to `schema.sql` and map the store actions to functions. Wait for the owner's go-ahead.
 
 ## Commands
 
@@ -92,10 +92,11 @@ Supabase Postgres, verified on Postgres 16 (CI) and 18. Read `erd/README.md` and
 
 ## Front-end SPA (`src/`)
 
-React 19 + Vite + React Router 7 (declarative `BrowserRouter`). **No backend yet:** all data lives in memory and a refresh resets it (no localStorage) until Supabase is connected. Product Phase 1 was built in front-end phases 0–7; each has `qa/frontend/phase_N_review.md` (stories covered, wireframe deviations, decisions) and screenshots in `qa/frontend/screens/`. P2–P4 features that P1 screens already show (the staff app's locked "My Shifts / Day-of / Chat" tabs, the karaoke add-ons, KJ job title, guest song requests) are hooks for later; there's no KJ, booth, shift or equipment screen yet.
+React 19 + Vite + React Router 7 (declarative `BrowserRouter`). **No backend yet:** all data lives in memory and a refresh resets it (no localStorage) until Supabase is connected. Each front-end phase has `qa/frontend/phase_N_review.md` (stories covered, decisions, stand-ins) and screenshots in `qa/frontend/screens/phase-N/`. Only P1 screens have wireframes/`pages/` folders; P2–P4 screens were designed from the stories directly. Stand-ins for real services (payments, camera, printer, GPS, audio, QuickBooks, wallets) are listed in each review.
 
 - **Routes:** `src/App.jsx`.
-  - Areas: `/app/*` planner, `/app/staff/*` staff, `/portal/*` client, `/b/:biz/*` public inquiry/booking, `/i/:token` and `/e/:slug/*` guests (no account; the guest's token is `?t=`), `/join/:token` staff invite, `/outbox` demo messages, `/help` the How-To.
+  - Areas: `/app/*` planner (incl. `/app/day-of/:id`, `/app/kj/:id`, `/app/booth/:id`, `/app/grow`), `/app/staff/*` staff, `/portal/*` client, `/b/:biz/*` public inquiry/booking, `/i/:token` and `/e/:slug/*` guests (no account; the guest's token is `?t=`; give/auction/tickets/karaoke/gallery… pages skip the site's privacy gate, see `GuestLayout`), `/v/:token/*` vendors (magic link), `/join/:token` staff invite, `/print/events/:id/*` and `/screen/*/:id` and `/booth/:id` (no app frame), `/outbox` demo messages, `/help` the How-To.
+  - Event Hub tabs: Overview · [Wrap-up after teardown] · Tasks · Guests (list, invitations, design, website, potluck, seating, tickets) · Logistics (run of show, vendors, staff, booth & karaoke, gear) · Fundraising · Money · Files · Messages.
   - Pages are code-split with `lazyPage()` (`src/lib/lazyPage.js`, uses React `use()`; call it on every render). Layouts stay eager.
   - Every layout wraps its `<Outlet>` in `PageFrame` (`components/shell/PageFrame.jsx`): Suspense fallback, an error boundary with "Try again", and the page fade (off for reduced motion and the respectful tone).
 - **State:**
@@ -103,17 +104,21 @@ React 19 + Vite + React Router 7 (declarative `BrowserRouter`). **No backend yet
     - `sales.js` (leads, consults, proposals);
     - `booking.js` (accept, sign, pay, countersign, invoice);
     - `hub.js` (tasks, guests, website, invitations, files, approvals, threads, reschedule, cancel, client requests);
-    - `guests.js` (RSVP, reminders, staff join).
-  - Handler names mirror `functions.sql` (the mapping table is in `documentation/README.md` §3.5); keep the same rules (e.g. countersign needs the deposit). Shared helpers (`newId`, `updateById`, `withMessage`, `withActivity`, `withToast`) are in `store/helpers.js`. All lookups go through `selectors.js`.
-  - Seed: `src/data/seed.js` (business, team, catalog, leads, proposals, contracts, events, invoices, tasks, Outbox) + `seedPlanning.js` (guests, files, approvals, questionnaires, threads, per-event website/invitation details). "Today" is **Thu Nov 5, 2026, 6 PM** (`src/lib/clock.js`; never call `new Date()` for today).
+    - `guests.js` (RSVP, reminders, staff join);
+    - P2–P4: `logistics.js` (vendors, run of show, budget, gear, final week), `staff.js` (shifts, clock, packing, team chat), `eventDay.js` (day-of, check-in, sales, incidents, teardown, close-out), `potluck.js`, `karaoke.js`, `booth.js` (booth, magnets, galleries, thank-yous), `designer.js` (invitation designer), `giving.js` (donations, auction, paddle, sponsors), `seating.js` (tickets, floor plan), `grow.js` (QuickBooks, marketing, templates, reviews).
+  - Handler names mirror `functions.sql` (the mapping table is in `documentation/README.md` §3.5); keep the same rules (e.g. countersign needs the deposit). Shared helpers (`newId`, `updateById`, `withMessage`, `withActivity`, `withToast`) are in `store/helpers.js`. All lookups go through `selectors.js`, which re-exports the per-area files `selectorsLogistics/EventDay/Karaoke/Booth/Giving/Seating/Grow.js` (import from `selectors.js` in screens).
+  - Seed: `src/data/seed.js` (business, team, catalog, leads, proposals, contracts, events, invoices, tasks, Outbox) + `seedPlanning.js` (guests, files, approvals, questionnaires, threads, per-event website/invitation details) + one file per later area (`seedLogistics`, `seedKaraoke`, `seedBooth`, `seedGiving`, `seedSeating`, `seedGrow`). `withPlanning(event)` gives every event its defaults (`site`, `invitation`, `potluck`, `karaoke`, `booth`, `fund`, `auction`, `floorPlan`, `ticketing`…). Demo events per area: Acme (logistics, karaoke, booth, seating), Thompson (memorial, event day), Hope (potluck, fundraising, tickets), Okafor/Westlake (closed: reports, galleries). "Today" is **Thu Nov 5, 2026, 6 PM** (`src/lib/clock.js`; never call `new Date()` for today).
   - Money is in cents (`lib/money.js`; proposal math in `lib/proposal.js`). Calendar days are `'YYYY-MM-DD'`, read as local days with `parseDay`.
   - Soft delete + Undo: `toast/show` takes `undo: <action>` (e.g. `{ type: 'guest/restore', guestId }`).
   - **Action payloads can't use a `type` field for data** (it's the action name); use `eventType` etc.
 - **Demo:**
   - The demo bar's "Viewing as" sets `ui.role` plus who: `ui.memberId` (planner as a teammate, e.g. `planner:devon` to show permissions via `can(state, perm)`), `ui.clientId` (which client's portal: `ana` before booking, `acme` after), `ui.staffId`.
-  - Outbox messages carry `link.role` / `link.clientId`, and opening the link switches to that person.
+  - Outbox messages carry `link.role` / `link.clientId` / `link.staffId`, and opening the link switches to that person. A `vendor` role exists for `/v/` pages.
+  - Double-tap safety: charging actions (donations, tickets) take an idempotency `key` and ignore a repeat.
+  - The demo clock never reaches an event day, so day-of features have "Start event day" / practice-mode buttons.
   - `RequireRole` shows the friendly no-access page otherwise. Demo codes: card 4242… works, 4000…0002 declines; staff SMS code 123456.
 - **Guest pages:** all words come from `src/lib/guestText.js` (EN + ES, `guestT(lang)`, `guestDate`). `GuestLayout` finds the event from the token or slug and gates private/password sites. `?preview=1` (or the planner role) bypasses the gate.
+- **QR codes:** `components/ui/QrCode.jsx` (dependency `qrcode-generator`). **Charts:** `components/charts/BarChart.jsx`; series colors were validated with the dataviz skill's palette validator for light and Bold-dark surfaces.
 - **Help / How-To:** `src/data/howTo.js` is the single source for the `/help` page and `documentation/HOW_TO.md` (screenshots in `documentation/how_to/`). Edit the data, then run `npm run docs:howto`.
 - **Styling:** `src/main.jsx` imports `index.css` (which imports `tokens.css`) *before* any component, so CSS-module styles load after the tokens and win ties. `GuestLayout` remaps the app tokens (`--color-*`, `--font-display`) onto the event theme's `--theme-*` variables, so shared components wear the event theme on guest pages.
 - **Layouts:** `AppShell` (sidebar ≥1024px, top tabs 768–1023, phone bottom bar with 4 items + "More (n)") is shared by the planner, portal and staff layouts.
@@ -122,6 +127,7 @@ React 19 + Vite + React Router 7 (declarative `BrowserRouter`). **No backend yet
 - **Overflow gotcha:** `.visually-hidden` is `position: absolute`, so inside a horizontally scrolling box it can widen the page. Give the scroll container `position: relative`.
 - **Tests:**
   - `src/test/renderApp.jsx` renders the whole app at a URL as a role (optionally with a modified `initialState()`). Write tests first, and query by role/label.
+  - Vitest runs with `maxWorkers: '50%'` and a 30 s `testTimeout` (`vite.config.js`): whole-app click-through tests timed out when every core ran in parallel.
   - `src/test/setup.js` preloads every lazy page (so queries work right after render), adds jest-dom, and stubs `<dialog>` and `scrollTo`. Use fake timers (`vi.useFakeTimers({ shouldAdvanceTime: true })` + `vi.advanceTimersByTimeAsync`) for the 600 ms "processing" steps.
   - Accessible names join adjacent elements without spaces, so put a real `{' '}` between a visually-hidden prefix and the label.
   - `qa/frontend/rivera-walkthrough.js` clicks the whole story in a real browser (run it with the Playwright MCP `browser_run_code_unsafe`, `filename`).
