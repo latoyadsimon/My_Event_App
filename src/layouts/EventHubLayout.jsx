@@ -3,7 +3,7 @@
 // Cancel event) + tabs (Overview · Tasks · Guests · Money · Files · Messages).
 // Memorial events switch the whole hub to the respectful tone (style guide §13).
 // =====================================================================
-import { Link, NavLink, Outlet, useParams } from 'react-router-dom'
+import { Link, NavLink, Outlet, useOutletContext, useParams } from 'react-router-dom'
 import { useStore } from '../store/StoreContext'
 import { getEvent } from '../store/selectors'
 import { getTheme, isRespectful } from '../styles/themes'
@@ -41,10 +41,12 @@ export default function EventHubLayout() {
             <StatusChip status={event.status} />
           </p>
         </div>
-        <div className={styles.hubActions}>
-          <Button size="small" to={`${base}/reschedule`}>Change date</Button>
-          <Button size="small" variant="danger" to={`${base}/cancel`}>Cancel event</Button>
-        </div>
+        {!['cancelled', 'closed'].includes(event.status) && (
+          <div className={styles.hubActions}>
+            <Button size="small" to={`${base}/reschedule`}>Change date</Button>
+            <Button size="small" variant="danger" to={`${base}/cancel`}>Cancel event</Button>
+          </div>
+        )}
       </div>
 
       <nav className={styles.tabs} aria-label="Event sections">
@@ -71,6 +73,7 @@ export default function EventHubLayout() {
 /** Guest list · Invitations · Website & RSVP (inside the Guests tab) */
 export function GuestSubTabs() {
   const { eventId } = useParams()
+  const hub = useOutletContext()
   const base = `/app/events/${eventId}/guests`
   const items = [
     { to: base, label: 'Guest list', end: true },
@@ -90,7 +93,7 @@ export function GuestSubTabs() {
           ))}
         </ul>
       </nav>
-      <Outlet />
+      <Outlet context={hub} />
     </>
   )
 }

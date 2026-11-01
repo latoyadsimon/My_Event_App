@@ -15,6 +15,9 @@
 //   Nov 4   v2 sent  ← we are here: waiting for Ana to accept, sign and pay
 // =====================================================================
 import { splitByPercent } from '../lib/money'
+import {
+  defaultSite, defaultInvitation, eventDetails, guests, files, approvals, questionnaires, threads, moreAppointments,
+} from './seedPlanning'
 
 export const business = {
   id: 'bella-events',
@@ -281,6 +284,7 @@ export const tasks = [
   task('t12', 'thompson', 'Set up the photo slideshow', '2026-11-13', 'devon'),
   task('t13', 'thompson', 'Confirm the reception food order', '2026-11-09'),
   task('t14', 'garza', 'Send the welcome questionnaire', '2026-11-09'),
+  task('t15', 'acme', 'Approve the dinner menu', '2026-11-09', 'client'),
 ]
 
 // Consults, site visits, tastings and pickups (Dashboard "Today & this week", Calendar)
@@ -290,6 +294,7 @@ export const appointments = [
   { id: 'a3', at: '2026-11-07T16:00:00', title: 'Gear pickup', with: 'Acme holiday party', to: '/app/events/acme' },
   { id: 'a4', at: '2026-11-09T13:00:00', title: 'Call', with: 'Nguyen (new lead)', to: '/app/leads/nguyen' },
   { id: 'a5', at: '2026-11-19T15:00:00', title: 'Planning meeting', with: 'Garza wedding', to: '/app/events/garza' },
+  ...moreAppointments,
 ]
 
 // The demo Outbox: every email / text / push the app "sent". Links inside open real screens;
@@ -311,6 +316,11 @@ export const outbox = [
     link: { label: 'View your proposal', to: '/portal/proposal', role: 'client' }, foot: 'This link is just for you and expires in 7 days.',
   },
   {
+    id: 'm5', type: 'sms', at: '2026-11-01T09:00:00', to: 'Dana Lee · (512) 555-0303', from: 'Bella Events',
+    subject: 'Invitation', body: 'You\'re invited to the Acme Robotics holiday party! Saturday, December 12, 7 PM at The Driskill Ballroom. RSVP by Nov 28:',
+    link: { label: 'Open invitation', to: '/i/acme-g8-t', role: 'guest' },
+  },
+  {
     id: 'm4', type: 'push', at: '2026-11-05T16:40:00', to: 'LaToya (planner)', from: 'Bella Events · Crowned',
     subject: 'New lead: Linh Nguyen', body: 'Baby shower · Sat Jan 23, 2027 · 35 guests · $2–3k',
     link: { label: 'Open lead', to: '/app/leads/nguyen', role: 'planner' },
@@ -318,9 +328,18 @@ export const outbox = [
 ]
 
 /** A fresh copy of the whole world. Called once on load (and by tests). */
+/** Every event carries its website, invitation and planning details (Phase 4). */
+export const withPlanning = (event) => ({
+  venueInfo: { address: '', loadIn: '', wifi: '' }, costsCents: 0, headcount: null, log: [],
+  site: defaultSite(event), invitation: defaultInvitation(),
+  ...event, ...(eventDetails[event.id] ?? {}),
+})
+
 export function createSeedState() {
   return structuredClone({
-    business, team, packages, addons, clients, leads, proposals, contracts, events, invoices, tasks, appointments, outbox,
+    business, team, packages, addons, clients, leads, proposals, contracts, events: events.map(withPlanning), invoices, tasks, appointments,
+    outbox: [...outbox].sort((a, b) => b.at.localeCompare(a.at)),
+    guests, files, approvals, questionnaires, threads,
   })
 }
 
@@ -343,5 +362,6 @@ export function createNewBusinessState({ ownerName, businessName, email }) {
       permissions: { see_budgets: true, see_profit: true, take_payments: true, edit_vendors: true },
     }],
     packages: [], addons: [], clients: [], leads: [], proposals: [], contracts: [], events: [], invoices: [], tasks: [], appointments: [], outbox: [],
+    guests: [], files: [], approvals: [], questionnaires: [], threads: [],
   }
 }

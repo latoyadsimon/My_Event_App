@@ -141,7 +141,7 @@ describe('PL-4.1 events list', () => {
   it('lists upcoming events by date with balance and open tasks', () => {
     const rows = getEventRows(initialState())
     expect(rows.map((r) => r.event.id)).toEqual(['thompson', 'acme', 'hope', 'patel', 'garza'])
-    expect(rows[1]).toMatchObject({ balanceCents: 360000, openTasks: 5 })
+    expect(rows[1]).toMatchObject({ balanceCents: 360000, openTasks: 6 })
   })
 
   it('filters past events and by status', () => {

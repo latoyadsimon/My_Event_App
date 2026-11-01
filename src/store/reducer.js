@@ -14,9 +14,10 @@ import { nowStamp } from '../lib/clock'
 import { newId, updateById, withMessage, isEmailContact as isEmail } from './helpers'
 import { salesActions } from './actions/sales'
 import { bookingActions } from './actions/booking'
+import { hubActions } from './actions/hub'
 
 // Each domain adds its own handlers: { 'lead/create': (state, action) => newState }
-const HANDLERS = { ...salesActions, ...bookingActions }
+const HANDLERS = { ...salesActions, ...bookingActions, ...hubActions }
 
 export const MODES = ['calm', 'bold']
 export const ROLES = ['planner', 'client', 'guest', 'staff']
@@ -45,7 +46,7 @@ export function reducer(state, action) {
     case 'ui/setRole':
       if (!ROLES.includes(action.role)) return state
       // clientId: which client the portal shows (a proposal email for Linh opens Linh's portal)
-      return { ...state, ui: { ...state.ui, role: action.role, ...(action.clientId && { clientId: action.clientId }) } }
+      return { ...state, ui: { ...state.ui, role: action.role, memberId: action.memberId ?? null, ...(action.clientId && { clientId: action.clientId }) } }
 
     // ---- Demo Outbox: stands in for email / SMS / push until the backend exists ----
     case 'outbox/send':
@@ -146,7 +147,7 @@ export function reducer(state, action) {
 
     // ---- Toasts: short confirmations ("Proposal sent to Ana") ----
     case 'toast/show':
-      return { ...state, toasts: [...state.toasts, { id: newId('t'), text: action.text, tone: action.tone ?? 'success' }] }
+      return { ...state, toasts: [...state.toasts, { id: newId('t'), text: action.text, tone: action.tone ?? 'success', undo: action.undo ?? null }] }
 
     case 'toast/dismiss':
       return { ...state, toasts: state.toasts.filter((t) => t.id !== action.id) }

@@ -12,7 +12,7 @@
 //   payment/recordManual     → planner_record_manual_payment
 //   contract/countersign     → planner_countersign      (refused until the deposit is paid)
 // =====================================================================
-import { CHECKLIST_ITEMS } from '../../data/seed'
+import { CHECKLIST_ITEMS, withPlanning } from '../../data/seed'
 import { DEFAULT_THEME_FOR_EVENT_TYPE } from '../../styles/themes'
 import { formatDay, formatWeekdayDay, nowStamp, parseDay } from '../../lib/clock'
 import { formatMoney } from '../../lib/money'
@@ -125,7 +125,7 @@ export const bookingActions = {
     let next = {
       ...state,
       contracts: updateById(state.contracts, contract.id, { clientSignedAt: nowStamp(), clientSignature: a.signature.trim(), eventId }),
-      events: [...state.events.filter((e) => e.id !== eventId), event],
+      events: [...state.events.filter((e) => e.id !== eventId), withPlanning(event)],
       invoices: [...state.invoices, invoice],
       leads: updateById(state.leads, lead.id, { stage: 'won', hold: null }),
     }
@@ -269,6 +269,6 @@ export const bookingActions = {
       startTime: a.startTime || '17:00', venue: a.venue?.trim() || 'TBD', status: 'booked', guestCount: Number(a.guestCount) || null,
       theme: DEFAULT_THEME_FOR_EVENT_TYPE[a.eventType] ?? 'party-pop', portalUnlockedAt: nowStamp(),
     }
-    return withToast({ ...next, events: [...next.events, event] }, `${event.name} added`)
+    return withToast({ ...next, events: [...next.events, withPlanning(event)] }, `${event.name} added`)
   },
 }

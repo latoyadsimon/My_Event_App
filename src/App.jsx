@@ -37,6 +37,16 @@ import Dashboard from './pages/planner/Dashboard'
 import Leads from './pages/planner/leads/Leads'
 import LeadDetail from './pages/planner/leads/LeadDetail'
 import ProposalBuilder from './pages/planner/leads/ProposalBuilder'
+import Calendar from './pages/planner/Calendar'
+import Overview from './pages/planner/hub/Overview'
+import Tasks from './pages/planner/hub/Tasks'
+import Guests from './pages/planner/hub/Guests'
+import Website from './pages/planner/hub/Website'
+import Invitations from './pages/planner/hub/Invitations'
+import Money from './pages/planner/hub/Money'
+import Files from './pages/planner/hub/Files'
+import Messages from './pages/planner/hub/Messages'
+import { Reschedule, CancelEvent } from './pages/planner/hub/ChangeEvent'
 import Contract from './pages/planner/booking/Contract'
 import Invoice from './pages/planner/booking/Invoice'
 import Events from './pages/planner/booking/Events'
@@ -71,7 +81,7 @@ export default function App() {
         <Route path="app" element={<RequireRole role="planner"><PlannerLayout /></RequireRole>}>
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<Dashboard />} />
-          <Route path="calendar" element={<Planned id="calendar" />} />
+          <Route path="calendar" element={<Calendar />} />
           <Route path="leads" element={<Leads />} />
           <Route path="leads/:leadId" element={<LeadDetail />} />
           <Route path="proposals/:leadId" element={<ProposalBuilder />} />
@@ -79,18 +89,18 @@ export default function App() {
           <Route path="invoices/:invoiceId" element={<Invoice />} />
           <Route path="events" element={<Events />} />
           <Route path="events/:eventId" element={<EventHubLayout />}>
-            <Route index element={<Planned id="hubOverview" nested />} />
-            <Route path="tasks" element={<Planned id="hubTasks" nested />} />
+            <Route index element={<Overview />} />
+            <Route path="tasks" element={<Tasks />} />
             <Route path="guests" element={<GuestSubTabs />}>
-              <Route index element={<Planned id="hubGuests" nested />} />
-              <Route path="invitations" element={<Planned id="hubInvitations" nested />} />
-              <Route path="website" element={<Planned id="hubWebsite" nested />} />
+              <Route index element={<Guests />} />
+              <Route path="invitations" element={<Invitations />} />
+              <Route path="website" element={<Website />} />
             </Route>
-            <Route path="money" element={<Planned id="hubMoney" nested />} />
-            <Route path="files" element={<Planned id="hubFiles" nested />} />
-            <Route path="messages" element={<Planned id="hubMessages" nested />} />
-            <Route path="reschedule" element={<Planned id="reschedule" nested />} />
-            <Route path="cancel" element={<Planned id="cancelEvent" nested />} />
+            <Route path="money" element={<Money />} />
+            <Route path="files" element={<Files />} />
+            <Route path="messages" element={<Messages />} />
+            <Route path="reschedule" element={<Reschedule />} />
+            <Route path="cancel" element={<CancelEvent />} />
           </Route>
           <Route path="settings" element={<SettingsLayout />}>
             <Route index element={<Navigate to="business" replace />} />

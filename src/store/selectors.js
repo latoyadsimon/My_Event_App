@@ -39,8 +39,15 @@ export function nextOnboardingStep(state) {
   return ONBOARDING_STEPS.find((s) => !state.business.onboarding[s.id])?.id ?? null
 }
 
-/** The person signed in on the planner side (the demo's planner is the owner). */
-export const getMe = (state) => state.team.find((m) => m.role === 'owner')
+/** The person signed in on the planner side: the owner, unless the demo bar picked a teammate. */
+export const getMe = (state) =>
+  state.team.find((m) => m.id === state.ui?.memberId) ?? state.team.find((m) => m.role === 'owner')
+
+/** Can the signed-in team member do this? (PL-1.6 permissions; owners can do everything) */
+export const can = (state, permission) => {
+  const me = getMe(state)
+  return me?.role === 'owner' || Boolean(me?.permissions[permission] && !(permission === 'see_profit'))
+}
 
 // ---------------------------------------------------------------------
 // Getting-started checklist (PL-1.8): shows until done; each item links to its fix.
@@ -275,4 +282,138 @@ export function getEventRows(state, { when = 'upcoming', status = 'all' } = {}) 
         openTasks: state.tasks.filter((t) => t.eventId === event.id && !t.done).length,
       }
     })
+}
+
+// ---------------------------------------------------------------------
+// Event Hub (Phase 4)
+// ---------------------------------------------------------------------
+export const getEventGuests = (state, eventId) => state.guests.filter((g) => g.eventId === eventId && !g.removed)
+export const getEventTasks = (state, eventId) => state.tasks.filter((t) => t.eventId === eventId && !t.removed)
+
+/** Live guest counts (PL-5.1): people attending, households declined/maybe/no reply, meals, allergies, tracking. */
+export function guestCounts(list) {
+  const meals = {}
+  for (const g of list.filter((x) => x.rsvp === 'attending')) {
+    for (const [meal, n] of Object.entries(g.meals ?? {})) meals[meal] = (meals[meal] ?? 0) + n
+  }
+  const invited = list.filter((g) => g.invite !== 'not_sent')
+  return {
+    households: list.length,
+    invitedPeople: list.reduce((sum, g) => sum + 1 + (g.plusOnes ?? 0), 0),
+    attending: list.filter((g) => g.rsvp === 'attending').reduce((sum, g) => sum + g.attending, 0),
+    declined: list.filter((g) => g.rsvp === 'declined').length,
+    maybe: list.filter((g) => g.rsvp === 'maybe').length,
+    noReply: list.filter((g) => !g.rsvp).length,
+    responded: list.filter((g) => g.rsvp).length,
+    meals,
+    allergies: list.filter((g) => g.allergies?.trim()),
+    notInvited: list.filter((g) => g.invite === 'not_sent').length,
+    tracking: {
+      delivered: invited.filter((g) => !['bounced', 'stopped'].includes(g.invite)).length,
+      opened: invited.filter((g) => g.invite === 'opened' || g.rsvp).length,
+      responded: invited.filter((g) => g.rsvp).length,
+      notDelivered: invited.filter((g) => ['bounced', 'stopped'].includes(g.invite)),
+    },
+  }
+}
+
+/** The next deadlines for an event (Overview): tasks, payments, RSVP cutoff, headcount lock. */
+export function nextDeadlines(state, event, count = 3) {
+  const items = [
+    ...getEventTasks(state, event.id).filter((t) => !t.done).map((t) => ({ day: t.due, text: t.title, late: daysUntil(t.due) < 0, to: 'tasks' })),
+    ...(getInvoiceForEvent(state, event.id)?.installments ?? []).filter((p) => !p.paidAt && !p.voided).map((p) => ({ day: p.dueDate, text: `${p.label}: ${formatMoney(p.amountCents)}`, late: daysUntil(p.dueDate) < 0, to: 'money' })),
+    ...(event.site?.rsvpCutoff && !event.headcount?.lockedAt ? [{ day: event.site.rsvpCutoff, text: 'RSVP cutoff', to: 'guests' }] : []),
+  ]
+  if (event.date && !event.headcount?.lockedAt) {
+    const lock = parseDay(event.date)
+    lock.setDate(lock.getDate() - 7)
+    items.push({ day: toDay(lock), text: 'Lock final headcount', to: 'guests' })
+  }
+  return items.filter((x) => x.day).sort((a, b) => a.day.localeCompare(b.day)).filter((x) => x.late || daysUntil(x.day) >= 0).slice(0, count)
+}
+
+/** Status path for the Overview (PL-4.2). */
+export const STATUS_PATH = ['booked', 'in_planning', 'final_week', 'event_day', 'wrap_up', 'closed']
+
+/** What cancelling would refund, from the contract's policy (PL-3.7). */
+export function cancellationQuote(state, eventId) {
+  const event = getEvent(state, eventId)
+  const invoice = getInvoiceForEvent(state, eventId)
+  const daysOut = daysUntil(event.date)
+  const paid = invoice ? invoice.installments.filter((p) => p.paidAt) : []
+  const depositCents = paid[0] === invoice?.installments[0] && paid[0] ? paid[0].amountCents : 0
+  const paidCents = paid.reduce((s, p) => s + p.amountCents, 0)
+  const afterDeposit = paidCents - depositCents
+  const alreadyRefunded = (invoice?.refunds ?? []).reduce((s, r) => s + r.amountCents, 0)
+  const [percent, rule] = daysOut >= 90 ? [100, '90 or more days before: payments after the deposit are refunded in full']
+    : daysOut >= 30 ? [50, '30–89 days before: half of the payments after the deposit are refunded']
+      : [0, 'Under 30 days before: nothing is refunded']
+  const refundCents = Math.max(0, Math.round((afterDeposit * percent) / 100) - alreadyRefunded)
+  const unpaidCents = invoice ? invoice.installments.filter((p) => !p.paidAt).reduce((s, p) => s + p.amountCents, 0) : 0
+  return { daysOut, paidCents, depositCents, refundCents, keptCents: paidCents - refundCents - alreadyRefunded, unpaidCents, rule }
+}
+
+/** Checks before moving an event (PL-3.6): calendar, staff and gear on the new date, and what shifts. */
+export function rescheduleCheck(state, eventId, newDate) {
+  const event = getEvent(state, eventId)
+  const delta = Math.round((parseDay(newDate) - parseDay(event.date)) / 86400000)
+  const taken = dateTakenBy(state, newDate, event.leadId)
+  const held = state.leads.find((l) => l.hold && l.eventDate === newDate && l.id !== event.leadId && daysUntil(l.hold.until) >= 0)
+  const sameDay = state.events.filter((e) => e.id !== eventId && e.date === newDate && !['cancelled', 'closed'].includes(e.status))
+  const busyStaff = state.team.filter((m) => m.status === 'active' && state.tasks.some((t) => sameDay.some((e) => e.id === t.eventId) && t.assignee === m.id))
+  const proposal = event.leadId && getProposal(state, event.leadId)
+  const lines = proposal ? (proposal.versions.find((v) => v.n === proposal.acceptedVersion) ?? proposal.versions.at(-1)).lines : []
+  const gear = lines.filter((l) => {
+    const addon = state.addons.find((a) => a.id === l.addonId)
+    return addon?.owned != null && sameDay.length > 0 && l.qty > addon.owned / 2
+  }).map((l) => state.addons.find((a) => a.id === l.addonId).name)
+  return {
+    delta,
+    inPast: daysUntil(newDate) <= 0,
+    calendar: taken ? `${taken.name} is already booked that day` : held ? `${held.title} is holding that date` : null,
+    staff: busyStaff.map((m) => m.name),
+    gear,
+    tasksShifting: getEventTasks(state, eventId).filter((t) => !t.done).length,
+    paymentsShifting: (getInvoiceForEvent(state, eventId)?.installments ?? []).filter((p) => !p.paidAt && !p.voided).length,
+  }
+}
+
+// ---- Calendar (PL-4.8) ----
+const EVENT_MINUTES = 240
+const TRAVEL_MINUTES = 45
+
+/** Everything on the calendar between two days (inclusive): events, appointments, holds. */
+export function calendarItems(state, fromDay, toDayIncl) {
+  const inRange = (day) => day >= fromDay && day <= toDayIncl
+  const items = [
+    ...state.events.filter((e) => e.status !== 'cancelled' && inRange(e.date)).map((e) => ({
+      id: `e-${e.id}`, kind: 'event', day: e.date, at: `${e.date}T${e.startTime ?? '17:00'}:00`, minutes: e.minutes ?? EVENT_MINUTES,
+      title: e.name, place: e.venue, status: e.status, type: e.type, to: `/app/events/${e.id}`,
+    })),
+    ...state.appointments.filter((a) => inRange(a.at.slice(0, 10))).map((a) => ({
+      id: a.id, kind: 'appointment', day: a.at.slice(0, 10), at: a.at, minutes: a.minutes ?? 60, title: `${a.title} · ${a.with}`, place: a.place ?? a.with, to: a.to,
+    })),
+    ...state.leads.filter((l) => l.hold && l.eventDate && inRange(l.eventDate) && daysUntil(l.hold.until) >= 0).map((l) => ({
+      id: `h-${l.id}`, kind: 'hold', day: l.eventDate, at: null, title: `Hold · ${l.title}`, daysLeft: daysUntil(l.hold.until), to: `/app/leads/${l.id}`,
+    })),
+  ]
+  return items.sort((a, b) => (a.at ?? `${a.day}T00`).localeCompare(b.at ?? `${b.day}T00`))
+}
+
+/** Double-bookings and too-short travel between places on the same day. */
+export function calendarWarnings(items) {
+  const warnings = []
+  const byDay = {}
+  for (const i of items.filter((x) => x.at)) (byDay[i.day] ??= []).push(i)
+  for (const [day, list] of Object.entries(byDay)) {
+    for (let k = 1; k < list.length; k++) {
+      const a = list[k - 1]
+      const b = list[k]
+      const end = parseDay(a.at).getTime() + a.minutes * 60000
+      const gap = Math.round((parseDay(b.at).getTime() - end) / 60000)
+      if (gap < 0) warnings.push({ day, text: `${a.title} and ${b.title} overlap`, items: [a, b] })
+      else if (gap < TRAVEL_MINUTES && a.place !== b.place) warnings.push({ day, text: `Only ${gap} min between ${a.title} and ${b.title}, but travel takes about ${TRAVEL_MINUTES} min`, items: [a, b] })
+    }
+  }
+  return warnings
 }

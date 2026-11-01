@@ -7,7 +7,6 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useStore } from '../../store/StoreContext'
 import { ROLE_HOME } from '../../lib/roles'
-import { getMe } from '../../store/selectors'
 import Icon from '../ui/Icon'
 import styles from './DemoBar.module.css'
 
@@ -17,22 +16,27 @@ export default function DemoBar() {
   const navigate = useNavigate()
   const unread = state.outbox.filter((m) => m.unread).length
 
-  const switchRole = (role) => {
-    dispatch({ type: 'ui/setRole', role })
+  // "planner:devon" = the planner app as a teammate, to see permissions at work (PL-1.6)
+  const switchRole = (value) => {
+    const [role, memberId] = value.split(':')
+    dispatch({ type: 'ui/setRole', role, memberId })
     navigate(ROLE_HOME[role].to)
   }
+  const coordinator = state.team.find((m) => m.role === 'coordinator' && m.status === 'active')
+  const current = state.ui.memberId ? `planner:${state.ui.memberId}` : state.ui.role
 
   return (
     <div className={styles.bar} role="region" aria-label="Demo controls">
       <span className={styles.tag}>Demo</span>
       <label className={styles.role}>
         <span>Viewing as</span>
-        <select value={state.ui.role} onChange={(e) => switchRole(e.target.value)}>
-          {Object.entries(ROLE_HOME).map(([id, r]) => (
+        <select value={current} onChange={(e) => switchRole(e.target.value)}>
+          {Object.entries(ROLE_HOME).map(([id, r]) => [
             <option key={id} value={id}>
-              {id === 'planner' ? `Planner (${getMe(state)?.name.split(' ')[0] ?? 'you'})` : r.label}
-            </option>
-          ))}
+              {id === 'planner' ? `Planner (${state.team.find((m) => m.role === 'owner')?.name.split(' ')[0] ?? 'you'})` : r.label}
+            </option>,
+            id === 'planner' && coordinator && <option key="coordinator" value={`planner:${coordinator.id}`}>Coordinator ({coordinator.name.split(' ')[0]})</option>,
+          ])}
         </select>
       </label>
       <span className={styles.today}>Today is Thu, Nov 5, 2026</span>

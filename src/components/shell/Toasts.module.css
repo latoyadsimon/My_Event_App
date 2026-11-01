@@ -20,3 +20,8 @@
 .toast :focus-visible { outline-color: var(--color-bg); }
 @keyframes enter { from { opacity: 0; transform: translateY(6px); } }
 @media (prefers-reduced-motion: reduce) { .toast { animation: none; } }
+.danger { background: var(--status-danger-ink); color: var(--status-danger-bg); }
+.undo {
+  background: none; border: 0; color: inherit; font-weight: 700; text-decoration: underline; text-underline-offset: .2em;
+  min-height: var(--tap-min); padding: 0 var(--space-2); cursor: pointer;
+}

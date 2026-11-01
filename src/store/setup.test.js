@@ -159,7 +159,7 @@ describe('Dashboard numbers (Thu Nov 5, 2026)', () => {
   })
 
   it('counts open and late tasks', () => {
-    expect(d.kpis.openTasks).toBe(14)
+    expect(d.kpis.openTasks).toBe(15)   // includes Priya's "Approve the dinner menu"
     expect(d.kpis.lateTasks).toBe(1)
   })
 
