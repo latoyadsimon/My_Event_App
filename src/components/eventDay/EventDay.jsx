@@ -11,7 +11,7 @@
 // =====================================================================
 import { useEffect, useState } from 'react'
 import { useStore } from '../../store/StoreContext'
-import { checkInCode, checkInCounts, findGuests, formatClock, getEventVendors, getIncidents, livePanel, nowNext, ownerLabel, packList } from '../../store/selectors'
+import { checkInCode, checkInCounts, findGuests, ticketByCode, formatClock, getEventVendors, getIncidents, livePanel, nowNext, ownerLabel, packList } from '../../store/selectors'
 import { formatMoney } from '../../lib/money'
 import { formatDateTime, formatTime } from '../../lib/clock'
 import { Button, Card, ConfirmDialog, Field, Notice, StatusChip } from '../ui'
@@ -71,6 +71,8 @@ export function CheckIn({ eventId, by }) {
   const [walk, setWalk] = useState({ name: '', people: '1' })
   const counts = checkInCounts(state, eventId)
   const results = findGuests(state, eventId, q)
+  // Ticketed events (GU-3.4): a ticket's QR code, or the holder's name
+  const tickets = q.trim() ? state.tickets.filter((k) => k.eventId === eventId && (k.holder.toLowerCase().includes(q.trim().toLowerCase()) || ticketByCode(state, q)?.id === k.id)).slice(0, 6) : []
   return (
     <div className="stack">
       <div className={styles.count} aria-live="polite">
@@ -79,7 +81,15 @@ export function CheckIn({ eventId, by }) {
       </div>
       <Card title="Find a guest">
         <Field label="Name or check-in code" value={q} onChange={(e) => setQ(e.target.value)} hint="Scan the QR on their invitation, or type a name" autoComplete="off" />
-        {q.trim() && (results.length === 0
+        {tickets.length > 0 && (
+          <ul role="list" className={styles.list} aria-label="Matching tickets">
+            {tickets.map((k) => (
+              <li key={k.id}><span><strong>{k.holder}</strong><span className={styles.sub}>Ticket {k.code}</span></span>
+                {k.checkedInAt ? <StatusChip tone="success" label="Ticket used" /> : <Button variant="primary" onClick={() => dispatch({ type: 'ticket/checkIn', id: k.id })}>Check in ticket</Button>}</li>
+            ))}
+          </ul>
+        )}
+        {q.trim() && !tickets.length && (results.length === 0
           ? <p className="muted">No one by that name. Add them as a walk-in below.</p>
           : <ul role="list" className={styles.list} aria-label="Matching guests">{results.map((g) => <GuestRow key={g.id} guest={g} by={by} />)}</ul>)}
       </Card>
@@ -223,6 +233,7 @@ export function LivePanel({ eventId, money = true }) {
     ['Vendors arrived', `${p.vendorsArrived} / ${p.vendorsTotal}`],
     ['Incidents', p.incidents],
     ...(money ? [['On-site sales', formatMoney(p.onsiteCents)]] : []),
+    ...(p.tickets ? [['Tickets in', `${p.tickets.checkedIn} / ${p.tickets.sold}`]] : []),
     ...(p.giving ? [['Raised', formatMoney(p.giving.raisedCents)]] : []),
     ...(p.booth ? [['Photo booth', `${p.booth.sessions} sessions · ${p.booth.prints} prints`]] : []),
     ...(p.karaoke ? [['Karaoke line', `${p.karaoke.waiting} waiting · ${p.karaoke.sung} sung`]] : []),

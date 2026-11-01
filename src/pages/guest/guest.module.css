@@ -122,3 +122,15 @@ fieldset.panel > legend + * { clear: both; }
 .tier { display: flex; gap: var(--space-3); align-items: flex-start; padding: var(--space-3); border: 1.5px solid var(--theme-border); border-radius: var(--theme-radius, var(--radius-md)); cursor: pointer; }
 .tier input { margin-top: .3rem; width: 1.2rem; height: 1.2rem; accent-color: var(--theme-accent); }
 .tier .muted { display: block; }
+
+/* Tickets and seats (GU-3.4, GU-5.2) */
+.ticketList { display: grid; gap: var(--space-3); grid-template-columns: repeat(auto-fill, minmax(14rem, 1fr)); }
+.ticket { display: flex; gap: var(--space-3); align-items: center; padding: var(--space-3); border: 1.5px dashed var(--theme-border); border-radius: var(--theme-radius, var(--radius-md)); }
+.ticket > div { display: flex; flex-direction: column; gap: 2px; min-width: 0; overflow-wrap: anywhere; }
+.qty select { min-height: var(--tap-min); min-width: 4rem; padding: 0 var(--space-2); border-radius: var(--radius-sm); border: 1.5px solid var(--theme-border); background: var(--theme-surface); color: var(--theme-text); font: inherit; }
+.ticketTier { display: flex; justify-content: space-between; align-items: center; gap: var(--space-3); padding: var(--space-3); border: 1.5px solid var(--theme-border); border-radius: var(--theme-radius, var(--radius-md)); }
+.ticketTier > span { display: flex; flex-direction: column; min-width: 0; }
+.seat { display: flex; flex-direction: column; align-items: center; gap: var(--space-2); text-align: center; }
+.miniMap { position: relative; width: 100%; max-width: 30rem; border: 1.5px solid var(--theme-border); border-radius: var(--radius-sm); background: var(--theme-bg); }
+.mapThing, .mapHere { position: absolute; display: grid; place-items: center; font-size: 10px; font-weight: 700; border: 1px solid var(--theme-border); background: var(--theme-surface); color: var(--theme-muted); }
+.mapHere { background: var(--theme-accent); color: var(--theme-on-accent); border-color: var(--theme-accent); z-index: 1; box-shadow: 0 0 0 4px color-mix(in srgb, var(--theme-accent) 35%, transparent); }

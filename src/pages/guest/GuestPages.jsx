@@ -99,6 +99,12 @@ export function EventWebsite() {
         </nav>
       )}
 
+      {(event.ticketing?.enabled || event.floorPlan?.objects?.some((o) => o.kind.startsWith('table'))) && (
+        <p className={styles.actions}>
+          {event.ticketing?.enabled && <Button variant="primary" to={withToken(`/e/${event.id}/tickets`, token)}>{t('tickets')}</Button>}
+          {event.floorPlan?.objects?.some((o) => o.kind.startsWith('table')) && <Button to={withToken(`/e/${event.id}/seat`, token)}>{t('findSeat')}</Button>}
+        </p>
+      )}
       {(event.fund?.enabled || event.auction?.enabled || event.sponsorship?.enabled) && (
         <p className={styles.actions}>
           {event.fund?.enabled && <Button variant="primary" to={withToken(`/e/${event.id}/give`, token)}>{t('give')}: {event.fund.name}</Button>}

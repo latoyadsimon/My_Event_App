@@ -102,6 +102,11 @@ const Slideshow = lazyPage(() => import('./pages/booth/BoothPages'), 'Slideshow'
 const GuestGallery = lazyPage(() => import('./pages/guest/Gallery'))
 const InvitationDesigner = lazyPage(() => import('./pages/planner/hub/InvitationDesigner'))
 const Fundraising = lazyPage(() => import('./pages/planner/hub/Fundraising'))
+const Seating = lazyPage(() => import('./pages/planner/hub/Seating'))
+const SeatingPrint = lazyPage(() => import('./pages/planner/hub/Seating'), 'SeatingPrint')
+const TicketsTab = lazyPage(() => import('./pages/planner/hub/TicketsTab'))
+const GuestTickets = lazyPage(() => import('./pages/guest/Tickets'), 'Tickets')
+const FindSeat = lazyPage(() => import('./pages/guest/Tickets'), 'FindSeat')
 const GivingScreen = lazyPage(() => import('./pages/giving/GivingScreen'))
 const Give = lazyPage(() => import('./pages/guest/Giving'), 'Give')
 const Auction = lazyPage(() => import('./pages/guest/Giving'), 'Auction')
@@ -169,6 +174,8 @@ export default function App() {
               <Route path="design" element={<InvitationDesigner />} />
               <Route path="website" element={<Website />} />
               <Route path="potluck" element={<PotluckTab />} />
+              <Route path="seating" element={<Seating />} />
+              <Route path="tickets" element={<TicketsTab />} />
             </Route>
             <Route path="logistics" element={<LogisticsSubTabs />}>
               <Route index element={<RunOfShow />} />
@@ -256,6 +263,7 @@ export default function App() {
         {/* ---------- Printable pages (planner, no app frame) ---------- */}
         <Route path="print/events/:eventId/run-of-show" element={<RequireRole role="planner"><RunOfShowPrint /></RequireRole>} />
         <Route path="print/events/:eventId/invitation" element={<RequireRole role="planner"><InvitationPrint /></RequireRole>} />
+        <Route path="print/events/:eventId/seating" element={<RequireRole role="planner"><SeatingPrint /></RequireRole>} />
 
         {/* ---------- Guests (no account) ---------- */}
         <Route path="e/:slug" element={<GuestLayout />}>
@@ -270,6 +278,8 @@ export default function App() {
           <Route path="auction" element={<Auction />} />
           <Route path="paddle" element={<Paddle />} />
           <Route path="sponsor" element={<Sponsor />} />
+          <Route path="tickets" element={<GuestTickets />} />
+          <Route path="seat" element={<FindSeat />} />
         </Route>
         <Route path="i/:token" element={<GuestLayout />}>
           <Route index element={<Invitation />} />

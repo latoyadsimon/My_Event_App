@@ -126,6 +126,7 @@ export default function WrapUp() {
           {money && <li><span>Damage charges</span><strong>{formatMoney(r.damageCents)}</strong></li>}
           <li><span>Vendors arrived</span><strong>{r.vendorsOnTime} of {r.vendorsTotal}</strong></li>
           <li><span>Incidents</span><strong>{r.incidents}</strong></li>
+          {r.tickets && <li><span>Tickets</span><strong>{r.tickets.sold} sold · {formatMoney(r.tickets.revenueCents)} · {r.tickets.checkedIn} used</strong></li>}
           {r.giving && <li><span>Fundraising</span><strong>{formatMoney(r.giving.raisedCents)} from {r.giving.donors} donors{r.giving.goalCents ? ` (${r.giving.percent}% of goal)` : ''}</strong></li>}
           {r.booth && <li><span>Photo booth</span><strong>{r.booth.sessions} sessions · {r.booth.prints} prints · {r.booth.magnets} magnets · {r.booth.photos} photos</strong></li>}
           {r.karaoke && <li><span>Karaoke</span><strong>{r.karaoke.sung} songs · {r.karaoke.singers} singers{r.karaoke.topSong ? ` · most sung “${r.karaoke.topSong.title}”` : ''}</strong></li>}

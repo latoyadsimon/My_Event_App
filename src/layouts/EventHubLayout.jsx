@@ -98,7 +98,7 @@ function SubTabs({ label, items }) {
   )
 }
 
-/** Guest list · Invitations · Website & RSVP · Potluck & volunteers (inside the Guests tab) */
+/** Guest list · Invitations · Website & RSVP · Potluck & volunteers · Seating · Tickets (inside the Guests tab) */
 export function GuestSubTabs() {
   const { eventId } = useParams()
   const base = `/app/events/${eventId}/guests`
@@ -107,6 +107,8 @@ export function GuestSubTabs() {
     { to: `${base}/invitations`, label: 'Invitations' },
     { to: `${base}/website`, label: 'Website & RSVP' },
     { to: `${base}/potluck`, label: 'Potluck & volunteers' },
+    { to: `${base}/seating`, label: 'Seating' },
+    { to: `${base}/tickets`, label: 'Tickets' },
   ]} />
 }
 

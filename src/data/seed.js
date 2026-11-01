@@ -22,6 +22,7 @@ import { vendors, eventVendors, timeline, budgetLines, equipment, kits, reservat
 import { songs, songRequests, defaultKaraoke, karaokeDetails } from './seedKaraoke'
 import { photos, boothSessions, prints, recipes, defaultBooth, boothDetails } from './seedBooth'
 import { donations, bidders, bids, sponsors, defaultFund, defaultAuction, defaultPaddle, defaultSponsorship, givingDetails } from './seedGiving'
+import { tickets, waitlist, seats, avoid, defaultFloorPlan, defaultTicketing, seatingDetails, ticketingDetails } from './seedSeating'
 
 export const business = {
   id: 'bella-events',
@@ -366,6 +367,8 @@ export const withPlanning = (event) => ({
   booth: { ...defaultBooth(), ...(boothDetails[event.id] ?? {}) },
   fund: defaultFund(), auction: defaultAuction(), paddle: defaultPaddle(), sponsorship: defaultSponsorship(),
   ...(givingDetails[event.id] ?? {}),
+  floorPlan: defaultFloorPlan(), ...(seatingDetails[event.id] ?? {}),
+  ticketing: { ...defaultTicketing(), ...(ticketingDetails[event.id] ?? {}) },
   ...event, ...(eventDetails[event.id] ?? {}),
 })
 
@@ -373,8 +376,8 @@ export function createSeedState() {
   return structuredClone({
     business, team, packages, addons, clients, leads, proposals, contracts, events: events.map(withPlanning), invoices, tasks, appointments,
     outbox: [...outbox].sort((a, b) => b.at.localeCompare(a.at)),
-    guests, files, approvals, questionnaires, threads, requests: [],
-    vendors, eventVendors, timeline, budgetLines, equipment, kits, reservations, shifts, incidents: [], potluckSignups, volunteerSignups, songs, songRequests, photos, boothSessions, prints, recipes, donations, bidders, bids, sponsors,
+    guests: guests.map((g) => ({ tableId: seats[g.id] ?? null, avoid: avoid[g.id] ?? [], ...g })), files, approvals, questionnaires, threads, requests: [],
+    vendors, eventVendors, timeline, budgetLines, equipment, kits, reservations, shifts, incidents: [], potluckSignups, volunteerSignups, songs, songRequests, photos, boothSessions, prints, recipes, donations, bidders, bids, sponsors, tickets, waitlist,
   })
 }
 
@@ -398,6 +401,6 @@ export function createNewBusinessState({ ownerName, businessName, email }) {
     }],
     packages: [], addons: [], clients: [], leads: [], proposals: [], contracts: [], events: [], invoices: [], tasks: [], appointments: [], outbox: [],
     guests: [], files: [], approvals: [], questionnaires: [], threads: [], requests: [],
-    vendors: [], eventVendors: [], timeline: [], budgetLines: [], equipment: [], kits: [], reservations: [], shifts: [], incidents: [], potluckSignups: [], volunteerSignups: [], songs: structuredClone(songs), songRequests: [], photos: [], boothSessions: [], prints: [], recipes: [], donations: [], bidders: [], bids: [], sponsors: [],
+    vendors: [], eventVendors: [], timeline: [], budgetLines: [], equipment: [], kits: [], reservations: [], shifts: [], incidents: [], potluckSignups: [], volunteerSignups: [], songs: structuredClone(songs), songRequests: [], photos: [], boothSessions: [], prints: [], recipes: [], donations: [], bidders: [], bids: [], sponsors: [], tickets: [], waitlist: [],
   }
 }
