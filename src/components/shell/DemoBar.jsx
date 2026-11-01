@@ -17,13 +17,16 @@ export default function DemoBar() {
   const unread = state.outbox.filter((m) => m.unread).length
 
   // "planner:devon" = the planner app as a teammate, to see permissions at work (PL-1.6)
+  // "client:acme"   = the portal as another client (Priya's is already unlocked)
   const switchRole = (value) => {
-    const [role, memberId] = value.split(':')
-    dispatch({ type: 'ui/setRole', role, memberId })
+    const [role, who] = value.split(':')
+    dispatch({ type: 'ui/setRole', role, memberId: role === 'planner' ? who : undefined, clientId: role === 'client' ? who ?? 'ana' : undefined })
     navigate(ROLE_HOME[role].to)
   }
   const coordinator = state.team.find((m) => m.role === 'coordinator' && m.status === 'active')
-  const current = state.ui.memberId ? `planner:${state.ui.memberId}` : state.ui.role
+  const otherClient = state.clients.find((c) => c.id === 'acme')
+  const current = state.ui.memberId ? `planner:${state.ui.memberId}`
+    : state.ui.role === 'client' && state.ui.clientId !== 'ana' ? `client:${state.ui.clientId}` : state.ui.role
 
   return (
     <div className={styles.bar} role="region" aria-label="Demo controls">
@@ -36,6 +39,7 @@ export default function DemoBar() {
               {id === 'planner' ? `Planner (${state.team.find((m) => m.role === 'owner')?.name.split(' ')[0] ?? 'you'})` : r.label}
             </option>,
             id === 'planner' && coordinator && <option key="coordinator" value={`planner:${coordinator.id}`}>Coordinator ({coordinator.name.split(' ')[0]})</option>,
+            id === 'client' && otherClient && <option key="client-acme" value="client:acme">Client ({otherClient.name}, Acme)</option>,
           ])}
         </select>
       </label>

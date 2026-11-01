@@ -83,6 +83,11 @@ export const hubActions = {
     return withToast(withLog(next, event.id, `“${q.title}” questionnaire sent`), `Questionnaire sent to ${firstName(clientOfEvent(next, event).name)}`)
   },
 
+  // Saves after every field (CL-3.2), quietly
+  'questionnaire/save': (state, a) => ({
+    ...state, questionnaires: updateById(state.questionnaires, a.questionnaireId, (q) => ({ answers: { ...q.answers, ...a.answers } })),
+  }),
+
   // Client answers: fields fill in, the task is done, Overview shows "received"
   'questionnaire/answer': (state, a) => {
     const q = state.questionnaires.find((x) => x.id === a.questionnaireId)
@@ -260,6 +265,20 @@ export const hubActions = {
     if (a.from === 'planner' && thread.kind === 'client') next = emailClient(next, event, `New message from ${state.business.name}`, a.text.trim(), { label: 'Reply', to: '/portal/messages' })
     return next
   },
+  // The client writes to their planner (CL-4.5): works before booking too (keyed by the lead id)
+  'thread/postClient': (state, a) => {
+    if (!a.text?.trim()) return state
+    let next = state
+    let thread = state.threads.find((t) => t.eventId === a.eventId && t.kind === 'client')
+    if (!thread) {
+      thread = { id: newId('th'), eventId: a.eventId, kind: 'client', name: `${a.authorFull ?? a.author} (client)`, shared: true, messages: [] }
+      next = { ...next, threads: [...next.threads, thread] }
+    }
+    next = { ...next, threads: updateById(next.threads, thread.id, (t) => ({ messages: [...t.messages, { id: newId('msg'), from: 'client', author: a.author, at: nowStamp(), text: a.text.trim(), attachment: a.attachment ?? null }] })) }
+    const to = state.events.some((e) => e.id === a.eventId) ? `/app/events/${a.eventId}/messages` : `/app/leads/${a.eventId}`
+    return pushToPlanner(next, `Message from ${a.author}`, a.text.trim(), to)
+  },
+
   'thread/add': (state, a) => ({
     ...state, threads: [...state.threads, { id: newId('th'), eventId: a.eventId, kind: 'vendor', name: a.name.trim(), shared: false, messages: [] }],
   }),
@@ -273,6 +292,36 @@ export const hubActions = {
     next = { ...next, threads: updateById(next.threads, thread.id, (t) => ({ messages: [...t.messages, { id: newId('msg'), from: 'planner', author: firstName(state.team.find((m) => m.role === 'owner')?.name), at: nowStamp(), text: `I sent a change order for your OK: ${a.title.trim()}, ${formatMoney(a.amountCents)}. It's in your Approvals.` }] })) }
     next = emailClient(next, event, `Change order: ${a.title.trim()}`, `${formatMoney(a.amountCents)}, added to your final payment if you approve.`, { label: 'Review it', to: '/portal/approvals' })
     return withToast(next, 'Change order sent for approval')
+  },
+
+  // ---- Client requests (CL-4.4): cancel or postpone, handled by the planner (PL-3.6 / PL-3.7) ----
+  'request/submit': (state, a) => {
+    const event = eventOf(state, a.eventId)
+    const request = { id: newId('req'), eventId: event.id, kind: a.kind, dates: a.dates ?? [], reason: a.reason?.trim() ?? '', at: nowStamp(), by: a.by, status: 'open' }
+    let next = { ...state, requests: [...state.requests, request] }
+    const what = a.kind === 'cancel' ? 'asked to cancel' : 'asked to postpone'
+    next = pushToPlanner(next, `${a.by} ${what}`, `${event.name}${request.reason ? `: “${request.reason}”` : ''}`, `/app/events/${event.id}/${a.kind === 'cancel' ? 'cancel' : 'reschedule'}`)
+    return withToast(withLog(next, event.id, `Client ${what}`), `Sent to ${state.business.name}. They'll reply within one business day.`)
+  },
+  'request/close': (state, a) => ({ ...state, requests: updateById(state.requests, a.requestId, { status: 'closed' }) }),
+
+  // ---- Co-host (CL-3.4): a partner or parent gets the same or limited access ----
+  'client/inviteCoHost': (state, a) => {
+    const client = state.clients.find((c) => c.id === a.clientId)
+    const next = { ...state, clients: updateById(state.clients, client.id, (c) => ({ coHosts: [...(c.coHosts ?? []), { name: a.name.trim(), email: a.email.trim(), access: a.access, invitedAt: nowStamp() }] })) }
+    return withToast(withMessage(next, {
+      type: 'email', to: a.email.trim(), from: state.business.name, subject: `${firstName(client.name)} invited you to plan together`,
+      body: `${client.name} added you as a co-host${a.access === 'limited' ? ' (guests and messages only)' : ''}. No password needed.`,
+      link: { label: 'Open the portal', to: '/portal', role: 'client', clientId: client.id },
+    }), `Invite sent to ${a.name.trim()}`)
+  },
+
+  // Client ticks off their own to-do (Portal › Home)
+  'task/clientDone': (state, a) => {
+    const task = state.tasks.find((t) => t.id === a.taskId)
+    if (!task || task.assignee !== 'client') return state
+    const next = { ...state, tasks: updateById(state.tasks, task.id, { done: true, doneAt: nowStamp() }) }
+    return pushToPlanner(next, `${a.by} finished a to-do`, task.title, `/app/events/${task.eventId}/tasks`)
   },
 
   // ---- Reschedule (PL-3.6): every open task and unpaid payment shifts by the same number of days ----
@@ -289,6 +338,7 @@ export const hubActions = {
         site: e.site?.rsvpCutoff ? { ...e.site, rsvpCutoff: clamp(shiftDay(e.site.rsvpCutoff, delta)) } : e.site,
       })),
       leads: event.leadId ? updateById(state.leads, event.leadId, { eventDate: a.date }) : state.leads,
+      requests: (state.requests ?? []).map((r) => (r.eventId === event.id ? { ...r, status: 'closed' } : r)),
       tasks: state.tasks.map((t) => (t.eventId === event.id && !t.done ? { ...t, due: clamp(shiftDay(t.due, delta)) } : t)),
       invoices: state.invoices.map((i) => (i.eventId === event.id ? {
         ...i, installments: i.installments.map((p) => (p.paidAt || p.voided ? p : { ...p, dueDate: clamp(shiftDay(p.dueDate, delta)) })),
@@ -311,6 +361,7 @@ export const hubActions = {
       ...state,
       events: updateById(state.events, event.id, { status: 'cancelled', cancelledAt: nowStamp(), cancelReason: a.reason ?? null }),
       leads: event.leadId ? updateById(state.leads, event.leadId, { hold: null }) : state.leads,
+      requests: (state.requests ?? []).map((r) => (r.eventId === event.id ? { ...r, status: 'closed' } : r)),
       tasks: state.tasks.map((t) => (t.eventId === event.id && !t.done ? { ...t, removed: true } : t)),
       appointments: state.appointments.filter((x) => x.to !== `/app/events/${event.id}`),
       invoices: state.invoices.map((i) => (i.eventId === event.id ? {

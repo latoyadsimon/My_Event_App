@@ -244,7 +244,9 @@ export const bookingActions = {
     if (!due) return state
     const event = state.events.find((e) => e.id === invoice.eventId)
     const client = clientOf(state, event.clientId)
-    const body = state.business.templates.messages.paymentReminder
+    const body = invoice.options?.autopay
+      ? `Hi ${firstName(client.name)}, heads up: we'll charge your card on file ${formatMoney(due.amountCents)} for ${event.name} on ${formatWeekdayDay(due.dueDate)}. Nothing to do.`
+      : state.business.templates.messages.paymentReminder
       .replace('{first_name}', firstName(client.name)).replace('{amount}', formatMoney(due.amountCents))
       .replace('{event}', event.name).replace('{due_date}', formatWeekdayDay(due.dueDate)).replace('{pay_link}', '')
       .trim()

@@ -6,12 +6,18 @@ describe('CSV import (PL-5.1)', () => {
   })
 
   it('matches column names loosely and keeps allergies', () => {
-    const { rows, skipped } = parseGuestsCsv('Household,E-mail,+1,Group,Dietary\nRivera family,r@x.com,3,family;VIP,Nuts\n,,,,\nChen household,,2,,')
-    expect(skipped).toBe(0)
+    const { rows, problems } = parseGuestsCsv('Household,E-mail,+1,Group,Dietary\nRivera family,r@x.com,3,family;VIP,Nuts\n,,,,\nChen household,,2,,')
+    expect(problems).toEqual([])
     expect(rows).toEqual([
       { name: 'Rivera family', email: 'r@x.com', phone: '', plusOnes: 3, tags: ['family', 'VIP'], allergies: 'Nuts', notes: '' },
       { name: 'Chen household', email: '', phone: '', plusOnes: 2, tags: [], allergies: '', notes: '' },
     ])
+  })
+
+  it('flags rows to fix: no name, or an email that looks wrong (CL-3.4)', () => {
+    const { rows, problems } = parseGuestsCsv('Name,Email\nAna,ana@gmail.com\n,orphan@x.com\nBob,bob@gmail')
+    expect(rows.map((r) => r.name)).toEqual(['Ana'])
+    expect(problems.map((p) => [p.line, p.reason])).toEqual([[3, 'Missing name'], [4, 'Email looks wrong']])
   })
 
   it('explains a missing name column', () => {

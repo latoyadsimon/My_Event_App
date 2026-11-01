@@ -339,7 +339,7 @@ export function createSeedState() {
   return structuredClone({
     business, team, packages, addons, clients, leads, proposals, contracts, events: events.map(withPlanning), invoices, tasks, appointments,
     outbox: [...outbox].sort((a, b) => b.at.localeCompare(a.at)),
-    guests, files, approvals, questionnaires, threads,
+    guests, files, approvals, questionnaires, threads, requests: [],
   })
 }
 
@@ -362,6 +362,6 @@ export function createNewBusinessState({ ownerName, businessName, email }) {
       permissions: { see_budgets: true, see_profit: true, take_payments: true, edit_vendors: true },
     }],
     packages: [], addons: [], clients: [], leads: [], proposals: [], contracts: [], events: [], invoices: [], tasks: [], appointments: [], outbox: [],
-    guests: [], files: [], approvals: [], questionnaires: [], threads: [],
+    guests: [], files: [], approvals: [], questionnaires: [], threads: [], requests: [],
   }
 }

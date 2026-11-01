@@ -176,6 +176,11 @@ export const questionnaires = [
 
 // ---- Message threads (PL-4.6): one with the client, one per vendor ----
 export const threads = [
+  // Ana can message before booking (CL-4.5): the thread is keyed by the lead id, which becomes the event id
+  { id: 'th-rivera-client', eventId: 'rivera', kind: 'client', name: 'Ana Rivera (client)', shared: true, messages: [
+    { id: 'msg-r1', from: 'client', author: 'Ana', at: '2026-11-03T20:16:00', text: 'Hi LaToya! Just sent a change request: could the photo magnets be optional? Everything else looks perfect.' },
+    { id: 'msg-r2', from: 'planner', author: 'LaToya', at: '2026-11-04T11:03:00', text: 'Done! v2 is in your inbox. Photo magnets and the extra karaoke hour are now optional, so you can tick them if you want.' },
+  ] },
   { id: 'th-acme-client', eventId: 'acme', kind: 'client', name: 'Priya Shah (client)', shared: true, messages: [
     { id: 'msg1', from: 'client', author: 'Priya', at: '2026-11-02T09:15:00', text: 'Hi LaToya! Can we add a few more vegetarian options to the menu?' },
     { id: 'msg2', from: 'planner', author: 'LaToya', at: '2026-11-02T10:02:00', text: 'Absolutely. I asked the caterer for a mushroom risotto. Menu v2 is in your Approvals.' },

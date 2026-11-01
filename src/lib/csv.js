@@ -38,7 +38,13 @@ const COLUMNS = {
   notes: ['notes', 'note', 'comments'],
 }
 
-/** CSV text → { rows: [{ name, email, phone, plusOnes, tags, allergies, notes }], skipped } */
+const looksLikeEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)
+
+/**
+ * CSV text → { rows, problems }
+ *   rows:     [{ name, email, phone, plusOnes, tags, allergies, notes }] ready to import
+ *   problems: the same shape plus { line, reason } for rows to fix first (no name, bad email)
+ */
 export function parseGuestsCsv(text) {
   const [header, ...body] = parseCsv(text)
   if (!header) return { rows: [], skipped: 0, error: 'The file is empty.' }
@@ -48,19 +54,28 @@ export function parseGuestsCsv(text) {
     if (key && index[key] == null) index[key] = i
     if (key === 'allergies' && index.allergies !== i) (index.extraAllergies ??= []).push(i)
   })
-  if (index.name == null) return { rows: [], skipped: body.length, error: 'We couldn’t find a "Name" column. Add one to the first row and try again.' }
-  let skipped = 0
+  if (index.name == null) return { rows: [], problems: [], error: 'We couldn’t find a "Name" column. Add one to the first row and try again.' }
   const rows = []
-  for (const r of body) {
+  const problems = []
+  body.forEach((r, i) => {
     const get = (key) => (index[key] == null ? '' : r[index[key]] ?? '')
-    if (!get('name')) { skipped++; continue }
-    const allergies = [get('allergies'), ...(index.extraAllergies ?? []).map((i) => r[i])].filter(Boolean).join('; ')
-    rows.push({
+    const allergies = [get('allergies'), ...(index.extraAllergies ?? []).map((k) => r[k])].filter(Boolean).join('; ')
+    const row = {
       name: get('name'), email: get('email'), phone: get('phone'),
       plusOnes: Number.parseInt(get('plusOnes'), 10) || 0,
       tags: get('tags').split(/[;|]/).map((t) => t.trim()).filter(Boolean),
       allergies, notes: get('notes'),
-    })
-  }
-  return { rows, skipped }
+    }
+    const reason = guestRowProblem(row)
+    if (reason) problems.push({ ...row, line: i + 2, reason })
+    else rows.push(row)
+  })
+  return { rows, problems }
+}
+
+/** Why a row can't be imported yet, or null if it's fine. */
+export function guestRowProblem(row) {
+  if (!row.name.trim()) return 'Missing name'
+  if (row.email && !looksLikeEmail(row.email)) return 'Email looks wrong'
+  return null
 }

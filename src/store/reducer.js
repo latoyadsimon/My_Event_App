@@ -48,6 +48,9 @@ export function reducer(state, action) {
       // clientId: which client the portal shows (a proposal email for Linh opens Linh's portal)
       return { ...state, ui: { ...state.ui, role: action.role, memberId: action.memberId ?? null, ...(action.clientId && { clientId: action.clientId }) } }
 
+    case 'ui/tourSeen':   // the client portal's first-visit tour (CL-2.5), once per client
+      return { ...state, ui: { ...state.ui, toursSeen: [...(state.ui.toursSeen ?? []), action.clientId] } }
+
     // ---- Demo Outbox: stands in for email / SMS / push until the backend exists ----
     case 'outbox/send':
       return withMessage(state, action.message)

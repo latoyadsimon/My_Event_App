@@ -119,6 +119,10 @@ export function getDashboard(state) {
     const client = getClient(state, l.clientId)
     alerts.push({ id: `lead-${l.id}`, tone: 'info', text: `New lead: ${client?.name ?? l.title} · ${typeWords(l.eventType)}`, to: `/app/leads/${l.id}` })
   }
+  for (const r of (state.requests ?? []).filter((x) => x.status === 'open')) {
+    const event = eventById[r.eventId]
+    alerts.unshift({ id: `req-${r.id}`, tone: 'warning', text: `${event.name}: client asked to ${r.kind}`, action: r.kind === 'cancel' ? 'Review' : 'Change date', to: `/app/events/${r.eventId}/${r.kind === 'cancel' ? 'cancel' : 'reschedule'}` })
+  }
   const lateByEvent = {}
   for (const t of openTasks.filter((x) => daysUntil(x.due) < 0)) lateByEvent[t.eventId] = (lateByEvent[t.eventId] ?? 0) + 1
   for (const [eventId, n] of Object.entries(lateByEvent)) {

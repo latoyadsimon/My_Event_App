@@ -9,7 +9,7 @@
 // When payments aren't connected, only check/cash instructions show.
 // =====================================================================
 import { useEffect, useRef, useState } from 'react'
-import { Navigate } from 'react-router-dom'
+import { Navigate, useSearchParams } from 'react-router-dom'
 import { useStore } from '../../../store/StoreContext'
 import { getBookingStep, getPortal, getInvoiceForEvent, nextDue, installmentStatus } from '../../../store/selectors'
 import { formatMoney } from '../../../lib/money'
@@ -27,6 +27,11 @@ export default function PortalPay() {
   const { event, client } = getPortal(state)
   const invoice = event && getInvoiceForEvent(state, event.id)
   const due = nextDue(invoice)
+  const [params] = useSearchParams()
+  // ?all=1 → pay the full balance (every unpaid payment) in one go (CL-4.2)
+  const unpaid = invoice?.installments.filter((p) => !p.paidAt && !p.voided) ?? []
+  const payAll = params.get('all') === '1' && unpaid.length > 1
+  const amountCents = payAll ? unpaid.reduce((sum, p) => sum + p.amountCents, 0) : due?.amountCents
 
   const [method, setMethod] = useState('card')
   const [card, setCard] = useState({ number: '', exp: '', cvc: '' })
@@ -84,19 +89,19 @@ export default function PortalPay() {
         return
       }
       const label = method === 'card' ? `Visa ·${card.number.replace(/\D/g, '').slice(-4)}` : METHODS.find(([id]) => id === method)[1]
-      dispatch({ type: 'payment/succeeded', invoiceId: invoice.id, installmentId: due.id, method: label, autopay })
-      setPaid({ amountCents: due.amountCents, method: methodLabel, isDeposit, at: nowStamp() })
+      for (const p of payAll ? unpaid : [due]) dispatch({ type: 'payment/succeeded', invoiceId: invoice.id, installmentId: p.id, method: label, autopay })
+      setPaid({ amountCents, method: methodLabel, isDeposit, at: nowStamp() })
     }, 600)
   }
 
   return (
     <>
-      <PageHeader title={isDeposit ? 'Pay your deposit' : 'Make a payment'} />
+      <PageHeader title={isDeposit ? 'Pay your deposit' : payAll ? 'Pay your full balance' : 'Make a payment'} />
       {booking.step === 'pay' && <BookingSteps current="pay" />}
 
       <Card>
-        <p className="muted">{isDeposit ? 'Deposit due today' : `${due.label} · due ${formatDayShort(due.dueDate)}`}</p>
-        <p className={styles.bigAmount}>{formatMoney(due.amountCents)}</p>
+        <p className="muted">{isDeposit ? 'Deposit due today' : payAll ? `Everything left · ${unpaid.length} payments` : `${due.label} · due ${formatDayShort(due.dueDate)}`}</p>
+        <p className={styles.bigAmount}>{formatMoney(amountCents)}</p>
         <div className={styles.tableWrap}>
           <table className={styles.schedule}>
             <thead><tr><th scope="col">Payment</th><th scope="col">Due</th><th scope="col" className={styles.num}>Amount</th><th scope="col"><span className="visually-hidden">Status</span></th></tr></thead>
@@ -152,7 +157,7 @@ export default function PortalPay() {
               <span>Turn on autopay for future payments</span>
             </label>
             <p className="muted">Your card details go straight to {state.business.paymentProvider === 'square' ? 'Square' : 'Stripe'}. {state.business.name} never sees them.</p>
-            <Button type="submit" variant="primary" block busy={busy} busyLabel="Processing…">Pay {formatMoney(due.amountCents)}</Button>
+            <Button type="submit" variant="primary" block busy={busy} busyLabel="Processing…">Pay {formatMoney(amountCents)}</Button>
           </form>
         )}
     </>

@@ -6,7 +6,7 @@
 // =====================================================================
 import { useEffect, useRef, useState } from 'react'
 import { useStore } from '../../store/StoreContext'
-import { parseGuestsCsv } from '../../lib/csv'
+import { guestRowProblem, parseGuestsCsv } from '../../lib/csv'
 import { Button, Dialog, Field, Notice } from '../ui'
 import styles from './GuestTools.module.css'
 
@@ -46,9 +46,16 @@ export function ImportDialog({ open, onClose, eventId, addedBy = 'planner' }) {
   const { dispatch } = useStore()
   const [text, setText] = useState('')
   const [progress, setProgress] = useState(null)   // 0–100 while importing
+  const [fixes, setFixes] = useState({})           // line → { name, email } typed to fix a flagged row
   const timer = useRef(null)
   useEffect(() => () => clearTimeout(timer.current), [])
   const parsed = text.trim() ? parseGuestsCsv(text) : null
+  // Flagged rows the person has fixed inline join the import; the rest are left out
+  const fixedRows = (parsed?.problems ?? []).map((p) => ({ ...p, ...fixes[p.line] })).filter((p) => !guestRowProblem(p))
+  const toRow = (p) => ({ name: p.name, email: p.email, phone: p.phone, plusOnes: p.plusOnes, tags: p.tags, allergies: p.allergies, notes: p.notes })
+  const ready = parsed ? [...parsed.rows, ...fixedRows.map(toRow)] : []
+  const stillWrong = (parsed?.problems ?? []).filter((p) => guestRowProblem({ ...p, ...fixes[p.line] }))
+  const fix = (line, key) => (e) => setFixes((f) => ({ ...f, [line]: { ...f[line], [key]: e.target.value } }))
 
   const readFile = async (e) => {
     const file = e.target.files?.[0]
@@ -56,10 +63,10 @@ export function ImportDialog({ open, onClose, eventId, addedBy = 'planner' }) {
   }
 
   const start = () => {
-    const rows = parsed.rows
+    const rows = ready
     if (rows.length <= CHUNK) {
       dispatch({ type: 'guest/import', eventId, rows, addedBy })
-      setText(''); onClose()
+      setText(''); setFixes({}); onClose()
       return
     }
     // Big list: import in chunks so the screen stays responsive, with a progress bar
@@ -77,8 +84,8 @@ export function ImportDialog({ open, onClose, eventId, addedBy = 'planner' }) {
 
   return (
     <Dialog open={open} title="Import guests" onClose={onClose} wide
-      actions={<Button variant="primary" disabled={!parsed?.rows.length || progress !== null} onClick={start}>
-        {parsed?.rows.length ? `Import ${parsed.rows.length} household${parsed.rows.length === 1 ? '' : 's'}` : 'Import'}
+      actions={<Button variant="primary" disabled={!ready.length || progress !== null} onClick={start}>
+        {ready.length ? `Import ${ready.length} household${ready.length === 1 ? '' : 's'}` : 'Import'}
       </Button>}>
       <p className="muted">From Excel or Google Sheets: save as CSV. The first row names the columns. Only a Name column is required; allergies are always kept.</p>
       <label className={styles.file}>
@@ -87,12 +94,27 @@ export function ImportDialog({ open, onClose, eventId, addedBy = 'planner' }) {
       </label>
       <Field label="…or paste it here" as="textarea" rows={6} value={text} onChange={(e) => setText(e.target.value)} placeholder={EXAMPLE} />
       {parsed?.error && <Notice tone="danger">{parsed.error}</Notice>}
-      {parsed?.rows.length > 0 && (
+      {ready.length > 0 && (
         <p className={styles.preview}>
-          Ready: <strong>{parsed.rows.length}</strong> household{parsed.rows.length === 1 ? '' : 's'}
-          {parsed.rows.filter((r) => r.allergies).length > 0 && <> · {parsed.rows.filter((r) => r.allergies).length} with allergies</>}
-          {parsed.skipped > 0 && <> · {parsed.skipped} rows without a name skipped</>}
+          Ready: <strong>{ready.length}</strong> household{ready.length === 1 ? '' : 's'}
+          {ready.filter((r) => r.allergies).length > 0 && <> · {ready.filter((r) => r.allergies).length} with allergies</>}
         </p>
+      )}
+      {parsed?.problems.length > 0 && (
+        <div className={styles.problems}>
+          <p><strong>{stillWrong.length ? `${stillWrong.length} row${stillWrong.length === 1 ? '' : 's'} to fix` : 'All fixed'}</strong> · rows left as they are won’t be imported.</p>
+          {parsed.problems.map((p) => {
+            const row = { ...p, ...fixes[p.line] }
+            const problem = guestRowProblem(row)
+            return (
+              <div key={p.line} className={styles.problem}>
+                <span className={problem ? styles.bad : styles.good}>Row {p.line}: {problem ?? 'Fixed ✓'}</span>
+                <Field label={`Row ${p.line} name`} value={row.name} onChange={fix(p.line, 'name')} />
+                <Field label={`Row ${p.line} email`} value={row.email} onChange={fix(p.line, 'email')} />
+              </div>
+            )
+          })}
+        </div>
       )}
       {progress !== null && (
         <div className={styles.progress}>

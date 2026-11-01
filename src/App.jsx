@@ -53,6 +53,9 @@ import Events from './pages/planner/booking/Events'
 import PortalProposal from './pages/client/portal/PortalProposal'
 import PortalContract from './pages/client/portal/PortalContract'
 import PortalPay from './pages/client/portal/PortalPay'
+import PortalHome from './pages/client/portal/PortalHome'
+import { PortalQuestionnaire, PortalMoodBoard, PortalApprovals, PortalMessages } from './pages/client/portal/PortalPlanning'
+import { PortalPayments, PortalChange, PortalGuests } from './pages/client/portal/PortalMoney'
 import InquiryForm from './pages/client/InquiryForm'
 import BookingPage from './pages/client/BookingPage'
 import SettingsLayout from './pages/planner/settings/SettingsLayout'
@@ -131,17 +134,17 @@ export default function App() {
 
         {/* ---------- Client portal ---------- */}
         <Route path="portal" element={<RequireRole role="client"><PortalLayout /></RequireRole>}>
-          <Route index element={<Planned id="portalHome" />} />
+          <Route index element={<PortalHome />} />
           <Route path="proposal" element={<PortalProposal />} />
           <Route path="contract" element={<PortalContract />} />
           <Route path="pay" element={<PortalPay />} />
-          <Route path="questionnaire/:questionnaireId" element={<Planned id="portalQuestionnaire" />} />
-          <Route path="mood-board" element={<Planned id="portalMoodBoard" />} />
-          <Route path="approvals" element={<Planned id="portalApprovals" />} />
-          <Route path="payments" element={<Planned id="portalPayments" />} />
-          <Route path="change-request" element={<Planned id="portalChange" />} />
-          <Route path="guests" element={<Planned id="portalGuests" />} />
-          <Route path="messages" element={<Planned id="portalMessages" />} />
+          <Route path="questionnaire/:questionnaireId" element={<PortalQuestionnaire />} />
+          <Route path="mood-board" element={<PortalMoodBoard />} />
+          <Route path="approvals" element={<PortalApprovals />} />
+          <Route path="payments" element={<PortalPayments />} />
+          <Route path="change-request" element={<PortalChange />} />
+          <Route path="guests" element={<PortalGuests />} />
+          <Route path="messages" element={<PortalMessages />} />
         </Route>
 
         {/* ---------- Guests (no account) ---------- */}

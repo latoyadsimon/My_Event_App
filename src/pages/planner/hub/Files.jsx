@@ -8,36 +8,11 @@
 import { useState } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { useStore } from '../../../store/StoreContext'
-import { formatDateTime, formatDayShort } from '../../../lib/clock'
+import { formatDayShort } from '../../../lib/clock'
 import { isHexColor } from '../../../lib/brand'
 import { Button, Card, Dialog, EmptyState, Field, Icon } from '../../../components/ui'
+import BoardItem from '../../../components/planning/BoardItem'
 import styles from './hub.module.css'
-
-/** One mood-board item, shown the same way here and in the client's portal. */
-export function BoardItem({ item, children }) {
-  return (
-    <figure className={styles.boardItem}>
-      {item.kind === 'image' && <img src={item.url} alt={item.name} className={styles.boardImage} />}
-      {item.kind === 'color' && (
-        <div className={styles.palette} role="img" aria-label={`Colors: ${item.colors.join(', ')}`}>
-          {item.colors.map((c) => <span key={c} style={{ background: c }} />)}
-        </div>
-      )}
-      {item.kind === 'link' && <a href={item.url} target="_blank" rel="noreferrer" className={styles.boardLink}><Icon name="external" size={16} /> Open link<span className="visually-hidden"> (new tab)</span></a>}
-      {item.kind === 'note' && <p className={styles.boardNote}>{item.text}</p>}
-      <figcaption>
-        <strong>{item.name}</strong>
-        <span className="muted"> · {item.addedBy}, {formatDayShort(item.addedAt)}</span>
-      </figcaption>
-      {item.comments.length > 0 && (
-        <ul role="list" className={styles.comments}>
-          {item.comments.map((c, i) => <li key={i}><strong>{c.by}:</strong> {c.text} <span className="muted">{formatDateTime(c.at)}</span></li>)}
-        </ul>
-      )}
-      {children}
-    </figure>
-  )
-}
 
 function AddToBoard({ eventId, open, onClose }) {
   const { dispatch } = useStore()

@@ -165,3 +165,24 @@ describe('next deadlines (PL-4.2)', () => {
     expect(nextDeadlines(initialState(), acme(initialState())).map((d) => d.text)).toEqual(['Confirm final headcount with Priya', 'Approve the dinner menu', 'Book the DJ'])
   })
 })
+
+describe('Phase 5: client-side actions', () => {
+  it('CL-4.1 autopay clients get "we\'ll charge your card" instead of a pay link', () => {
+    const s = run(initialState(), { type: 'invoice/sendReminder', invoiceId: 'acme' })
+    expect(s.outbox[0].body).toMatch(/we'll charge your card on file \$3,600.00 for Acme holiday party on Sat, Nov 28/)
+  })
+
+  it('CL-4.4 a cancel/postpone request becomes a Dashboard alert; rescheduling closes it', async () => {
+    const { getDashboard } = await import('./selectors')
+    let s = run(initialState(), { type: 'request/submit', eventId: 'patel', kind: 'postpone', dates: ['2027-03-10'], by: 'Raj Patel' })
+    expect(getDashboard(s).alerts[0]).toMatchObject({ text: 'Patel family reunion: client asked to postpone', to: '/app/events/patel/reschedule' })
+    s = run(s, { type: 'event/reschedule', eventId: 'patel', date: '2027-03-10' })
+    expect(getDashboard(s).alerts.some((a) => a.id.startsWith('req-'))).toBe(false)
+  })
+
+  it('CL-4.5 the client can message before booking (thread keyed by the lead)', () => {
+    const s = run(initialState(), { type: 'thread/postClient', eventId: 'nguyen', author: 'Linh', authorFull: 'Linh Nguyen', text: 'Do you do balloon arches?' })
+    expect(s.threads.at(-1)).toMatchObject({ eventId: 'nguyen', kind: 'client' })
+    expect(s.outbox[0].link.to).toBe('/app/leads/nguyen')
+  })
+})

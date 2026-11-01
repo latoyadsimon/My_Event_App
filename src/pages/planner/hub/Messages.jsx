@@ -8,51 +8,10 @@ import { useState } from 'react'
 import { useOutletContext, useSearchParams } from 'react-router-dom'
 import { useStore } from '../../../store/StoreContext'
 import { getMe } from '../../../store/selectors'
-import { formatDateTime } from '../../../lib/clock'
 import { dollarsToCents } from '../../../lib/validate'
-import { Button, Dialog, EmptyState, Field, Icon, Notice } from '../../../components/ui'
+import { Button, Dialog, EmptyState, Field, Notice } from '../../../components/ui'
+import Conversation from '../../../components/planning/Conversation'
 import styles from './hub.module.css'
-
-/** The conversation itself: shared with Portal › Messages. */
-export function Conversation({ thread, me, onSend, sendLabel = 'Send', extra }) {
-  const [text, setText] = useState('')
-  const [file, setFile] = useState(null)
-  const send = (e) => {
-    e.preventDefault()
-    if (!text.trim()) return
-    onSend(text, file?.name)
-    setText(''); setFile(null)
-  }
-  return (
-    <div className={styles.conversation}>
-      <ol role="list" className={styles.messages} aria-label={`Messages with ${thread.name}`}>
-        {thread.messages.length === 0 && <li className="muted">No messages yet.</li>}
-        {thread.messages.map((m) => (
-          <li key={m.id} className={m.from === me ? styles.mine : styles.theirs}>
-            <p className={styles.bubbleMeta}>{m.author} · {formatDateTime(m.at)}</p>
-            <p className={styles.bubble}>{m.text}</p>
-            {m.attachment && <p className={styles.attachment}><Icon name="proposal" size={14} /> {m.attachment}</p>}
-            {m.delivery?.failed?.map((f) => (
-              <p key={f.name} className={styles.failed}>⚠ Not delivered to {f.name} by {f.channel} ({f.reason})</p>
-            ))}
-          </li>
-        ))}
-      </ol>
-      <form className={styles.composer} onSubmit={send}>
-        <Field label="Message" as="textarea" rows={2} value={text} onChange={(e) => setText(e.target.value)} />
-        <div className="cluster">
-          <label className={styles.uploadButton}>
-            <Icon name="proposal" size={14} /> {file ? file.name : 'Attach a file'}
-            <input type="file" className="visually-hidden" onChange={(e) => setFile(e.target.files?.[0] ?? null)} />
-          </label>
-          {extra}
-          <span className="spacer" />
-          <Button type="submit" variant="primary" disabled={!text.trim()}>{sendLabel}</Button>
-        </div>
-      </form>
-    </div>
-  )
-}
 
 export default function Messages() {
   const { event } = useOutletContext()
