@@ -12,6 +12,7 @@ import BrandingFields from '../setup/BrandingFields'
 import PackagesManager from '../setup/PackagesManager'
 import TeamManager from '../setup/TeamManager'
 import TemplatesEditor from '../setup/TemplatesEditor'
+import EventTemplates from '../setup/EventTemplates'
 import { CalendarConnect, PaymentsConnect } from '../setup/ConnectCards'
 import styles from '../setup/setup.module.css'
 
@@ -64,7 +65,7 @@ export const PackagesSettings = () => <PackagesManager />
 export const PaymentsSettings = () => <Card title="Payments"><PaymentsConnect /></Card>
 export const CalendarSettings = () => <Card title="Calendar sync"><CalendarConnect /></Card>
 export const TeamSettings = () => <TeamManager />
-export const TemplatesSettings = () => <TemplatesEditor />
+export const TemplatesSettings = () => <div className="stack"><TemplatesEditor /><EventTemplates /></div>
 
 /** Everything in this business as one JSON file (data portability). */
 export function ExportSettings() {

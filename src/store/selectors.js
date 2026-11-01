@@ -14,6 +14,7 @@ export * from './selectorsKaraoke'
 export * from './selectorsBooth'
 export * from './selectorsGiving'
 export * from './selectorsSeating'
+export * from './selectorsGrow'
 
 export const getLead = (state, id) => state.leads.find((l) => l.id === id)
 export const getEvent = (state, id) => state.events.find((e) => e.id === id)

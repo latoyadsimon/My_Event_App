@@ -134,3 +134,8 @@ fieldset.panel > legend + * { clear: both; }
 .miniMap { position: relative; width: 100%; max-width: 30rem; border: 1.5px solid var(--theme-border); border-radius: var(--radius-sm); background: var(--theme-bg); }
 .mapThing, .mapHere { position: absolute; display: grid; place-items: center; font-size: 10px; font-weight: 700; border: 1px solid var(--theme-border); background: var(--theme-surface); color: var(--theme-muted); }
 .mapHere { background: var(--theme-accent); color: var(--theme-on-accent); border-color: var(--theme-accent); z-index: 1; box-shadow: 0 0 0 4px color-mix(in srgb, var(--theme-accent) 35%, transparent); }
+
+/* One-question survey (GU-6.2) */
+.scale { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--space-2); }
+.scale .amount[aria-checked='true'] { background: var(--theme-accent); color: var(--theme-on-accent); border-color: var(--theme-accent); }
+.scaleEnds { display: flex; justify-content: space-between; font-size: var(--text-sm); color: var(--theme-muted); }

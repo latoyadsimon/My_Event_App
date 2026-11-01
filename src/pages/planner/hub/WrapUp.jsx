@@ -9,11 +9,11 @@
 import { useState } from 'react'
 import { Link, useOutletContext } from 'react-router-dom'
 import { useStore } from '../../../store/StoreContext'
-import { can, closeOut, eventReport, getInvoiceForEvent, installmentStatus } from '../../../store/selectors'
+import { can, closeOut, eventReport, feedbackFor, getInvoiceForEvent, installmentStatus } from '../../../store/selectors'
 import { formatDayShort, formatDateTime } from '../../../lib/clock'
 import { formatMoney } from '../../../lib/money'
 import { dollarsToCents } from '../../../lib/validate'
-import { Button, Card, ConfirmDialog, Field, Icon, Kpis, Notice, StatusChip } from '../../../components/ui'
+import { Button, Card, ConfirmDialog, Field, Icon, Kpis, Notice, Stars, StatusChip } from '../../../components/ui'
 import styles from './hub.module.css'
 
 function FinalInvoice({ invoice }) {
@@ -114,6 +114,8 @@ export default function WrapUp() {
           : <Button onClick={() => dispatch({ type: 'guests/thankYouGallery', eventId: event.id })}>Send thank-you{event.booth?.enabled ? ' + gallery link' : ''}</Button>}
       </Card>
 
+      <Feedback event={event} />
+
       <Card title="Event report">
         <Kpis label="Report numbers" items={[
           ...(money ? [{ label: 'Revenue', value: formatMoney(r.priceCents), note: `${formatMoney(r.collectedCents)} collected` }] : []),
@@ -138,5 +140,26 @@ export default function WrapUp() {
         The status moves to Closed and the event moves to Past on the Events list. The report stays here.
       </ConfirmDialog>
     </div>
+  )
+}
+
+/** PL-8.4 (P4): ask the client for a review (Google, Yelp, The Knot, WeddingWire) and guests for one score. */
+function Feedback({ event }) {
+  const { state, dispatch } = useStore()
+  const f = feedbackFor(state, event.id)
+  const memorial = event.type === 'memorial'
+  return (
+    <Card title="Reviews and feedback">
+      {f.client
+        ? <div><Stars n={f.client.score} /> <span>“{f.client.comment}” · {f.client.name}</span></div>
+        : event.reviewRequestedAt
+          ? <p className="muted">Review request sent {formatDayShort(event.reviewRequestedAt)}.</p>
+          : <Button onClick={() => dispatch({ type: 'review/request', eventId: event.id })}>{memorial ? 'Ask the family how we did' : 'Send the review request'}</Button>}
+      <p className="muted">{memorial ? 'For memorials we ask privately and never link to public review sites.' : 'Normally sent 3 days after the event, with links to Google, Yelp, The Knot and WeddingWire.'}</p>
+      {f.guests.length > 0
+        ? <p>Guests: <strong>{f.guestAverage} / 5</strong> from {f.guests.length} answer{f.guests.length === 1 ? '' : 's'}</p>
+        : event.surveySentAt ? <p className="muted">Guest survey sent {formatDayShort(event.surveySentAt)}.</p>
+          : <Button onClick={() => dispatch({ type: 'survey/send', eventId: event.id })}>Send the one-question guest survey</Button>}
+    </Card>
   )
 }

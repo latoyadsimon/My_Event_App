@@ -12,7 +12,7 @@ import { useStore } from '../store/StoreContext'
 import { getPortal } from '../store/selectors'
 
 const LOCK_NOTE = 'Unlocks after your deposit'
-const LOCKED_BEFORE_DEPOSIT = ['/portal', '/portal/guests', '/portal/mood-board', '/portal/approvals', '/portal/entertainment', '/portal/gallery', '/portal/thank-yous']
+const LOCKED_BEFORE_DEPOSIT = ['/portal', '/portal/guests', '/portal/mood-board', '/portal/approvals', '/portal/entertainment', '/portal/gallery', '/portal/thank-yous', '/portal/review']
 
 const ITEMS = [
   { to: '/portal', label: 'Home', icon: 'home', end: true },
@@ -36,6 +36,7 @@ export default function PortalLayout() {
   const at = () => menu.findIndex((x) => x.to === '/portal/approvals')
   if (event?.karaoke?.enabled || event?.booth?.enabled) menu.splice(at(), 0, { to: '/portal/entertainment', label: event.booth?.enabled && event.karaoke?.enabled ? 'Booth & karaoke' : event.booth?.enabled ? 'Photo booth' : 'Karaoke', icon: 'star' })
   if (['event_day', 'wrap_up', 'closed'].includes(event?.status)) menu.splice(at(), 0, { to: '/portal/gallery', label: 'Gallery', icon: 'image' }, { to: '/portal/thank-yous', label: 'Thank-yous', icon: 'check' })
+  if (['wrap_up', 'closed'].includes(event?.status)) menu.splice(at(), 0, { to: '/portal/review', label: 'Review', icon: 'star' })
   const items = menu.map((item) =>
     !unlocked && LOCKED_BEFORE_DEPOSIT.includes(item.to) ? { ...item, locked: true, lockNote: LOCK_NOTE } : item)
 

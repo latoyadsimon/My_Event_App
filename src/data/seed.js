@@ -23,6 +23,7 @@ import { songs, songRequests, defaultKaraoke, karaokeDetails } from './seedKarao
 import { photos, boothSessions, prints, recipes, defaultBooth, boothDetails } from './seedBooth'
 import { donations, bidders, bids, sponsors, defaultFund, defaultAuction, defaultPaddle, defaultSponsorship, givingDetails } from './seedGiving'
 import { tickets, waitlist, seats, avoid, defaultFloorPlan, defaultTicketing, seatingDetails, ticketingDetails } from './seedSeating'
+import { marketing, feedback } from './seedGrow'
 
 export const business = {
   id: 'bella-events',
@@ -50,6 +51,8 @@ export const business = {
   gearBufferDays: 1,                // gear isn't free again until a day after an event (cleaning, turnaround)
   alwaysBring: ALWAYS_BRING,        // on every pack list (PL-6.3)
   // The planner's own invitation looks, reusable on any event (PL-5.5)
+  quickbooks: null,                 // { connectedAt, lastSyncAt, invoices, payments } once connected (PL-9.1)
+  eventTemplates: [],               // events saved as templates (PL-9.3)
   inviteTemplates: [{ id: 'tpl-bella', name: 'Bella signature', design: { themeId: 'elegant-wedding', font: 'Playfair Display', accent: '#A3336A', photo: null, layout: 'classic', envelope: true, music: 'piano' } }],
   staffDressCode: 'All black, closed-toe shoes, name badge',   // on every call sheet (ST-3.1)
   // Contract template (PL-3.3): merge fields are filled from the accepted proposal
@@ -374,10 +377,11 @@ export const withPlanning = (event) => ({
 
 export function createSeedState() {
   return structuredClone({
-    business, team, packages, addons, clients, leads, proposals, contracts, events: events.map(withPlanning), invoices, tasks, appointments,
+    business, team, packages, addons, leads, proposals, contracts, events: events.map(withPlanning), invoices, tasks, appointments,
     outbox: [...outbox].sort((a, b) => b.at.localeCompare(a.at)),
     guests: guests.map((g) => ({ tableId: seats[g.id] ?? null, avoid: avoid[g.id] ?? [], ...g })), files, approvals, questionnaires, threads, requests: [],
-    vendors, eventVendors, timeline, budgetLines, equipment, kits, reservations, shifts, incidents: [], potluckSignups, volunteerSignups, songs, songRequests, photos, boothSessions, prints, recipes, donations, bidders, bids, sponsors, tickets, waitlist,
+    vendors, eventVendors, timeline, budgetLines, equipment, kits, reservations, shifts, incidents: [], potluckSignups, volunteerSignups, songs, songRequests, photos, boothSessions, prints, recipes, donations, bidders, bids, sponsors, tickets, waitlist, feedback,
+    clients: clients.map((c) => ({ ...c, marketing: marketing[c.id] ?? { optIn: false, dates: [], sent: [] } })),
   })
 }
 
@@ -392,7 +396,7 @@ export function createNewBusinessState({ ownerName, businessName, email }) {
     business: {
       ...structuredClone(business),
       id: slug, slug, name: businessName, initials, logo: null, email, phone: '', city: '', customDomain: '',
-      paymentProvider: null, calendarProvider: null, inquiryFormShared: false, inviteTemplates: [],
+      paymentProvider: null, calendarProvider: null, inquiryFormShared: false, inviteTemplates: [], eventTemplates: [], quickbooks: null,
       onboarding: { business: false, payments: false, packages: false, calendar: false, team: false, templates: false },
     },
     team: [{
@@ -401,6 +405,6 @@ export function createNewBusinessState({ ownerName, businessName, email }) {
     }],
     packages: [], addons: [], clients: [], leads: [], proposals: [], contracts: [], events: [], invoices: [], tasks: [], appointments: [], outbox: [],
     guests: [], files: [], approvals: [], questionnaires: [], threads: [], requests: [],
-    vendors: [], eventVendors: [], timeline: [], budgetLines: [], equipment: [], kits: [], reservations: [], shifts: [], incidents: [], potluckSignups: [], volunteerSignups: [], songs: structuredClone(songs), songRequests: [], photos: [], boothSessions: [], prints: [], recipes: [], donations: [], bidders: [], bids: [], sponsors: [], tickets: [], waitlist: [],
+    vendors: [], eventVendors: [], timeline: [], budgetLines: [], equipment: [], kits: [], reservations: [], shifts: [], incidents: [], potluckSignups: [], volunteerSignups: [], songs: structuredClone(songs), songRequests: [], photos: [], boothSessions: [], prints: [], recipes: [], donations: [], bidders: [], bids: [], sponsors: [], tickets: [], waitlist: [], feedback: [],
   }
 }

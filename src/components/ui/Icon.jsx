@@ -29,6 +29,7 @@ const PATHS = {
   close: 'M5 5l10 10M15 5L5 15',
   external: 'M11 3h6v6M17 3l-8 8M8 5H3v12h12v-5',
   sparkle: 'M10 2l1.6 5.4L17 9l-5.4 1.6L10 16l-1.6-5.4L3 9l5.4-1.6z',
+  chart: 'M3 17h14M5 14V9M9 14V5M13 14v-3M17 14V7',
 }
 
 export default function Icon({ name, size = 20, className }) {

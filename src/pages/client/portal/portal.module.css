@@ -102,3 +102,5 @@
 .inlineForm > * { flex: 1 1 10rem; }
 .inlineForm > button { flex: 0 0 auto; }
 .boothChoice { display: grid; gap: var(--space-4); grid-template-columns: minmax(0, 1fr) 9rem; align-items: start; }
+.reviewLinks { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); }
+.segmented button[aria-checked='true'] { background: var(--color-surface); color: var(--color-text); box-shadow: 0 0 0 1px var(--color-border); }

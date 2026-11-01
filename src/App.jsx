@@ -103,6 +103,9 @@ const GuestGallery = lazyPage(() => import('./pages/guest/Gallery'))
 const InvitationDesigner = lazyPage(() => import('./pages/planner/hub/InvitationDesigner'))
 const Fundraising = lazyPage(() => import('./pages/planner/hub/Fundraising'))
 const Seating = lazyPage(() => import('./pages/planner/hub/Seating'))
+const Grow = lazyPage(() => import('./pages/planner/Grow'))
+const GuestFeedback = lazyPage(() => import('./pages/guest/Feedback'))
+const PortalReview = lazyPage(() => import('./pages/client/portal/PortalReview'))
 const SeatingPrint = lazyPage(() => import('./pages/planner/hub/Seating'), 'SeatingPrint')
 const TicketsTab = lazyPage(() => import('./pages/planner/hub/TicketsTab'))
 const GuestTickets = lazyPage(() => import('./pages/guest/Tickets'), 'Tickets')
@@ -155,6 +158,7 @@ export default function App() {
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="calendar" element={<Calendar />} />
+          <Route path="grow" element={<Grow />} />
           <Route path="day-of/:eventId" element={<DayOf />} />
           <Route path="kj/:eventId" element={<KjConsole />} />
           <Route path="booth/:eventId" element={<BoothAttendant />} />
@@ -245,6 +249,7 @@ export default function App() {
           <Route path="entertainment" element={<PortalEntertainment />} />
           <Route path="gallery" element={<PortalGallery />} />
           <Route path="thank-yous" element={<PortalThankYous />} />
+          <Route path="review" element={<PortalReview />} />
         </Route>
 
         {/* ---------- Vendors (magic link, no account) ---------- */}
@@ -280,6 +285,7 @@ export default function App() {
           <Route path="sponsor" element={<Sponsor />} />
           <Route path="tickets" element={<GuestTickets />} />
           <Route path="seat" element={<FindSeat />} />
+          <Route path="feedback" element={<GuestFeedback />} />
         </Route>
         <Route path="i/:token" element={<GuestLayout />}>
           <Route index element={<Invitation />} />

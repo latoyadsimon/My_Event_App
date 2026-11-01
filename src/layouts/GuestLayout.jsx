@@ -61,7 +61,7 @@ export default function GuestLayout() {
   const site = event.site
   // Karaoke, magnet, auction and paddle pages open from QR codes at the venue; give and sponsor
   // links are shared with donors; the gallery checks its own access. None use the site's gate.
-  const atVenue = /\/(karaoke|magnet|gallery|give|auction|paddle|sponsor|tickets|seat)$/.test(pathname)
+  const atVenue = /\/(karaoke|magnet|gallery|give|auction|paddle|sponsor|tickets|seat|feedback)$/.test(pathname)
   const gate = !guest && !preview && !atVenue && (site.privacy === 'private' ? 'private' : site.privacy === 'password' && !unlocked ? 'password' : null)
 
   return (

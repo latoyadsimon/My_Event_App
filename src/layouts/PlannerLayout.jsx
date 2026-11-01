@@ -1,5 +1,6 @@
 // The planner workspace: Crowned wordmark, the business's name, and the
-// planner nav from the wireframes (Dashboard · Leads · Calendar · Events · Settings).
+// planner nav from the wireframes (Dashboard · Leads · Calendar · Events · Settings),
+// plus Grow (reports, marketing, reviews; product Phase 4).
 import { Link } from 'react-router-dom'
 import AppShell from '../components/shell/AppShell'
 import { Lockup } from '../components/brand/Brand'
@@ -12,6 +13,7 @@ const ITEMS = [
   { to: '/app/leads', label: 'Leads', icon: 'leads' },
   { to: '/app/calendar', label: 'Calendar', icon: 'calendar' },
   { to: '/app/events', label: 'Events', icon: 'events' },
+  { to: '/app/grow', label: 'Grow', icon: 'chart' },
   { to: '/app/settings', label: 'Settings', icon: 'settings' },
 ]
 

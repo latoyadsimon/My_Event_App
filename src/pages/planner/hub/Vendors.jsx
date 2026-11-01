@@ -28,7 +28,7 @@ const STATUS = { invited: ['warning', 'Invited'], confirmed: ['success', 'Confir
 function PayDialog({ ev, onClose }) {
   const { dispatch } = useStore()
   const [amount, setAmount] = useState((ev.balanceCents / 100).toFixed(2))
-  const [method, setMethod] = useState('Zelle')
+  const [method, setMethod] = useState('In the app (ACH)')
   const cents = dollarsToCents(amount) || 0
   return (
     <Dialog open title={`Record a payment to ${ev.vendor.name}`} onClose={onClose}
@@ -36,9 +36,10 @@ function PayDialog({ ev, onClose }) {
       <div className="stack">
         <Field label="Amount ($)" inputMode="decimal" value={amount} onChange={(e) => setAmount(e.target.value)} />
         <Field label="Paid by" as="select" value={method} onChange={(e) => setMethod(e.target.value)}>
+          <option value="In the app (ACH)">Pay in the app (ACH to their bank)</option>
           {[...MANUAL_PAYMENT_METHODS, 'Bank transfer'].map((m) => <option key={m}>{m}</option>)}
         </Field>
-        <p className="muted">{ev.vendor.name} gets a receipt.</p>
+        <p className="muted">{method === 'In the app (ACH)' ? `Sent to ${ev.vendor.payout || 'their bank on file'}; arrives in 1–2 business days. ` : 'Records a payment you made outside the app. '}{ev.vendor.name} gets a receipt.</p>
       </div>
     </Dialog>
   )

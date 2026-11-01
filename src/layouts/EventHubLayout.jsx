@@ -11,6 +11,7 @@ import { getTheme, isRespectful } from '../styles/themes'
 import { formatDay } from '../lib/clock'
 import { Button, StatusChip } from '../components/ui'
 import NotFound from '../pages/shared/NotFound'
+import EventCopyTools from '../components/planning/EventCopyTools'
 import styles from './layouts.module.css'
 
 const TABS = [
@@ -47,13 +48,16 @@ export default function EventHubLayout() {
             <StatusChip status={event.status} />
           </p>
         </div>
-        {!['cancelled', 'closed', 'wrap_up'].includes(event.status) && (
-          <div className={styles.hubActions}>
-            {dayOf && <Button size="small" variant="primary" to={`/app/day-of/${event.id}`}>Day-of Mode</Button>}
-            <Button size="small" to={`${base}/reschedule`}>Change date</Button>
-            <Button size="small" variant="danger" to={`${base}/cancel`}>Cancel event</Button>
-          </div>
-        )}
+        <div className={styles.hubActions}>
+          <EventCopyTools key={event.id} event={event} />
+          {!['cancelled', 'closed', 'wrap_up'].includes(event.status) && (
+            <>
+              {dayOf && <Button size="small" variant="primary" to={`/app/day-of/${event.id}`}>Day-of Mode</Button>}
+              <Button size="small" to={`${base}/reschedule`}>Change date</Button>
+              <Button size="small" variant="danger" to={`${base}/cancel`}>Cancel event</Button>
+            </>
+          )}
+        </div>
       </div>
 
       <nav className={styles.tabs} aria-label="Event sections">

@@ -22,17 +22,17 @@ describe('Phase 0: routes, shells and the demo', () => {
     renderApp('/app/leads')
     const nav = screen.getAllByRole('navigation', { name: 'Planner' })[0]
     const links = within(nav).getAllByRole('link').map((a) => a.textContent)
-    expect(links).toEqual(['Dashboard', 'Leads', 'Calendar', 'Events', 'Settings'])
+    expect(links).toEqual(['Dashboard', 'Leads', 'Calendar', 'Events', 'Grow', 'Settings'])
     expect(within(nav).getByRole('link', { name: 'Leads' })).toHaveAttribute('aria-current', 'page')
   })
 
-  it('puts 4 items plus "More (1)" in the phone bar, and keeps the current page visible', async () => {
+  it('puts 4 items plus "More (2)" in the phone bar, and keeps the current page visible', async () => {
     const { user } = renderApp('/app/settings/appearance')
     const bars = screen.getAllByRole('navigation', { name: 'Planner' })
     const phone = bars[1]
-    // Settings is 5th, so it takes the 4th slot and Events moves into More
+    // Settings is last, so it takes the 4th slot and Events + Grow move into More
     expect(within(phone).getByRole('link', { name: 'Settings' })).toHaveAttribute('aria-current', 'page')
-    const more = within(phone).getByRole('button', { name: 'More (1)' })
+    const more = within(phone).getByRole('button', { name: 'More (2)' })
     expect(more).toHaveAttribute('aria-expanded', 'false')
     await user.click(more)
     expect(more).toHaveAttribute('aria-expanded', 'true')
