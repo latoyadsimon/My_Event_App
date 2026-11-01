@@ -1,7 +1,7 @@
 // =====================================================================
 // One event's workspace: header (name, date · venue, status, Change date /
 // Cancel event, Day-of Mode in the final week) + tabs (Overview · [Wrap-up] · Tasks ·
-// Guests · Logistics · Money · Files · Messages).
+// Guests · Logistics · Fundraising · Money · Files · Messages).
 // Memorial events switch the whole hub to the respectful tone (style guide §13).
 // =====================================================================
 import { Link, NavLink, Outlet, useOutletContext, useParams } from 'react-router-dom'
@@ -18,6 +18,7 @@ const TABS = [
   { to: 'tasks', label: 'Tasks' },
   { to: 'guests', label: 'Guests' },
   { to: 'logistics', label: 'Logistics' },
+  { to: 'fundraising', label: 'Fundraising' },
   { to: 'money', label: 'Money' },
   { to: 'files', label: 'Files' },
   { to: 'messages', label: 'Messages' },

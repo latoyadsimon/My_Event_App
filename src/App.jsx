@@ -12,7 +12,7 @@
 //   /join/:token          staff invite
 //   /v/:token/...         a vendor's page for one event (magic link, no account)
 //   /print/...            printable pages without the app frame (run of show)
-//   /screen/...           big screens at the venue (karaoke, slideshow)
+//   /screen/...           big screens at the venue (karaoke, slideshow, giving)
 //   /booth/:eventId       the photo booth kiosk
 //   /outbox               demo: every email/text/push the app sent
 //   /help                 the How-To guide (same words as documentation/HOW_TO.md)
@@ -101,6 +101,12 @@ const BoothAttendant = lazyPage(() => import('./pages/booth/BoothPages'), 'Booth
 const Slideshow = lazyPage(() => import('./pages/booth/BoothPages'), 'Slideshow')
 const GuestGallery = lazyPage(() => import('./pages/guest/Gallery'))
 const InvitationDesigner = lazyPage(() => import('./pages/planner/hub/InvitationDesigner'))
+const Fundraising = lazyPage(() => import('./pages/planner/hub/Fundraising'))
+const GivingScreen = lazyPage(() => import('./pages/giving/GivingScreen'))
+const Give = lazyPage(() => import('./pages/guest/Giving'), 'Give')
+const Auction = lazyPage(() => import('./pages/guest/Giving'), 'Auction')
+const Paddle = lazyPage(() => import('./pages/guest/Giving'), 'Paddle')
+const Sponsor = lazyPage(() => import('./pages/guest/Giving'), 'Sponsor')
 const InvitationPrint = lazyPage(() => import('./pages/planner/hub/InvitationDesigner'), 'InvitationPrint')
 const GuestMagnet = lazyPage(() => import('./pages/guest/Gallery'), 'Magnet')
 const PortalGallery = lazyPage(() => import('./pages/client/portal/PortalAfter'), 'PortalGallery')
@@ -171,6 +177,7 @@ export default function App() {
               <Route path="entertainment" element={<Entertainment />} />
               <Route path="gear" element={<Gear />} />
             </Route>
+            <Route path="fundraising" element={<Fundraising />} />
             <Route path="money" element={<Money />} />
             <Route path="files" element={<Files />} />
             <Route path="messages" element={<Messages />} />
@@ -243,6 +250,7 @@ export default function App() {
         {/* ---------- Screens at the venue (no app frame) ---------- */}
         <Route path="screen/karaoke/:eventId" element={<KaraokeScreen />} />
         <Route path="screen/gallery/:eventId" element={<Slideshow />} />
+        <Route path="screen/giving/:eventId" element={<GivingScreen />} />
         <Route path="booth/:eventId" element={<BoothKiosk />} />
 
         {/* ---------- Printable pages (planner, no app frame) ---------- */}
@@ -258,6 +266,10 @@ export default function App() {
           <Route path="karaoke" element={<GuestKaraoke />} />
           <Route path="gallery" element={<GuestGallery />} />
           <Route path="magnet" element={<GuestMagnet />} />
+          <Route path="give" element={<Give />} />
+          <Route path="auction" element={<Auction />} />
+          <Route path="paddle" element={<Paddle />} />
+          <Route path="sponsor" element={<Sponsor />} />
         </Route>
         <Route path="i/:token" element={<GuestLayout />}>
           <Route index element={<Invitation />} />

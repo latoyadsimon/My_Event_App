@@ -59,9 +59,9 @@ export default function GuestLayout() {
   const hosts = client?.partner ? `${client.name.split(' ')[0]} & ${client.partner.split(' ')[0]}` : client?.company ?? client?.name ?? state.business.name
   const preview = params.get('preview') === '1' || state.ui.role === 'planner'
   const site = event.site
-  // Karaoke and magnet pages open from QR codes at the venue (GU-5.4, GU-5.5), and the gallery
-  // checks its own access (private / expired): none of them use the site's gate
-  const atVenue = /\/(karaoke|magnet|gallery)$/.test(pathname)
+  // Karaoke, magnet, auction and paddle pages open from QR codes at the venue; give and sponsor
+  // links are shared with donors; the gallery checks its own access. None use the site's gate.
+  const atVenue = /\/(karaoke|magnet|gallery|give|auction|paddle|sponsor)$/.test(pathname)
   const gate = !guest && !preview && !atVenue && (site.privacy === 'private' ? 'private' : site.privacy === 'password' && !unlocked ? 'password' : null)
 
   return (

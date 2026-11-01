@@ -1,0 +1,23 @@
+/* The recognition screen wears the event theme, readable from across the room. */
+.screen {
+  min-height: 100vh; display: flex; flex-direction: column; gap: var(--space-6); padding: clamp(1.5rem, 5vw, 4rem);
+  background: var(--theme-surface); color: var(--theme-text); font-family: var(--theme-font-body);
+  --color-text: var(--theme-text); --color-muted: var(--theme-muted); --color-surface: var(--theme-surface); --color-border: var(--theme-border);
+}
+.screen:focus { outline: none; }
+.title { font-family: var(--theme-font-display); font-size: clamp(1.75rem, 5vw, 3.5rem); color: var(--theme-accent); }
+.thermo { display: flex; align-items: flex-end; gap: var(--space-5); }
+.tube { width: 3rem; height: clamp(10rem, 30vh, 18rem); border-radius: 999px; border: 3px solid var(--theme-accent); position: relative; overflow: hidden; flex-shrink: 0; }
+.tube > span { position: absolute; left: 0; right: 0; bottom: 0; background: var(--theme-accent); transition: height 600ms ease; }
+@media (prefers-reduced-motion: reduce) { .tube > span { transition: none; } }
+.raised { font-family: var(--theme-font-display); font-size: clamp(2.5rem, 9vw, 6rem); line-height: 1; font-variant-numeric: tabular-nums; }
+.goal { font-size: clamp(1rem, 2.5vw, 1.5rem); color: var(--theme-muted); }
+.label { font-size: var(--text-sm); letter-spacing: .12em; text-transform: uppercase; color: var(--theme-muted); margin-bottom: var(--space-2); }
+.names { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-5); font-size: clamp(1.1rem, 2.5vw, 1.75rem); font-weight: 650; }
+.messages { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr)); font-size: clamp(1rem, 2vw, 1.4rem); font-style: italic; }
+.messages span { display: block; font-style: normal; font-size: var(--text-sm); color: var(--theme-muted); margin-top: var(--space-1); }
+.sponsors { display: flex; flex-wrap: wrap; gap: var(--space-4); }
+.sponsors li { display: flex; flex-direction: column; align-items: center; gap: var(--space-1); padding: var(--space-3) var(--space-4); border: 1px solid var(--theme-border); border-radius: var(--radius-md); font-weight: 700; }
+.sponsors img { max-height: 4rem; max-width: 10rem; object-fit: contain; }
+.sponsors small { font-weight: 400; color: var(--theme-muted); }
+.foot { margin-top: auto; display: flex; align-items: center; gap: var(--space-4); color: var(--theme-muted); }

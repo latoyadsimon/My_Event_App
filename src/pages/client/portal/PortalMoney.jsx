@@ -8,7 +8,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useStore } from '../../../store/StoreContext'
-import { cancellationQuote, getEventGuests, getInvoiceForEvent, getPortal, guestCounts, installmentStatus, invoiceTotals, nextDue, potluckBoard, volunteerBoard } from '../../../store/selectors'
+import { cancellationQuote, getEventGuests, getInvoiceForEvent, getPortal, guestCounts, installmentStatus, invoiceTotals, nextDue, potluckBoard, volunteerBoard, fundTotals, recognition } from '../../../store/selectors'
 import { formatMoney } from '../../../lib/money'
 import { formatDay, formatDayShort, formatDateTime } from '../../../lib/clock'
 import { isEmail } from '../../../lib/validate'
@@ -217,6 +217,7 @@ export function PortalGuests() {
           </Card>
         )}
       {event.potluck?.enabled && <PotluckTotals event={event} />}
+      {event.fund?.enabled && <FundTotals event={event} />}
       <AddGuestDialog open={adding} onClose={() => setAdding(false)} eventId={event.id} addedBy="client" />
       <ImportDialog open={importing} onClose={() => setImporting(false)} eventId={event.id} addedBy="client" />
       {cohost && <CoHostDialog open onClose={() => setCohost(false)} client={client} />}
@@ -243,6 +244,20 @@ function PotluckTotals({ event }) {
       </ul>
       {slots.length > 0 && <p className="muted">Volunteers: {slots.map((s) => `${s.name} ${s.filled}/${s.needed}`).join(' · ')}</p>}
       <Button to={`/e/${event.id}/potluck?preview=1`}>See the sign-up page</Button>
+    </Card>
+  )
+}
+
+/** CL-3.8 (P4): the fund's total and the messages people left (approved ones). */
+function FundTotals({ event }) {
+  const { state } = useStore()
+  const f = fundTotals(state, event.id)
+  const msgs = recognition(state, event.id).messages
+  return (
+    <Card title={`${event.fund.name} · ${formatMoney(f.raisedCents)}${f.goalCents ? ` of ${formatMoney(f.goalCents)}` : ''}`}>
+      <p className="muted">{f.donors} {f.donors === 1 ? 'person has' : 'people have'} given{event.fund.kind === 'gift' ? ' (gifts, not tax-deductible)' : ''}.</p>
+      {msgs.length > 0 && <ul role="list" className={styles.rows}>{msgs.map((d) => <li key={d.id}><span>“{d.message}”</span><span className="muted">{d.anonymous ? 'A friend' : d.name}</span></li>)}</ul>}
+      <Button to={`/e/${event.id}/give?preview=1`}>See the giving page</Button>
     </Card>
   )
 }

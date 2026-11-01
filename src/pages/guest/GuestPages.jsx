@@ -99,6 +99,13 @@ export function EventWebsite() {
         </nav>
       )}
 
+      {(event.fund?.enabled || event.auction?.enabled || event.sponsorship?.enabled) && (
+        <p className={styles.actions}>
+          {event.fund?.enabled && <Button variant="primary" to={withToken(`/e/${event.id}/give`, token)}>{t('give')}: {event.fund.name}</Button>}
+          {event.auction?.enabled && <Button to={withToken(`/e/${event.id}/auction`, token)}>{t('auction')}</Button>}
+          {event.sponsorship?.enabled && <Button to={withToken(`/e/${event.id}/sponsor`, token)}>{t('sponsor')}</Button>}
+        </p>
+      )}
       {(event.potluck?.enabled || event.volunteer?.enabled) && (
         <p><Button to={withToken(`/e/${event.id}/potluck`, token)}>{event.potluck?.enabled && event.volunteer?.enabled ? t('signUpLink') : event.potluck?.enabled ? t('bringDish') : t('lendHand')}</Button></p>
       )}

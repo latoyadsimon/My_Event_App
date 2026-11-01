@@ -6,6 +6,7 @@
 import { budgetFor, getEventVendors, getTimeline, packList } from './selectorsLogistics'
 import { karaokeStats } from './selectorsKaraoke'
 import { boothStats } from './selectorsBooth'
+import { fundTotals } from './selectorsGiving'
 
 const eventOf = (state, id) => state.events.find((e) => e.id === id)
 const sum = (list, f) => list.reduce((t, x) => t + f(x), 0)
@@ -55,6 +56,7 @@ export function livePanel(state, eventId) {
     onsiteCents: sum((invoice?.installments ?? []).filter((p) => p.extra === 'onsite'), (p) => p.amountCents),
     karaoke: eventOf(state, eventId)?.karaoke?.enabled ? karaokeStats(state, eventId) : null,   // P3 panel: queue length
     booth: eventOf(state, eventId)?.booth?.enabled ? boothStats(state, eventId) : null,         // P3 panel: sessions and prints
+    giving: eventOf(state, eventId)?.fund?.enabled ? fundTotals(state, eventId) : null,         // P4 panel: donation total
   }
 }
 
@@ -95,6 +97,7 @@ export function eventReport(state, eventId) {
     vendorsOnTime: vendors.filter((v) => v.arrivedAt).length, vendorsTotal: vendors.length,
     karaoke: eventOf(state, eventId)?.karaoke?.enabled ? karaokeStats(state, eventId) : null,
     booth: eventOf(state, eventId)?.booth?.enabled ? boothStats(state, eventId) : null,
+    giving: eventOf(state, eventId)?.fund?.enabled ? fundTotals(state, eventId) : null,
   }
 }
 

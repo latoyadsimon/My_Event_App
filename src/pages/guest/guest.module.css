@@ -101,3 +101,24 @@ fieldset.panel > legend + * { clear: both; }
 .photoGrid { display: grid; gap: var(--space-3); grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr)); }
 .recipe { white-space: pre-wrap; font-size: var(--text-sm); }
 .music { display: flex; justify-content: flex-end; font-size: var(--text-sm); }
+
+/* Giving (DN-1 to DN-6) */
+.goal { display: flex; flex-direction: column; gap: var(--space-2); width: 100%; max-width: 28rem; }
+.amounts { display: grid; grid-template-columns: repeat(auto-fill, minmax(5.5rem, 1fr)); gap: var(--space-2); }
+.amount {
+  min-height: 3rem; border-radius: var(--theme-radius, var(--radius-md)); border: 1.5px solid var(--theme-border); background: var(--theme-surface);
+  color: var(--theme-text); font-weight: 750; font-size: var(--text-lg); cursor: pointer; font-variant-numeric: tabular-nums;
+}
+.amount[aria-pressed='true'] { background: var(--theme-accent); color: var(--theme-on-accent); border-color: var(--theme-accent); }
+.inlineGuest { display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: flex-end; }
+.inlineGuest > :first-child { flex: 1 1 10rem; }
+.auction { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fill, minmax(15rem, 1fr)); }
+.auction > li > figure { max-width: 12rem; }
+.paddleButton {
+  min-height: 5rem; border-radius: var(--theme-radius, var(--radius-lg)); border: 0; cursor: pointer;
+  background: var(--theme-accent); color: var(--theme-on-accent); font-size: var(--text-2xl); font-weight: 800; font-variant-numeric: tabular-nums;
+}
+.tiers { display: flex; flex-direction: column; gap: var(--space-2); }
+.tier { display: flex; gap: var(--space-3); align-items: flex-start; padding: var(--space-3); border: 1.5px solid var(--theme-border); border-radius: var(--theme-radius, var(--radius-md)); cursor: pointer; }
+.tier input { margin-top: .3rem; width: 1.2rem; height: 1.2rem; accent-color: var(--theme-accent); }
+.tier .muted { display: block; }
