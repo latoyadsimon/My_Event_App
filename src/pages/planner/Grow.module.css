@@ -1,0 +1,18 @@
+/* Grow: reports, marketing, reviews */
+.segmented { display: inline-flex; flex-wrap: wrap; gap: var(--space-1); padding: 3px; border-radius: var(--radius-lg); background: var(--color-surface-2); align-self: flex-start; }
+.segmented button { min-height: calc(var(--tap-min) - 6px); padding: 0 var(--space-4); border: 0; border-radius: var(--radius-pill); background: transparent; font-weight: 600; font-size: var(--text-sm); cursor: pointer; color: var(--color-muted); }
+.segmented button[aria-selected='true'] { background: var(--color-surface); color: var(--color-text); box-shadow: 0 0 0 1px var(--color-border); }
+.grid2 { display: grid; gap: var(--space-4); grid-template-columns: 1fr; }
+@media (min-width: 1024px) { .grid2 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.grid2 > * { min-width: 0; }
+.rows { display: flex; flex-direction: column; font-size: var(--text-sm); }
+.rows > li { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-1) var(--space-3); min-height: var(--tap-min); padding: var(--space-2) 0; border-top: 1px solid var(--color-border); }
+.rows > li:first-child { border-top: 0; }
+.sub { display: block; font-size: var(--text-xs); color: var(--color-muted); }
+.check { display: flex; align-items: center; gap: var(--space-2); min-height: var(--tap-min); cursor: pointer; font-size: var(--text-sm); }
+.check input { width: 1.2rem; height: 1.2rem; accent-color: var(--color-accent); }
+.inline { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-3); align-items: flex-end; margin-top: var(--space-3); }
+.inline > * { flex: 1 1 10rem; }
+.inline > button, .inline > label { flex: 0 0 auto; }
+.reviews { display: flex; flex-direction: column; gap: var(--space-4); }
+.reviews p { font-style: italic; }

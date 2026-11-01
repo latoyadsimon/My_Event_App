@@ -1,0 +1,41 @@
+/* Small pieces shared by the layouts */
+.plannerBrand { display: flex; flex-direction: column; gap: 2px; }
+.workspace { font-size: var(--text-sm); color: var(--color-muted); padding-left: calc(28px + var(--space-2)); }
+.byline { font-size: var(--text-xs); color: var(--color-muted); }
+.byline strong { font-weight: 600; white-space: nowrap; }
+
+/* ---------- Event Hub header + tabs ---------- */
+.hub { display: flex; flex-direction: column; gap: var(--space-5); }
+.hubHead { display: flex; flex-wrap: wrap; align-items: flex-start; gap: var(--space-3); }
+.hubTitle { font-size: var(--text-xl-plus); }
+@media (min-width: 768px) { .hubTitle { font-size: var(--text-2xl); } }
+.hubMeta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); color: var(--color-muted); font-size: var(--text-sm); margin-top: var(--space-1); }
+.hubActions { margin-left: auto; display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.crumb { font-size: var(--text-sm); }
+
+.tabs { overflow-x: auto; overflow-y: hidden; border-bottom: 1px solid var(--color-border); scrollbar-width: thin; }
+.tabList { display: flex; gap: var(--space-1); }
+.tab {
+  display: inline-flex; align-items: center; min-height: var(--tap-min); padding: 0 var(--space-4);
+  color: var(--color-muted); text-decoration: none; font-weight: 600; font-size: var(--text-sm); white-space: nowrap;
+  border-bottom: 3px solid transparent; margin-bottom: -1px;
+}
+.tab:hover { color: var(--color-text); }
+.tabActive { color: var(--color-text); border-bottom-color: var(--color-accent); }
+
+/* One row that scrolls sideways on narrow screens (never wraps into a blob) */
+.subTabs { display: flex; gap: var(--space-1); padding: var(--space-1); border-radius: var(--radius-pill); background: var(--color-surface-2); width: fit-content; max-width: 100%; overflow-x: auto; scrollbar-width: none; }
+.subTabs li { flex-shrink: 0; }
+.subTab {
+  display: inline-flex; align-items: center; min-height: 2.5rem; padding: 0 var(--space-4); border-radius: var(--radius-pill);
+  color: var(--color-text); text-decoration: none; font-size: var(--text-sm); font-weight: 550;
+}
+.subTabActive { background: var(--color-surface); box-shadow: 0 0 0 1px var(--color-border); font-weight: 650; }
+
+/* ---------- Public business pages (inquiry, booking, staff join) ---------- */
+.public { flex: 1; display: flex; flex-direction: column; }
+.publicHead { padding: var(--space-4); border-bottom: 1px solid var(--color-border); background: var(--color-surface); }
+.publicHeadInner, .publicMain, .publicFoot { width: 100%; max-width: 52rem; margin: 0 auto; }
+.publicMain { flex: 1; padding: var(--space-6) var(--space-4); display: flex; flex-direction: column; gap: var(--space-5); outline: none; }
+.publicFoot { padding: var(--space-5) var(--space-4); display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); justify-content: space-between; border-top: 1px solid var(--color-border); }
+.helpLink { display: inline-flex; align-items: center; min-height: var(--tap-min); font-weight: 600; font-size: var(--text-sm); }

@@ -1,0 +1,21 @@
+/* A stand-in photo: a warm two-tone backdrop, three soft "guests", the event overlay. */
+.tile { margin: 0; display: flex; flex-direction: column; gap: var(--space-2); min-width: 0; }
+.img, .art { width: 100%; aspect-ratio: 4 / 5; border-radius: var(--radius-md); object-fit: cover; display: block; }
+.art {
+  position: relative; overflow: hidden;
+  background: linear-gradient(160deg, hsl(var(--hue) 55% 72%), hsl(calc(var(--hue) + 40) 50% 48%));
+  box-shadow: inset 0 0 0 6px #fff;
+}
+.tile[data-overlay='gold'] .art { box-shadow: inset 0 0 0 6px #c9a227, inset 0 0 0 9px #1b1b1f; }
+.tile[data-overlay='floral'] .art { box-shadow: inset 0 0 0 8px #f4ebd0; border-radius: 40% 40% var(--radius-md) var(--radius-md) / 18% 18% var(--radius-md) var(--radius-md); }
+.tile[data-overlay='minimal'] .art { box-shadow: none; }
+.people { position: absolute; inset: auto 12% 6px; height: 55%; display: flex; align-items: flex-end; justify-content: center; gap: 6%; }
+.people span { flex: 1; height: 100%; border-radius: 50% 50% 0 0 / 34% 34% 0 0; background: hsl(var(--hue) 30% 22% / .55); position: relative; }
+.people span::before { content: ''; position: absolute; left: 50%; top: -38%; width: 62%; aspect-ratio: 1; transform: translateX(-50%); border-radius: 50%; background: inherit; }
+.people span:nth-child(2) { height: 115%; }
+.caption {
+  position: absolute; left: 0; right: 0; bottom: 0; padding: var(--space-2) var(--space-3); text-align: center;
+  font-size: var(--text-xs); font-weight: 700; letter-spacing: .04em; color: #1b1b1f; background: #fff;
+}
+.tile[data-overlay='gold'] .caption { background: #1b1b1f; color: #f4ebd0; }
+.tools { display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: center; font-size: var(--text-xs); }

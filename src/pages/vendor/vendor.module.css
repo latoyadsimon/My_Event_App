@@ -1,0 +1,17 @@
+/* The vendor's pages: flat cards and hairline rows, like the planner's hub. */
+.grid2 { display: grid; gap: var(--space-4); grid-template-columns: 1fr; align-items: start; }
+@media (min-width: 640px) { .grid2 { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.grid2 > * { min-width: 0; }
+.rows { display: flex; flex-direction: column; font-size: var(--text-sm); }
+.rows > li { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-1) var(--space-3); min-height: var(--tap-min); padding: var(--space-2) 0; border-top: 1px solid var(--color-border); }
+.rows > li:first-child { border-top: 0; }
+.split > li { justify-content: space-between; }   /* label on the left, number or phone on the right */
+.when { min-width: 4.5rem; color: var(--color-muted); font-variant-numeric: tabular-nums; font-weight: 650; }
+.subline { display: block; font-size: var(--text-xs); color: var(--color-muted); }
+.facts { display: flex; flex-direction: column; gap: var(--space-2); font-size: var(--text-sm); }
+.facts > div { display: grid; grid-template-columns: 8rem minmax(0, 1fr); gap: var(--space-3); }
+.facts dt { color: var(--color-muted); font-weight: 600; }
+.big { font-size: var(--text-xl); font-weight: 700; font-variant-numeric: tabular-nums; }
+.allergy { color: var(--status-warning-ink); }
+.details { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: var(--space-3) var(--space-4); }
+.details summary { cursor: pointer; font-weight: 650; min-height: var(--tap-min); display: flex; align-items: center; }
