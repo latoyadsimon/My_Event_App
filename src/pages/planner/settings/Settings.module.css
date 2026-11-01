@@ -1,0 +1,19 @@
+/* Phone/tablet: a scrolling row of sections. Desktop: a list on the left. */
+.layout { display: flex; flex-direction: column; gap: var(--space-5); }
+.sections { overflow-x: auto; scrollbar-width: none; margin: 0 calc(var(--space-4) * -1); padding: 0 var(--space-4); }
+.sectionList { display: flex; gap: var(--space-1); }
+.sectionList li { flex-shrink: 0; }
+.section {
+  display: flex; align-items: center; min-height: var(--tap-min); padding: 0 var(--space-4);
+  border-radius: var(--radius-pill); color: var(--color-text); text-decoration: none; font-size: var(--text-sm); font-weight: 550; white-space: nowrap;
+}
+.section:hover { background: var(--color-surface-2); }
+.sectionActive, .sectionActive:hover { background: var(--color-surface-2); font-weight: 700; box-shadow: inset 0 0 0 1.5px var(--color-text); }
+.content { min-width: 0; flex: 1; display: flex; flex-direction: column; gap: var(--space-4); }
+
+@media (min-width: 1024px) {
+  .layout { flex-direction: row; align-items: flex-start; }
+  .sections { margin: 0; padding: 0; width: 12rem; flex-shrink: 0; position: sticky; top: calc(var(--demo-h) + var(--space-5)); }
+  .sectionList { flex-direction: column; }
+  .section { border-radius: var(--radius-sm); }
+}

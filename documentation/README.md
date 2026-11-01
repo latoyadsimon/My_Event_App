@@ -2,14 +2,15 @@
 
 ## 1. What this project is
 
-This is a design-stage project for an all-in-one event planner app. It is a multi-tenant SaaS: each planning business is a "tenant" with its own private data. The app is meant to run a planner's whole business: leads, proposals, contracts, payments, then guests and RSVPs. Later phases add equipment, staff, photo booth, karaoke and donations.
+This is an all-in-one event planner app called **Crowned** (brought to you by Simon Says: Celebrate). It is a multi-tenant SaaS: each planning business is a "tenant" with its own private data. The app is meant to run a planner's whole business: leads, proposals, contracts, payments, then guests and RSVPs. Later phases add equipment, staff, photo booth, karaoke and donations.
 
-**There is no application front end or back end yet.** The repository holds four things:
+**The front end is complete; the back end is next.** The repository holds:
 
-- written designs
-- clickable wireframes
-- a Supabase Postgres database design (tables, security rules and server functions)
-- automated database tests
+- written designs, clickable wireframes and one folder per screen
+- **the front-end app** (`src/`): a React single-page app with every Phase 1 screen for all four roles. Its data lives in the browser and resets on refresh (section 3.5)
+- a Supabase Postgres database design (tables, security rules and server functions), not connected yet
+- automated tests: 263 front-end tests (Vitest) and the database tests
+- a user guide: [`HOW_TO.md`](HOW_TO.md), also inside the app at `/help`
 
 Build phases are P1 core business (the current focus), P2 event operations, P3 guest experience and P4 growth. The running example in every document is the **Rivera wedding**: Sat Jun 12, 2027, 120 guests, total $14,850, paid as $4,455 + $5,940 + $4,455 (`wireframes/walkthrough_rivera.md`).
 
@@ -45,6 +46,24 @@ event_planning_app01/
 ```
 
 Not covered in this document: PNG images, `.claude/skills/`, `.playwright-mcp/` and `*:Zone.Identifier` files. `.claude/agents/` and `.claude/skills/` were copied from an earlier project ("BookWorm"). CLAUDE.md says `front-end-agent.md` still refers to that project's folders.
+
+Front-end files (inside `My_Event_App/`):
+
+```
+My_Event_App/
+├── src/
+│   ├── App.jsx                     Every route (pages load on first visit: lib/lazyPage.js)
+│   ├── layouts/                    The frame per area: planner, Event Hub, portal, public, guest, staff
+│   ├── pages/<role>/               The screens (planner/, client/, guest/, staff/, shared/)
+│   ├── components/                 Shared UI: ui/, shell/ (app frame, demo bar, toasts), booking/,
+│   │                               proposal/, guests/, planning/ (mood board, conversations), brand/
+│   ├── store/                      reducer.js + actions/*.js (every change), selectors.js (every lookup)
+│   ├── data/                       seed.js + seedPlanning.js (the demo world), howTo.js (the guide)
+│   └── lib/                        clock (the demo's "today"), money, proposal math, csv, ics, guest words
+├── qa/frontend/                    One review per build phase, screenshots, the Rivera walkthrough script
+├── scripts/                        check_contrast.mjs, build_howto.mjs
+└── documentation/                  This file, HOW_TO.md and its screenshots (how_to/)
+```
 
 ## 3. Where each feature lives
 
@@ -158,6 +177,45 @@ RLS is switched on for every `public` table by a loop (`schema.sql:758`). The po
 - `helpers.sql`: `test.eq(label, actual, expected)` at line 29 and `test.expect_error(sql, fragment)` at line 11.
 - `test_rls.sql`: seven numbered checks covering tenants, staff permissions, client unlock, clients unable to write payments, guest token, duplicate `idempotency_key`, and `updated_at`.
 - `test_functions.sql`: the Rivera booking from start to finish, plus cases that must be refused.
+
+### 3.5 The front end (`src/`)
+
+A React 19 + Vite single-page app with React Router. It was built in eight phases, each with a review in `qa/frontend/phase_N_review.md`.
+
+**What a visitor can do.** Every screen from the wireframes works:
+- **Planner:** set up, leads, proposals, contracts, invoices, events, the Event Hub's tabs, calendar and settings.
+- **Client:** inquiry, booking a consult, and the portal before and after the deposit.
+- **Guest:** invitation, event website, RSVP and confirmation, in English or Spanish.
+- **Staff:** join by phone code, and a profile.
+
+A **demo bar** switches who you're viewing as. An **Outbox** shows every email, text and push the app "sent", with buttons that open the real screen.
+
+**Where data lives.** One in-memory store (React `useReducer` + Context), seeded with Bella Events on Thu Nov 5, 2026 (`src/lib/clock.js`). Money is in cents. Calendar days are `'YYYY-MM-DD'` and are read as local days. A refresh starts over.
+
+**How it maps to Supabase.** Screens only `dispatch` actions and read through `selectors.js`. Each action handler is named after the server step it stands in for, so the backend can replace them one at a time:
+
+| Front-end action | Becomes (Supabase) |
+|---|---|
+| `lead/create` | insert into `leads` + `lead.created` event (push, auto-reply) |
+| `proposal/send`, `proposal/saveDraft` | `proposal_versions` insert + email with a magic link |
+| `proposal/view`, `proposal/requestChanges`, `proposal/accept` | `client_mark_proposal_viewed`, `client_request_proposal_changes`, `client_accept_proposal` |
+| `contract/clientSign` | `client_sign_contract` (creates the event, invoice and schedule) |
+| `payment/succeeded`, `payment/failed` | `record_payment`, called only by the Stripe/Square webhook |
+| `payment/recordManual` | `planner_record_manual_payment` |
+| `contract/countersign` | `planner_countersign` (refused until the deposit is paid) |
+| `approval/decide` (change orders) | `client_decide_change_order` |
+| `rsvp/submit` | `guest_submit_rsvp` |
+| everything else (tasks, guests, files, threads…) | plain inserts/updates under row-level security |
+
+The pricing rules in `src/lib/proposal.js` mirror `_recalc_proposal()`. The front end can keep them for live previews; the server's numbers stay the source of truth.
+
+**Quality gates (every phase, in CI):**
+- `npm test`, `npm run lint`, `npm run build` and `npm run check:contrast`;
+- Playwright screenshots compared with the wireframes;
+- Lighthouse accessibility 100 on every page type checked;
+- no sideways scroll at 375, 768 and 1280.
+
+`qa/frontend/rivera-walkthrough.js` clicks the whole Rivera story end to end, as every role.
 
 ## 4. How the pieces connect
 
@@ -275,9 +333,21 @@ CLAUDE.md says every "→ System" step in the journeys should map to a domain ev
 | **Test stub** (`supabase_stub.sql`) | A film-set facade of the real town (Supabase), built so the tests can run on a normal computer. |
 | **Rivera tests** (`test_functions.sql`) | A full dress rehearsal of the Rivera wedding booking, plus checks that the wrong person gets turned away at every door. |
 
-## 7. Running the generators and tests
+## 7. Running the app, the generators and the tests
 
-All commands are run from the repository root, `/home/ldsimon/CodePlatoon/event_planning_app01`.
+The front end (from `My_Event_App/`):
+
+```bash
+npm install
+npm run dev              # the app at http://localhost:5173 (Help is at /help)
+npm test                 # 263 Vitest tests
+npm run lint
+npm run build            # production build into dist/
+npm run check:contrast   # WCAG AA for every color pair and all 27 event themes
+npm run docs:howto       # rebuild documentation/HOW_TO.md from src/data/howTo.js
+```
+
+The design tools below are run from the repository root, `/home/ldsimon/CodePlatoon/event_planning_app01`.
 
 ```bash
 # Database tests (needs PostgreSQL 15+ server tools: initdb, pg_ctl, psql)
@@ -309,7 +379,15 @@ Notes:
 
 ## 8. Known gaps and unclear points
 
-- No application code exists. The Stripe/Square webhook function and the checkout function are not written (`app_outline/erd/README.md`, "Open questions").
+- The front end is not connected to a backend yet: no real sign-in, email, SMS, payments, file storage or calendar sync. Each is simulated in the browser, and the stand-ins are listed in the phase reviews (`qa/frontend/`).
+- The Stripe/Square webhook function and the checkout function are not written (`app_outline/erd/README.md`, "Open questions").
+- Front-end items deferred to the backend or later phases:
+  - QR codes on invitations;
+  - forwarded-link detection on RSVPs;
+  - co-hosts disagreeing on an approval;
+  - automatic reminder timing (7 days / 1 day);
+  - task attachments;
+  - the P3 Invitation Designer.
 - There is no worker that processes `domain_events`.
 - `client_sign_contract` sets the event start to noon on the requested date, because leads store only a date. The planner is expected to set the real time (`functions.sql:256`).
 - Equipment reservation at countersign (PL-3.4) waits for the Phase 2 equipment tables.
@@ -317,4 +395,4 @@ Notes:
 - The Phase 2-4 tables are sketches only (`LATER` in `build_erd.py`, not in `schema.sql`).
 - The script or procedure that exports `_wireframe_screens.json` and the PNG crops is not in the repo. CLAUDE.md describes it only as "Playwright, by hand". `pages/README.md` is said to document "Refreshing wireframe images", but that section was not reviewed.
 - Figures such as "37 tables" and "67 policies" in `app_outline/erd/README.md` were not re-verified here.
-- `setup.md` (course workflow) and `product_spec.md` beyond its first 25 lines were not reviewed in detail. CLAUDE.md says there is no git repo or Docker setup yet.
+- `setup.md` (course workflow) and `product_spec.md` beyond its first 25 lines were not reviewed in detail. Docker is not set up yet.
