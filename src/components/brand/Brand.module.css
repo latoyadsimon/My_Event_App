@@ -1,0 +1,28 @@
+/* The Crowned lockup (style guide §1) */
+.lockup { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.wordmark {
+  display: inline-flex; align-items: center; gap: var(--space-2);
+  color: var(--color-text); text-decoration: none; width: fit-content;
+}
+.crown { color: var(--color-gold); flex-shrink: 0; }
+.name { font-family: var(--font-display); font-weight: 600; font-size: var(--text-xl-plus); line-height: 1; text-shadow: var(--glow); }
+.lg .name { font-size: var(--text-4xl); }
+.byline { font-size: var(--text-xs); color: var(--color-muted); }
+.md .byline { padding-left: calc(28px + var(--space-2)); }
+.lg .byline { font-size: var(--text-sm); padding-left: calc(44px + var(--space-2)); }
+.byline strong { font-weight: 600; }
+
+/* The planner's own mark: their initials in their brand color (until they upload a logo) */
+.biz { display: inline-flex; align-items: center; gap: var(--space-2); color: var(--color-text); text-decoration: none; min-width: 0; }
+.logo {
+  display: grid; place-items: center; flex-shrink: 0;
+  width: 2.25rem; height: 2.25rem; border-radius: var(--radius-sm);
+  background: var(--color-accent); color: #FFFFFF;   /* background comes from brandInk(), always ≥ 4.5:1 with white */
+  font-weight: 700; font-size: var(--text-sm); letter-spacing: .02em;
+}
+.logoImg { width: 2.25rem; height: 2.25rem; border-radius: var(--radius-sm); object-fit: contain; background: #FFFFFF; flex-shrink: 0; }
+.bizText { display: flex; flex-direction: column; min-width: 0; }
+.bizName { font-weight: 650; line-height: 1.2; }
+.bizSub { font-size: var(--text-xs); color: var(--color-muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.powered { font-size: var(--text-xs); color: var(--color-muted); }

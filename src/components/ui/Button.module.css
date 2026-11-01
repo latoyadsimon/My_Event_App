@@ -1,0 +1,26 @@
+/* Buttons (style guide §6). Pill shape, at least 44px tall. */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
+  min-height: var(--tap-min); padding: 0 var(--space-5);
+  border-radius: var(--radius-pill); border: 1.5px solid transparent;
+  font-weight: 600; font-size: var(--text-sm); line-height: 1.2; text-decoration: none; white-space: nowrap;
+  cursor: pointer; background: transparent; color: var(--color-text);
+  transition: transform var(--motion-fast) var(--ease), box-shadow var(--motion-base) var(--ease),
+              background-color var(--motion-fast) var(--ease);
+}
+.btn:hover:not(:disabled) { transform: translateY(-1px); }
+.btn:active:not(:disabled) { transform: translateY(0) scale(.98); }
+.btn:disabled, .btn[aria-disabled='true'] { opacity: .55; cursor: not-allowed; }
+
+.primary { background: var(--color-accent); color: var(--color-on-accent); }
+.primary:hover:not(:disabled) { box-shadow: var(--glow); }          /* glow is "none" in Calm */
+.secondary { border-color: var(--color-secondary); color: var(--color-secondary); }
+.ghost { border-color: var(--color-input-border); }
+.danger { border-color: var(--status-danger-ink); color: var(--status-danger-ink); }
+
+.small { min-height: 2.25rem; padding: 0 var(--space-4); }   /* only inside dense rows; row itself stays ≥ 44px */
+.block { width: 100%; }
+
+@media (prefers-reduced-motion: reduce) {
+  .btn:hover:not(:disabled), .btn:active:not(:disabled) { transform: none; }
+}
