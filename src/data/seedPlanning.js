@@ -141,11 +141,11 @@ export const guests = [
   // Thompson: family and friends
   g('th-g1', 'thompson', 'Denise Thompson', 'denise.t@gmail.com', { plusOnes: 3, tags: ['family'], ...yes(4, {}, '2026-10-30T12:00:00') }),
   g('th-g2', 'thompson', 'Robert & Mae Thompson', '(512) 555-0401', { plusOnes: 1, tags: ['family'], ...yes(2, {}, '2026-10-31T09:00:00') }),
-  g('th-g3', 'thompson', 'Pastor Lewis', 'lewis@stmarks.org', { tags: ['church'], ...yes(1, {}, '2026-10-30T15:00:00') }),
+  g('th-g3', 'thompson', 'Pastor Lewis', 'lewis@stmarks.org', { tags: ['church'], ...yes(1, {}, '2026-10-30T15:00:00'), gift: 'Donation to the food pantry in Harold\'s name' }),
   g('th-g4', 'thompson', 'The Garcia family', '(512) 555-0402', { plusOnes: 3, tags: ['neighbors'], ...yes(3, {}, '2026-11-01T11:00:00'), allergies: 'Tree nuts' }),
   g('th-g5', 'thompson', 'Walt Henderson', '(512) 555-0403', { plusOnes: 1, tags: ['friends'], ...sent('opened') }),
-  g('th-g6', 'thompson', 'Lorraine Ellis', 'lellis@gmail.com', { tags: ['friends'], rsvp: 'declined', respondedAt: '2026-11-02T10:00:00', invite: 'opened', invitedAt: '2026-10-30T10:00:00', notes: 'Sending flowers' }),
-  g('th-g7', 'thompson', 'Veterans Post 76', 'post76@vfw.org', { plusOnes: 5, tags: ['community'], ...sent() }),
+  g('th-g6', 'thompson', 'Lorraine Ellis', 'lellis@gmail.com', { tags: ['friends'], rsvp: 'declined', respondedAt: '2026-11-02T10:00:00', invite: 'opened', invitedAt: '2026-10-30T10:00:00', notes: 'Sending flowers', gift: 'Flowers (white lilies)' }),
+  g('th-g7', 'thompson', 'Veterans Post 76', 'post76@vfw.org', { plusOnes: 5, tags: ['community'], ...sent(), gift: 'Flag and honor guard' }),
   g('th-g8', 'thompson', 'Carla & Jim Ruiz', '(512) 555-0404', { plusOnes: 1, tags: ['friends'], ...yes(2, {}, '2026-11-04T18:00:00') }),
 ]
 

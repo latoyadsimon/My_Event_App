@@ -96,3 +96,7 @@ fieldset.panel > legend + * { clear: both; }
 .songs > li { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); min-height: var(--tap-min); padding: var(--space-2) 0; border-top: 1px solid var(--theme-border); }
 .songs > li:first-child { border-top: 0; }
 .songNote { display: block; font-size: var(--text-xs); color: var(--theme-muted); }
+
+/* Gallery (GU-5.6, GU-6.1) */
+.photoGrid { display: grid; gap: var(--space-3); grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr)); }
+.recipe { white-space: pre-wrap; font-size: var(--text-sm); }

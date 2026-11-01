@@ -21,6 +21,10 @@
 .screen {
   min-height: 100vh; display: flex; flex-direction: column; gap: var(--space-6); padding: clamp(1.5rem, 5vw, 4rem);
   background: var(--theme-surface); color: var(--theme-text); font-family: var(--theme-font-body);
+  /* Map the app tokens onto the event theme so shared components (Button, Field) match it, like guest pages */
+  --color-bg: var(--theme-bg); --color-surface: var(--theme-surface); --color-text: var(--theme-text); --color-muted: var(--theme-muted);
+  --color-accent: var(--theme-accent); --color-on-accent: var(--theme-on-accent); --color-border: var(--theme-border);
+  --color-input-border: var(--theme-border); --color-focus: var(--theme-text);
 }
 .screenTitle { font-family: var(--theme-font-display); font-size: clamp(1.5rem, 4vw, 3rem); color: var(--theme-accent); }
 .screenNow { display: flex; flex-direction: column; gap: var(--space-2); }
@@ -32,3 +36,4 @@
 .buttons > :not([class*='primary']) { color: var(--color-surface); border-color: var(--color-surface); background: transparent; }
 .buttons > :not([class*='primary']):hover { background: color-mix(in srgb, var(--color-surface) 12%, transparent); }
 .buttons > :not([class*='primary'])[aria-pressed='true'] { background: var(--color-surface); color: var(--color-text); }
+.screen:focus { outline: none; }

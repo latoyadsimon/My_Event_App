@@ -12,7 +12,8 @@
 //   /join/:token          staff invite
 //   /v/:token/...         a vendor's page for one event (magic link, no account)
 //   /print/...            printable pages without the app frame (run of show)
-//   /screen/...           big screens at the venue (karaoke)
+//   /screen/...           big screens at the venue (karaoke, slideshow)
+//   /booth/:eventId       the photo booth kiosk
 //   /outbox               demo: every email/text/push the app sent
 //   /help                 the How-To guide (same words as documentation/HOW_TO.md)
 //
@@ -95,6 +96,13 @@ const KjConsole = lazyPage(() => import('./pages/karaoke/KjConsole'))
 const KaraokeScreen = lazyPage(() => import('./pages/karaoke/KjConsole'), 'KaraokeScreen')
 const GuestKaraoke = lazyPage(() => import('./pages/guest/Karaoke'))
 const PortalEntertainment = lazyPage(() => import('./pages/client/portal/PortalEntertainment'))
+const BoothKiosk = lazyPage(() => import('./pages/booth/BoothPages'), 'BoothKiosk')
+const BoothAttendant = lazyPage(() => import('./pages/booth/BoothPages'), 'BoothAttendant')
+const Slideshow = lazyPage(() => import('./pages/booth/BoothPages'), 'Slideshow')
+const GuestGallery = lazyPage(() => import('./pages/guest/Gallery'))
+const GuestMagnet = lazyPage(() => import('./pages/guest/Gallery'), 'Magnet')
+const PortalGallery = lazyPage(() => import('./pages/client/portal/PortalAfter'), 'PortalGallery')
+const PortalThankYous = lazyPage(() => import('./pages/client/portal/PortalAfter'), 'PortalThankYous')
 const InquiryForm = lazyPage(() => import('./pages/client/InquiryForm'))
 const BookingPage = lazyPage(() => import('./pages/client/BookingPage'))
 const SettingsLayout = lazyPage(() => import('./pages/planner/settings/SettingsLayout'))
@@ -136,6 +144,7 @@ export default function App() {
           <Route path="calendar" element={<Calendar />} />
           <Route path="day-of/:eventId" element={<DayOf />} />
           <Route path="kj/:eventId" element={<KjConsole />} />
+          <Route path="booth/:eventId" element={<BoothAttendant />} />
           <Route path="leads" element={<Leads />} />
           <Route path="leads/:leadId" element={<LeadDetail />} />
           <Route path="proposals/:leadId" element={<ProposalBuilder />} />
@@ -191,6 +200,7 @@ export default function App() {
           <Route path="chat" element={<StaffChat />} />
           <Route path="day-of" element={<StaffDayOf />} />
           <Route path="kj/:eventId" element={<KjConsole />} />
+          <Route path="booth/:eventId" element={<BoothAttendant />} />
           <Route path="profile" element={<StaffProfile />} />
         </Route>
 
@@ -216,6 +226,8 @@ export default function App() {
           <Route path="messages" element={<PortalMessages />} />
           <Route path="day-of" element={<PortalDayOf />} />
           <Route path="entertainment" element={<PortalEntertainment />} />
+          <Route path="gallery" element={<PortalGallery />} />
+          <Route path="thank-yous" element={<PortalThankYous />} />
         </Route>
 
         {/* ---------- Vendors (magic link, no account) ---------- */}
@@ -227,6 +239,8 @@ export default function App() {
 
         {/* ---------- Screens at the venue (no app frame) ---------- */}
         <Route path="screen/karaoke/:eventId" element={<KaraokeScreen />} />
+        <Route path="screen/gallery/:eventId" element={<Slideshow />} />
+        <Route path="booth/:eventId" element={<BoothKiosk />} />
 
         {/* ---------- Printable pages (planner, no app frame) ---------- */}
         <Route path="print/events/:eventId/run-of-show" element={<RequireRole role="planner"><RunOfShowPrint /></RequireRole>} />
@@ -238,6 +252,8 @@ export default function App() {
           <Route path="rsvp/done" element={<RsvpDone />} />
           <Route path="potluck" element={<GuestPotluck />} />
           <Route path="karaoke" element={<GuestKaraoke />} />
+          <Route path="gallery" element={<GuestGallery />} />
+          <Route path="magnet" element={<GuestMagnet />} />
         </Route>
         <Route path="i/:token" element={<GuestLayout />}>
           <Route index element={<Invitation />} />

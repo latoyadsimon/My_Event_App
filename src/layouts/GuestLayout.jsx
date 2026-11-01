@@ -8,7 +8,8 @@
 // browser language, with a toggle (NFR-10).
 // Privacy (GU-2.3): a private site shows "Ask the host" without a token;
 // a password site asks once; a public site lets anyone RSVP. The karaoke
-// request page (/e/<event>/karaoke) is never gated: its QR is on the tables.
+// request, magnet and gallery pages are never gated by the site (QRs at the
+// venue; the gallery has its own private/expiry rules).
 // =====================================================================
 import { useState } from 'react'
 import { Outlet, useLocation, useParams, useSearchParams } from 'react-router-dom'
@@ -58,8 +59,9 @@ export default function GuestLayout() {
   const hosts = client?.partner ? `${client.name.split(' ')[0]} & ${client.partner.split(' ')[0]}` : client?.company ?? client?.name ?? state.business.name
   const preview = params.get('preview') === '1' || state.ui.role === 'planner'
   const site = event.site
-  // The karaoke request page is opened from a QR code on the tables, at the venue: no gate (GU-5.5)
-  const atVenue = pathname.endsWith('/karaoke')
+  // Karaoke and magnet pages open from QR codes at the venue (GU-5.4, GU-5.5), and the gallery
+  // checks its own access (private / expired): none of them use the site's gate
+  const atVenue = /\/(karaoke|magnet|gallery)$/.test(pathname)
   const gate = !guest && !preview && !atVenue && (site.privacy === 'private' ? 'private' : site.privacy === 'password' && !unlocked ? 'password' : null)
 
   return (

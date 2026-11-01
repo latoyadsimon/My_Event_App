@@ -93,7 +93,7 @@ export default function DayOf() {
       </div>
 
       <div id="dayof-panel" role="tabpanel" aria-label={SECTIONS.find(([id]) => id === section)[1]} className="stack">
-        {section === 'run' && <><NowNext eventId={event.id} memberId={me.id} /><Arrivals eventId={event.id} />{event.karaoke?.enabled && <Button to={`/app/kj/${event.id}`}>Karaoke: KJ console</Button>}</>}
+        {section === 'run' && <><NowNext eventId={event.id} memberId={me.id} /><Arrivals eventId={event.id} />{event.booth?.enabled && <Button to={`/app/booth/${event.id}`}>Photo booth: attendant panel</Button>}{event.karaoke?.enabled && <Button to={`/app/kj/${event.id}`}>Karaoke: KJ console</Button>}</>}
         {section === 'door' && <CheckIn eventId={event.id} by={me.id} />}
         {section === 'sell' && <Sell event={event} />}
         {section === 'incidents' && <Incidents eventId={event.id} memberId={me.id} />}

@@ -107,6 +107,13 @@ export default function WrapUp() {
 
       {money && invoice && !closed && <FinalInvoice invoice={invoice} />}
 
+      <Card title="Thank your guests">
+        <p className="muted">A thank-you text or email to everyone who came{event.booth?.enabled ? ', with their link to the photo gallery' : ''}.</p>
+        {event.thankYouSentAt
+          ? <p><Icon name="check" size={14} className={styles.inlineIcon} /> Sent {formatDayShort(event.thankYouSentAt)}</p>
+          : <Button onClick={() => dispatch({ type: 'guests/thankYouGallery', eventId: event.id })}>Send thank-you{event.booth?.enabled ? ' + gallery link' : ''}</Button>}
+      </Card>
+
       <Card title="Event report">
         <Kpis label="Report numbers" items={[
           ...(money ? [{ label: 'Revenue', value: formatMoney(r.priceCents), note: `${formatMoney(r.collectedCents)} collected` }] : []),
@@ -119,6 +126,7 @@ export default function WrapUp() {
           {money && <li><span>Damage charges</span><strong>{formatMoney(r.damageCents)}</strong></li>}
           <li><span>Vendors arrived</span><strong>{r.vendorsOnTime} of {r.vendorsTotal}</strong></li>
           <li><span>Incidents</span><strong>{r.incidents}</strong></li>
+          {r.booth && <li><span>Photo booth</span><strong>{r.booth.sessions} sessions · {r.booth.prints} prints · {r.booth.magnets} magnets · {r.booth.photos} photos</strong></li>}
           {r.karaoke && <li><span>Karaoke</span><strong>{r.karaoke.sung} songs · {r.karaoke.singers} singers{r.karaoke.topSong ? ` · most sung “${r.karaoke.topSong.title}”` : ''}</strong></li>}
         </ul>
       </Card>

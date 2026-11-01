@@ -11,6 +11,7 @@ import { closeOut } from './selectorsEventDay'
 export * from './selectorsLogistics'
 export * from './selectorsEventDay'
 export * from './selectorsKaraoke'
+export * from './selectorsBooth'
 
 export const getLead = (state, id) => state.leads.find((l) => l.id === id)
 export const getEvent = (state, id) => state.events.find((e) => e.id === id)

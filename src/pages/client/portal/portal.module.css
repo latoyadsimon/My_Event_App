@@ -86,3 +86,19 @@
 .dayList > li { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-3); align-items: center; min-height: var(--tap-min); padding: var(--space-2) 0; border-top: 1px solid var(--color-border); }
 .dayList > li:first-child { border-top: 0; }
 .dayTime { min-width: 4.75rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+/* Gallery (CL-6.1) and thank-yous (CL-6.2) */
+.segmented { display: inline-flex; flex-wrap: wrap; gap: var(--space-1); padding: 3px; border-radius: var(--radius-lg); background: var(--color-surface-2); align-self: flex-start; }
+.segmented button { min-height: calc(var(--tap-min) - 6px); padding: 0 var(--space-4); border: 0; border-radius: var(--radius-pill); background: transparent; font-weight: 600; font-size: var(--text-sm); cursor: pointer; color: var(--color-muted); }
+.segmented button[aria-pressed='true'] { background: var(--color-surface); color: var(--color-text); box-shadow: 0 0 0 1px var(--color-border); }
+.photoGrid { display: grid; gap: var(--space-3); grid-template-columns: repeat(auto-fill, minmax(9rem, 1fr)); }
+.gifts { display: flex; flex-direction: column; }
+.giftRow { display: grid; grid-template-columns: 1fr; gap: var(--space-2); padding: var(--space-3) 0; border-top: 1px solid var(--color-border); }
+.giftRow:first-child { border-top: 0; }
+@media (min-width: 720px) { .giftRow { grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); align-items: end; } }
+.check { display: flex; align-items: center; gap: var(--space-3); min-height: var(--tap-min); cursor: pointer; }
+.check input { width: 1.25rem; height: 1.25rem; accent-color: var(--color-accent); flex-shrink: 0; }
+.inlineForm { display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: flex-end; }
+.inlineForm > * { flex: 1 1 10rem; }
+.inlineForm > button { flex: 0 0 auto; }
+.boothChoice { display: grid; gap: var(--space-4); grid-template-columns: minmax(0, 1fr) 9rem; align-items: start; }

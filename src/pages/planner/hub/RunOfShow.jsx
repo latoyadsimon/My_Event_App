@@ -159,7 +159,7 @@ export function RunOfShowPrint() {
   if (!event) return <NotFound what="event" standalone />
   const items = getTimeline(state, event.id)
   return (
-    <article className={styles.print}>
+    <article id="main" tabIndex={-1} className={styles.print}>
       <header className={styles.printHead}>
         <div>
           <h1 className={styles.threadTitle}>{event.name} · run of show</h1>

@@ -1,6 +1,9 @@
 // =====================================================================
 // Event Hub › Logistics › Booth & karaoke (PL-6.4): set it up before the
 // event so it runs itself.
+//   Photo booth: on/off, overlay, prints per session (limit + copies),
+//   magnets, the gallery's closing date and privacy (kids' parties:
+//   private), links to the kiosk, attendant panel and slideshow.
 //   Karaoke: on/off, content filter (clean only = explicit blocked), the
 //   client's do-not-play and must-play lists (CL-3.7), your banned list,
 //   the KJ, songs per singer in line, contest mode; links to the KJ
@@ -9,7 +12,8 @@
 // =====================================================================
 import { useOutletContext } from 'react-router-dom'
 import { useStore } from '../../../store/StoreContext'
-import { karaokeStats } from '../../../store/selectors'
+import { boothStats, karaokeStats } from '../../../store/selectors'
+import { BOOTH_OVERLAYS, MAGNET_FRAMES } from '../../../data/seedBooth'
 import { formatDateTime } from '../../../lib/clock'
 import { Button, Card, Field, Icon } from '../../../components/ui'
 import SongPicker from '../../../components/karaoke/SongPicker'
@@ -56,10 +60,50 @@ function KaraokeSetup({ event }) {
   )
 }
 
+function BoothSetup({ event }) {
+  const { state, dispatch } = useStore()
+  const b = event.booth
+  const set = (changes) => dispatch({ type: 'booth/configure', eventId: event.id, changes })
+  const num = (key) => (e) => set({ [key]: Math.max(0, Number(e.target.value) || 0) })
+  const stats = boothStats(state, event.id)
+  return (
+    <Card title="Photo booth" action={b.enabled && <Button size="small" variant="primary" to={`/app/booth/${event.id}`}>Attendant panel</Button>}>
+      <label className={styles.check}><input type="checkbox" checked={b.enabled} onChange={(e) => set({ enabled: e.target.checked })} /> Photo booth at this event</label>
+      {b.enabled && (
+        <div className="stack">
+          <div className={styles.grid2}>
+            <Field label="Overlay" as="select" value={b.overlay} onChange={(e) => set({ overlay: e.target.value })} hint="The client can pick in their portal">
+              {BOOTH_OVERLAYS.map((o) => <option key={o.id} value={o.id}>{o.name}</option>)}
+            </Field>
+            <Field label="Magnet frame" as="select" value={b.magnetFrame} onChange={(e) => set({ magnetFrame: e.target.value })}>
+              {MAGNET_FRAMES.map((o) => <option key={o.id} value={o.id}>{o.name}</option>)}
+            </Field>
+            <Field label="Copies per session" type="number" min="1" value={b.copies} onChange={num('copies')} />
+            <Field label="Print limit per session" type="number" min="1" value={b.printLimit} onChange={num('printLimit')} />
+            <Field label="Magnets included" type="number" min="0" value={b.magnets} onChange={num('magnets')} hint="0 = no magnets" />
+            <Field label="Gallery closes on" type="date" value={b.galleryExpires ?? ''} onChange={(e) => set({ galleryExpires: e.target.value || null })} />
+          </div>
+          <label className={styles.check}><input type="checkbox" checked={b.galleryPrivate} onChange={(e) => set({ galleryPrivate: e.target.checked })} /> Private gallery: only guests with their own link (use for kids&apos; parties)</label>
+          <div className="cluster">
+            <Button to={`/booth/${event.id}`}><Icon name="external" size={14} /> Kiosk screen</Button>
+            <Button to={`/screen/gallery/${event.id}`}><Icon name="external" size={14} /> Slideshow</Button>
+            <Button to={`/e/${event.id}/gallery?preview=1`}>Guest gallery</Button>
+            {b.magnets > 0 && <Button to={`/e/${event.id}/magnet`}>Magnet station page (QR)</Button>}
+            <Button onClick={() => dispatch({ type: 'booth/downloadOffline', eventId: event.id })}>Download for offline</Button>
+            {b.offlineAt && <span className="muted">On the tablets since {formatDateTime(b.offlineAt)}</span>}
+          </div>
+          {stats.sessions > 0 && <p className="muted">{stats.sessions} sessions, {stats.prints} prints, {stats.magnets} magnets, {stats.photos} photos.</p>}
+        </div>
+      )}
+    </Card>
+  )
+}
+
 export default function Entertainment() {
   const { event } = useOutletContext()
   return (
     <div className="stack">
+      <BoothSetup event={event} />
       <KaraokeSetup event={event} />
     </div>
   )

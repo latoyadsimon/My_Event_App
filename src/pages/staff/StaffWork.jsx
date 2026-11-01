@@ -374,6 +374,7 @@ export function StaffDayOf() {
       {!shift.clockIn && <Notice tone="warning" action={<Button size="small" to={`/app/staff/shifts/${shift.id}`}>Clock in</Button>}>You haven&apos;t clocked in yet.</Notice>}
       {role === 'Coordinator' && <><LivePanel eventId={event.id} money={false} /><NowNext eventId={event.id} memberId={me.id} /><Arrivals eventId={event.id} /></>}
       {role === 'Door / check-in' && <CheckIn eventId={event.id} by={me.id} />}
+      {role === 'Photo booth attendant' && event.booth?.enabled && <Button variant="primary" to={`/app/staff/booth/${event.id}`}>Open the booth panel</Button>}
       {role === 'KJ' && event.karaoke?.enabled && <Button variant="primary" to={`/app/staff/kj/${event.id}`}>Open the KJ console</Button>}
       {['Setup crew', 'Teardown'].includes(role) && <GearReturn eventId={event.id} />}
       {!['Coordinator', 'Door / check-in'].includes(role) && (

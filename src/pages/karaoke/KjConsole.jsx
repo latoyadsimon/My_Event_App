@@ -153,7 +153,7 @@ export function KaraokeScreen() {
   const next = line.filter((r) => r.status === 'queued').slice(0, 3)
   const results = event.karaoke?.contest ? contestResults(state, event.id).slice(0, 3) : []
   return (
-    <main className={styles.screen} style={themeToCssVars(theme)}>
+    <main id="main" tabIndex={-1} className={styles.screen} style={themeToCssVars(theme)}>
       <h1 className={styles.screenTitle}>{event.name}</h1>
       <section aria-label="Now singing" className={styles.screenNow}>
         <span className={styles.label}>Now singing</span>

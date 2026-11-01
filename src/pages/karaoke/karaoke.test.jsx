@@ -73,8 +73,9 @@ describe('PL-6.4 / CL-3.7 setup and the client’s lists', () => {
     const { user } = renderApp('/app/events/acme/logistics/entertainment')
     expect(screen.getByRole('button', { name: 'Remove Before He Cheats from Do-not-play' })).toBeInTheDocument()
     await user.click(screen.getByRole('checkbox', { name: /Contest mode/ }))
-    await user.click(screen.getByRole('button', { name: 'Download for offline' }))
-    expect(screen.getByText(/On the tablets since/)).toBeInTheDocument()
+    const karaoke = screen.getByRole('region', { name: 'Karaoke' })
+    await user.click(within(karaoke).getByRole('button', { name: 'Download for offline' }))
+    expect(within(karaoke).getByText(/On the tablets since/)).toBeInTheDocument()
   })
 
   it('Priya adds a must-play song from her portal', async () => {
