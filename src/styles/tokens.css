@@ -1,0 +1,164 @@
+/* =====================================================================
+   Design tokens for the app's OWN look (planner + staff workspace, landing page).
+   See app_outline/style_guide.md for when to use each one.
+
+   How it works
+   • Components never use raw hex colors; they use these variables, e.g.
+       background: var(--color-surface); color: var(--color-text);
+   • Calm is the default (:root). Bold is opt-in: <html data-mode="bold">.
+   • data-tone="respectful" (memorials, funerals, vigils) quiets everything inside that
+     element, in either mode: muted colors, no sparkle/glow, no motion.
+   • Event THEMES (guest websites, invitations) live in src/styles/themes.js.
+   • npm run check:contrast reads the "@mode" blocks below and fails if any text
+     pair drops under WCAG AA. Keep the "@mode" comments: the script needs them.
+   ===================================================================== */
+@import './fonts.css';
+
+/* ---------- Shared scales (same in every mode) ---------- */
+:root {
+  /* Spacing: a 4px grid, in rem so it grows with the user's font size */
+  --space-1: 0.25rem;  --space-2: 0.5rem;  --space-3: 0.75rem; --space-4: 1rem;
+  --space-5: 1.5rem;   --space-6: 2rem;    --space-7: 3rem;    --space-8: 4rem;
+
+  /* Type scale. Display fonts only for headings from --text-xl-plus (24px, WCAG "large text") up. */
+  --text-xs: 0.75rem;  --text-sm: 0.875rem; --text-base: 1rem;   --text-lg: 1.125rem;
+  --text-xl: 1.375rem; --text-xl-plus: 1.5rem; --text-2xl: 1.75rem; --text-3xl: 2.25rem; --text-4xl: clamp(2.5rem, 5vw + 1rem, 4rem);
+  --leading-tight: 1.15; --leading-body: 1.55;
+
+  --font-body: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+
+  /* Corners */
+  --radius-sm: 6px; --radius-md: 12px; --radius-lg: 20px; --radius-pill: 999px;
+
+  /* Touch targets: at least 44px tall on phones */
+  --tap-min: 2.75rem;
+
+  /* Motion: short and smooth. Respectful tone and reduced-motion set these to 0. */
+  --motion-fast: 120ms; --motion-base: 180ms; --motion-slow: 320ms;
+  --ease: cubic-bezier(.2, .8, .2, 1);
+
+  /* Layers */
+  --z-nav: 100; --z-overlay: 200; --z-toast: 300;
+}
+
+/* ---------- Calm (default): ivory and champagne, deep plum, rose and lavender ---------- */
+/* @mode calm */
+:root {
+  --color-bg: #FBF7F2;            /* page background: warm ivory */
+  --color-surface: #FFFFFF;       /* cards, panels, inputs */
+  --color-surface-2: #F3ECF5;     /* lavender mist: table stripes, selected rows */
+  --color-text: #2E1A3A;          /* deep plum: all body text */
+  --color-muted: #66566F;         /* secondary text: dates, metadata */
+  --color-accent: #A3336A;        /* rose berry: primary buttons, active nav */
+  --color-on-accent: #FFFFFF;     /* text on an accent background */
+  --color-secondary: #5E479C;     /* lavender: secondary buttons, links */
+  --color-gold: #C9A04A;          /* champagne gold: decoration only (crowns, sparkle) */
+  --color-gold-ink: #7A5A12;      /* gold you can put text in */
+  --color-border: #E6DCE8;        /* soft divider lines (decorative) */
+  --color-input-border: #8E7D96;  /* form fields: must stay ≥ 3:1 */
+  --color-focus: #5E479C;         /* keyboard focus ring */
+
+  /* Status chips: ink (text) on a tinted background */
+  --status-success-ink: #1F6B41; --status-success-bg: #E3F4EA;
+  --status-warning-ink: #7A4D00; --status-warning-bg: #FCF0D9;
+  --status-danger-ink:  #A3201A; --status-danger-bg:  #FBE5E3;
+  --status-info-ink:    #24508A; --status-info-bg:    #E2ECF8;
+  --status-neutral-ink: #4E4456; --status-neutral-bg: #EFEAF1;
+
+  --font-display: 'Playfair Display', Georgia, serif;   /* elegant serif headings */
+  --font-accent: 'Great Vibes', cursive;                 /* tiny script flourishes (names, ≥ 36px) */
+  --shadow-card: 0 1px 2px rgb(46 26 58 / .06), 0 4px 16px rgb(46 26 58 / .06);
+  --glow: none;
+  --sparkle-opacity: .55;          /* decorative sparkles: gentle in Calm */
+}
+
+/* ---------- Bold (opt-in): graffiti × princess power on a neon-arcade night ---------- */
+/* @mode bold */
+[data-mode="bold"] {
+  --color-bg: #0F0B1E;            /* arcade night */
+  --color-surface: #1A1430;
+  --color-surface-2: #251C45;
+  --color-text: #F7F1FF;
+  --color-muted: #BDB2D8;
+  --color-accent: #FF2E93;        /* neon pink */
+  --color-on-accent: #1A0612;     /* dark ink on neon (white on pink fails contrast) */
+  --color-secondary: #22E4F0;     /* cyan */
+  --color-gold: #FFC940;          /* crown gold */
+  --color-gold-ink: #FFC940;
+  --color-border: #3A2E5C;
+  --color-input-border: #8173B0;
+  --color-focus: #22E4F0;
+
+  --status-success-ink: #6EE7A0; --status-success-bg: #12301F;
+  --status-warning-ink: #FCD34D; --status-warning-bg: #33280A;
+  --status-danger-ink:  #FF8A8A; --status-danger-bg:  #3A1218;
+  --status-info-ink:    #7CC4FF; --status-info-bg:    #0F2742;
+  --status-neutral-ink: #CFC6E6; --status-neutral-bg: #2A2245;
+
+  --font-display: 'Sedgwick Ave Display', 'Permanent Marker', 'Comic Sans MS', cursive;  /* graffiti headings */
+  --font-accent: 'Press Start 2P', monospace;                                           /* arcade labels, sparingly */
+  --shadow-card: 0 0 0 1px #2E2450, 0 8px 24px rgb(0 0 0 / .45);
+  --glow: 0 0 12px rgb(255 46 147 / .55), 0 0 28px rgb(155 92 255 / .35);  /* neon glow, decoration only */
+  --sparkle-opacity: 1;
+}
+
+/* ---------- Respectful tone (memorials, funerals, vigils): quiet, in either mode ---------- */
+/* @mode respectful */
+[data-tone="respectful"] {
+  --color-bg: #F6F5F3;
+  --color-surface: #FFFFFF;
+  --color-surface-2: #EEEDEA;
+  --color-text: #2B2B2E;
+  --color-muted: #5C5C64;
+  --color-accent: #4A5568;        /* slate: calm, never celebratory */
+  --color-on-accent: #FFFFFF;
+  --color-secondary: #4A5568;
+  --color-gold: #A89F91;
+  --color-gold-ink: #5F574B;
+  --color-border: #DEDCD7;
+  --color-input-border: #85838A;
+  --color-focus: #2B4A7A;
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-accent: 'Cormorant Garamond', Georgia, serif;
+  --shadow-card: 0 1px 3px rgb(0 0 0 / .08);
+  --glow: none;
+  --sparkle-opacity: 0;           /* no sparkle, confetti or crowns */
+  --motion-fast: 0ms; --motion-base: 0ms; --motion-slow: 0ms;
+}
+/* @mode respectful-bold */
+:is([data-mode="bold"][data-tone="respectful"], [data-mode="bold"] [data-tone="respectful"]) {
+  --color-bg: #16161A;
+  --color-surface: #1F1F24;
+  --color-surface-2: #29292F;
+  --color-text: #ECECEF;
+  --color-muted: #ABABB4;
+  --color-accent: #9AA5B8;
+  --color-on-accent: #16161A;
+  --color-secondary: #9AA5B8;
+  --color-gold: #A89F91;
+  --color-gold-ink: #CFC7B8;
+  --color-border: #34343B;
+  --color-input-border: #75757F;
+  --color-focus: #9DB8E0;
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-accent: 'Cormorant Garamond', Georgia, serif;
+  --shadow-card: 0 1px 3px rgb(0 0 0 / .4);
+  --glow: none;
+  --sparkle-opacity: 0;
+}
+
+/* ---------- Respect the user's "reduce motion" setting ---------- */
+@media (prefers-reduced-motion: reduce) {
+  :root, [data-mode], [data-tone] { --motion-fast: 0ms; --motion-base: 0ms; --motion-slow: 0ms; }
+}
+
+/* ---------- Base element styles that every page shares ---------- */
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  line-height: var(--leading-body);
+}
+:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 2px; }
