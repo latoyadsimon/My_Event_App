@@ -1,0 +1,31 @@
+.wizard { display: flex; flex-direction: column; gap: var(--space-5); }
+.pageTitle { font-size: var(--text-xl-plus); }
+@media (min-width: 768px) { .pageTitle { font-size: var(--text-2xl); } }
+
+/* The six steps: numbered because they really are a sequence */
+.steps { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: var(--space-1); }
+.step {
+  width: 100%; min-height: var(--tap-min); display: flex; align-items: center; justify-content: center; gap: var(--space-2);
+  padding: var(--space-1) var(--space-2); border-radius: var(--radius-pill); cursor: pointer;
+  background: var(--color-surface); border: 1.5px solid var(--color-border); color: var(--color-muted); font-size: var(--text-sm); font-weight: 600;
+}
+.step[aria-current='step'] { background: var(--color-text); border-color: var(--color-text); color: var(--color-bg); }
+.stepDone { color: var(--color-text); }
+.stepNum {
+  display: inline-grid; place-items: center; width: 1.4rem; height: 1.4rem; border-radius: 50%; flex-shrink: 0;
+  background: var(--color-surface-2); color: var(--color-text); font-size: var(--text-xs);
+}
+.stepDone .stepNum { background: var(--status-success-bg); color: var(--status-success-ink); }
+.stepLabel { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+@media (max-width: 767px) {
+  .stepLabel { display: none; }                         /* phone: just the numbers, as in the wireframe */
+  .step[aria-current='step'] .stepLabel { display: inline; }
+  .steps { grid-template-columns: repeat(6, auto); justify-content: start; }
+}
+
+.body { display: flex; flex-direction: column; gap: var(--space-4); }
+.stepTitle { font-size: var(--text-lg); font-weight: 650; outline: none; }
+.footer {
+  display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: center;
+  padding-top: var(--space-4); border-top: 1px solid var(--color-border);
+}

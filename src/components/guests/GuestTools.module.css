@@ -1,0 +1,12 @@
+.grid { display: grid; gap: var(--space-4); grid-template-columns: 1fr; }
+@media (min-width: 640px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.file { display: flex; flex-direction: column; gap: var(--space-1); font-weight: 600; font-size: var(--text-sm); }
+.file input { font-weight: 400; max-width: 100%; }
+.preview { font-size: var(--text-sm); padding: var(--space-3); border-radius: var(--radius-sm); background: var(--status-success-bg); color: var(--status-success-ink); max-width: none; }
+.progress { display: flex; align-items: center; gap: var(--space-3); font-variant-numeric: tabular-nums; font-size: var(--text-sm); }
+.progress progress { flex: 1; height: .75rem; accent-color: var(--color-accent); }
+.problems { display: flex; flex-direction: column; gap: var(--space-3); padding: var(--space-3); border-radius: var(--radius-sm); background: var(--status-warning-bg); font-size: var(--text-sm); }
+.problem { display: grid; gap: var(--space-2); grid-template-columns: 1fr; }
+@media (min-width: 640px) { .problem { grid-template-columns: 9rem minmax(0, 1fr) minmax(0, 1fr); align-items: end; } }
+.bad { color: var(--status-danger-ink); font-weight: 650; }
+.good { color: var(--status-success-ink); font-weight: 650; }

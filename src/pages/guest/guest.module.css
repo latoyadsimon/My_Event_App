@@ -1,0 +1,102 @@
+/* Guest pages wear the event theme (--theme-*), mapped onto the app tokens by GuestLayout. */
+.muted { color: var(--theme-muted); font-size: var(--text-sm); }
+.error { color: var(--status-danger-ink); font-weight: 600; font-size: var(--text-sm); }
+.actions { display: flex; flex-wrap: wrap; gap: var(--space-2); justify-content: center; }
+.kicker { font-size: var(--text-xs); letter-spacing: .14em; text-transform: uppercase; font-weight: 700; color: var(--theme-muted); }
+
+/* Invitation: the card is the page */
+.invite {
+  border-radius: var(--theme-radius); padding: var(--space-4);
+  background: var(--theme-surface) var(--theme-motif) repeat; background-size: 180px;
+  border: 1px solid var(--theme-border);
+}
+.inviteInner {
+  display: flex; flex-direction: column; align-items: center; text-align: center; gap: var(--space-3);
+  padding: var(--space-7) var(--space-5); border-radius: var(--theme-radius); background: var(--theme-surface);
+  animation: unfold var(--motion-slow, 480ms) var(--ease) both;
+}
+.dear { font-family: var(--theme-font-display); font-size: var(--text-lg); }
+.inviteTitle { font-family: var(--theme-font-display); font-size: clamp(2rem, 7vw, 3.25rem); line-height: 1.05; color: var(--theme-accent); }
+.hostedBy { color: var(--theme-muted); }
+.wording { max-width: 38ch; }
+.when { font-weight: 650; font-size: var(--text-lg); }
+.replyBy { font-size: var(--text-sm); color: var(--theme-muted); }
+@keyframes unfold { from { opacity: 0; transform: translateY(12px) scale(.98); } }
+[data-tone='respectful'] .inviteInner { animation: none; }
+@media (prefers-reduced-motion: reduce) { .inviteInner { animation: none; } }
+
+/* Event website */
+.hero { display: flex; flex-direction: column; gap: var(--space-2); text-align: center; align-items: center; padding: var(--space-4) 0; }
+.siteTitle { font-family: var(--theme-font-display); font-size: clamp(1.75rem, 6vw, 2.75rem); line-height: 1.1; color: var(--theme-accent); }
+.welcome { max-width: 50ch; }
+.sectionNav { display: flex; flex-wrap: wrap; gap: var(--space-1) var(--space-4); justify-content: center; border-bottom: 1px solid var(--theme-border); padding-bottom: var(--space-2); }
+.sectionNav a { color: var(--theme-text); font-weight: 600; min-height: var(--tap-min); display: inline-flex; align-items: center; }
+.grid { display: grid; gap: var(--space-4); grid-template-columns: 1fr; }
+@media (min-width: 768px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.panel {
+  display: flex; flex-direction: column; gap: var(--space-3); padding: var(--space-5); min-width: 0; margin: 0;
+  border-radius: var(--theme-radius); background: var(--theme-surface); border: 1px solid var(--theme-border);
+  scroll-margin-top: var(--space-6);
+}
+.panelTitle { font-family: var(--theme-font-display); font-size: var(--text-xl); color: var(--theme-text); padding: 0; }
+.schedule { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; }
+.schedule li { display: grid; grid-template-columns: 6rem minmax(0, 1fr); gap: var(--space-3); padding: var(--space-2) 0; border-top: 1px solid var(--theme-border); }
+.schedule li:first-child { border-top: 0; }
+.schedule li span:first-child { font-weight: 650; font-variant-numeric: tabular-nums; }
+.faq { display: flex; flex-direction: column; gap: var(--space-3); }
+.faq dt { font-weight: 650; }
+.fundLink, .buttonLink {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); min-height: var(--tap-min); padding: 0 var(--space-5);
+  border-radius: var(--radius-pill); border: 1.5px solid var(--theme-border); color: var(--theme-text); font-weight: 600; font-size: var(--text-sm); text-decoration: none;
+}
+.rsvpBar {
+  position: sticky; bottom: 0; z-index: 2; display: flex; align-items: center; justify-content: space-between; gap: var(--space-3);
+  padding: var(--space-3) var(--space-4); border-radius: var(--theme-radius); background: var(--theme-surface);
+  border: 1px solid var(--theme-border); box-shadow: 0 -4px 16px rgb(0 0 0 / .08); font-weight: 600; font-size: var(--text-sm);
+}
+
+/* RSVP */
+.rsvp { display: flex; flex-direction: column; gap: var(--space-4); }
+.member { display: flex; flex-direction: column; gap: var(--space-2); padding: var(--space-3) 0; border-top: 1px solid var(--theme-border); }
+.member:first-of-type { border-top: 0; padding-top: 0; }
+.memberName { font-weight: 700; font-size: var(--text-lg); }
+.choice { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.choice button {
+  min-height: var(--tap-min); padding: 0 var(--space-5); border-radius: var(--radius-pill); cursor: pointer; font-weight: 600;
+  border: 1.5px solid var(--theme-border); background: var(--theme-surface); color: var(--theme-text);
+}
+.choice button[aria-checked='true'] { background: var(--theme-accent); color: var(--theme-on-accent); border-color: var(--theme-accent); }
+.limit { font-size: var(--text-sm); }
+.doneIcon { width: 3rem; height: 3rem; border-radius: 50%; display: grid; place-items: center; background: var(--theme-accent); color: var(--theme-on-accent); }
+.summary { display: flex; flex-direction: column; gap: var(--space-1); padding-left: 1.25rem; margin: 0; }
+/* A fieldset's legend normally sits on the border; float it so it reads like the other panel titles */
+fieldset.panel > legend { float: left; width: 100%; margin-bottom: var(--space-1); }
+fieldset.panel > legend + * { clear: both; }
+/* GU-5.1: the code door staff scan or type */
+.checkIn { display: flex; flex-direction: column; align-items: center; gap: var(--space-1); padding: var(--space-4); border-radius: var(--theme-radius, var(--radius-md)); border: 1.5px dashed var(--theme-border); text-align: center; }
+.checkInCode { font-size: var(--text-xl); letter-spacing: .12em; font-variant-numeric: tabular-nums; color: var(--theme-text); }
+
+/* Potluck and volunteers (GU-3.1, GU-3.2) */
+.formGrid { display: grid; gap: var(--space-3); grid-template-columns: 1fr; }
+@media (min-width: 560px) { .formGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.formGrid > * { min-width: 0; }
+.note { font-size: var(--text-sm); padding: var(--space-3); border-radius: var(--radius-sm); background: var(--status-warning-bg); color: var(--status-warning-ink); }
+.fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+.legend { font-weight: 650; font-size: var(--text-sm); cursor: pointer; }
+.tags { display: grid; grid-template-columns: repeat(auto-fill, minmax(7.5rem, 1fr)); gap: 0 var(--space-3); }
+.check { display: flex; align-items: center; gap: var(--space-2); min-height: var(--tap-min); cursor: pointer; font-size: var(--text-sm); }
+.check input { width: 1.2rem; height: 1.2rem; accent-color: var(--theme-accent); flex-shrink: 0; }
+.meter { display: flex; flex-direction: column; gap: var(--space-2); font-size: var(--text-sm); }
+.meter > li { display: grid; grid-template-columns: minmax(6rem, 1fr) minmax(4rem, 2fr) auto; gap: var(--space-3); align-items: center; }
+.bar { height: .5rem; border-radius: 999px; background: var(--theme-border); overflow: hidden; }
+.bar > span { display: block; height: 100%; background: var(--theme-accent); border-radius: inherit; }
+
+/* Karaoke requests (GU-5.5) */
+.songs { display: flex; flex-direction: column; font-size: var(--text-sm); }
+.songs > li { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); min-height: var(--tap-min); padding: var(--space-2) 0; border-top: 1px solid var(--theme-border); }
+.songs > li:first-child { border-top: 0; }
+.songNote { display: block; font-size: var(--text-xs); color: var(--theme-muted); }
+
+/* Gallery (GU-5.6, GU-6.1) */
+.photoGrid { display: grid; gap: var(--space-3); grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr)); }
+.recipe { white-space: pre-wrap; font-size: var(--text-sm); }
