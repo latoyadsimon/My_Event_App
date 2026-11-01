@@ -10,7 +10,8 @@ ERD_DIR="$(dirname "$TESTS_DIR")"
 PORT="${PGTEST_PORT:-54330}"
 
 # Find the newest installed PostgreSQL's server tools (Ubuntu puts them in /usr/lib/postgresql/<ver>/bin).
-PG_BIN="$(ls -d /usr/lib/postgresql/*/bin 2>/dev/null | sort -V | tail -1 || true)"
+# PG_BIN=/path/to/bin overrides it (e.g. to test another PostgreSQL version).
+PG_BIN="${PG_BIN:-$(ls -d /usr/lib/postgresql/*/bin 2>/dev/null | sort -V | tail -1 || true)}"
 if [ -n "$PG_BIN" ]; then PATH="$PG_BIN:$PATH"; fi
 command -v initdb >/dev/null || { echo "initdb not found: install PostgreSQL server tools"; exit 1; }
 
