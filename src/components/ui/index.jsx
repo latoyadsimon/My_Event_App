@@ -12,6 +12,7 @@ export { default as Button } from './Button'
 export { default as Icon, Crown } from './Icon'
 export { default as ConfirmDialog } from './ConfirmDialog'
 export { default as Dialog } from './Dialog'
+export { default as QrCode } from './QrCode'
 
 /** The noun title at the top of a screen, with optional subtitle and actions. */
 export function PageHeader({ title, sub, actions, children }) {

@@ -31,7 +31,7 @@
 .screenSong { font-family: var(--theme-font-display); font-size: clamp(2.5rem, 8vw, 6rem); line-height: 1.05; }
 .screenWho { font-size: clamp(1.25rem, 3vw, 2.25rem); font-weight: 650; }
 .screenNext { font-size: clamp(1.1rem, 2.5vw, 1.75rem); padding-left: 1.5em; display: flex; flex-direction: column; gap: var(--space-2); margin-top: var(--space-2); }
-.screenFoot { margin-top: auto; font-size: clamp(.9rem, 1.8vw, 1.25rem); color: var(--theme-muted); }
+.screenFoot { display: flex; align-items: center; gap: var(--space-4); margin-top: auto; font-size: clamp(.9rem, 1.8vw, 1.25rem); color: var(--theme-muted); }
 /* Outline buttons on the dark "now singing" card read light-on-dark */
 .buttons > :not([class*='primary']) { color: var(--color-surface); border-color: var(--color-surface); background: transparent; }
 .buttons > :not([class*='primary']):hover { background: color-mix(in srgb, var(--color-surface) 12%, transparent); }

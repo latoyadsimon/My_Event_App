@@ -100,6 +100,8 @@ const BoothKiosk = lazyPage(() => import('./pages/booth/BoothPages'), 'BoothKios
 const BoothAttendant = lazyPage(() => import('./pages/booth/BoothPages'), 'BoothAttendant')
 const Slideshow = lazyPage(() => import('./pages/booth/BoothPages'), 'Slideshow')
 const GuestGallery = lazyPage(() => import('./pages/guest/Gallery'))
+const InvitationDesigner = lazyPage(() => import('./pages/planner/hub/InvitationDesigner'))
+const InvitationPrint = lazyPage(() => import('./pages/planner/hub/InvitationDesigner'), 'InvitationPrint')
 const GuestMagnet = lazyPage(() => import('./pages/guest/Gallery'), 'Magnet')
 const PortalGallery = lazyPage(() => import('./pages/client/portal/PortalAfter'), 'PortalGallery')
 const PortalThankYous = lazyPage(() => import('./pages/client/portal/PortalAfter'), 'PortalThankYous')
@@ -158,6 +160,7 @@ export default function App() {
             <Route path="guests" element={<GuestSubTabs />}>
               <Route index element={<Guests />} />
               <Route path="invitations" element={<Invitations />} />
+              <Route path="design" element={<InvitationDesigner />} />
               <Route path="website" element={<Website />} />
               <Route path="potluck" element={<PotluckTab />} />
             </Route>
@@ -244,6 +247,7 @@ export default function App() {
 
         {/* ---------- Printable pages (planner, no app frame) ---------- */}
         <Route path="print/events/:eventId/run-of-show" element={<RequireRole role="planner"><RunOfShowPrint /></RequireRole>} />
+        <Route path="print/events/:eventId/invitation" element={<RequireRole role="planner"><InvitationPrint /></RequireRole>} />
 
         {/* ---------- Guests (no account) ---------- */}
         <Route path="e/:slug" element={<GuestLayout />}>

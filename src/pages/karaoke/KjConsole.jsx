@@ -14,7 +14,7 @@ import { Link, useParams } from 'react-router-dom'
 import { useStore } from '../../store/StoreContext'
 import { contestResults, getEvent, getSong, karaokeQueue, karaokeStats, searchSongs } from '../../store/selectors'
 import { getTheme, themeToCssVars, DEFAULT_THEME_FOR_EVENT_TYPE } from '../../styles/themes'
-import { Button, Card, EmptyState, Field, Icon, Notice, PageHeader, StatusChip } from '../../components/ui'
+import { Button, Card, EmptyState, Field, Icon, Notice, PageHeader, QrCode, StatusChip } from '../../components/ui'
 import NotFound from '../shared/NotFound'
 import styles from './karaoke.module.css'
 
@@ -172,7 +172,10 @@ export function KaraokeScreen() {
           <ol className={styles.screenNext}>{results.map((r) => <li key={r.id}>{who(r)} · {r.average.toFixed(1)}</li>)}</ol>
         </section>
       )}
-      <p className={styles.screenFoot}>Scan the QR on your table to request a song · {window.location.host}/e/{event.id}/karaoke</p>
+      <div className={styles.screenFoot}>
+        <QrCode value={`${window.location.origin}/e/${event.id}/karaoke`} size={120} label="QR code to request a song" />
+        <p>Scan to request a song · {window.location.host}/e/{event.id}/karaoke</p>
+      </div>
     </main>
   )
 }

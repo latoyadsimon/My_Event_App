@@ -8,6 +8,10 @@
 const TEXT = {
   en: {
     youreInvited: 'You’re invited',
+    openInvite: 'Open your invitation',
+    skip: 'Skip',
+    musicOn: 'Music on · tap to mute',
+    musicOff: 'Play music',
     hostedBy: 'Hosted by {hosts}',
     replyBy: 'Please reply by {date}',
     rsvp: 'RSVP',
@@ -135,6 +139,10 @@ const TEXT = {
     diet_Vegetarian: 'Vegetarian', diet_Vegan: 'Vegan', 'diet_Gluten-free': 'Gluten-free', 'diet_Dairy-free': 'Dairy-free', 'diet_Nut-free': 'Nut-free', diet_Halal: 'Halal', diet_Kosher: 'Kosher', diet_Spicy: 'Spicy',
   },
   es: {
+    openInvite: 'Abrir tu invitación',
+    skip: 'Saltar',
+    musicOn: 'Música · toca para silenciar',
+    musicOff: 'Poner música',
     youreInvited: 'Estás invitado',
     hostedBy: 'Te invitan {hosts}',
     replyBy: 'Por favor responde antes del {date}',

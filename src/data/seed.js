@@ -47,6 +47,8 @@ export const business = {
   holdDays: 7,                      // "Hold date" on a lead lasts this long
   gearBufferDays: 1,                // gear isn't free again until a day after an event (cleaning, turnaround)
   alwaysBring: ALWAYS_BRING,        // on every pack list (PL-6.3)
+  // The planner's own invitation looks, reusable on any event (PL-5.5)
+  inviteTemplates: [{ id: 'tpl-bella', name: 'Bella signature', design: { themeId: 'elegant-wedding', font: 'Playfair Display', accent: '#A3336A', photo: null, layout: 'classic', envelope: true, music: 'piano' } }],
   staffDressCode: 'All black, closed-toe shoes, name badge',   // on every call sheet (ST-3.1)
   // Contract template (PL-3.3): merge fields are filled from the accepted proposal
   contractTerms: {
@@ -384,7 +386,7 @@ export function createNewBusinessState({ ownerName, businessName, email }) {
     business: {
       ...structuredClone(business),
       id: slug, slug, name: businessName, initials, logo: null, email, phone: '', city: '', customDomain: '',
-      paymentProvider: null, calendarProvider: null, inquiryFormShared: false,
+      paymentProvider: null, calendarProvider: null, inquiryFormShared: false, inviteTemplates: [],
       onboarding: { business: false, payments: false, packages: false, calendar: false, team: false, templates: false },
     },
     team: [{

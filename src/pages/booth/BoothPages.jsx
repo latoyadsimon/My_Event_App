@@ -18,7 +18,7 @@ import { newId } from '../../store/helpers'
 import { BOOTH_PIN } from '../../data/seedBooth'
 import { formatTime } from '../../lib/clock'
 import { getTheme, themeToCssVars, DEFAULT_THEME_FOR_EVENT_TYPE } from '../../styles/themes'
-import { Button, Card, EmptyState, Field, Icon, Kpis, Notice, PageHeader, StatusChip } from '../../components/ui'
+import { Button, Card, EmptyState, Field, Icon, Kpis, Notice, PageHeader, QrCode, StatusChip } from '../../components/ui'
 import PhotoTile from '../../components/booth/PhotoTile'
 import NotFound from '../shared/NotFound'
 import styles from './booth.module.css'
@@ -88,7 +88,7 @@ export function BoothKiosk() {
           {child === false && (
             <>
               <Field label="Text or email them to me (optional)" value={contact} onChange={(e) => setContact(e.target.value)} hint="Only used to send these photos" />
-              <p className={styles.qr}><Icon name="external" size={14} /> Or scan the QR on the screen to open them on your phone</p>
+              <div className={styles.qr}><QrCode value={`${window.location.origin}/e/${event.id}/gallery`} size={96} label="QR code to open your photos on your phone" /><span>Or scan this to open them on your phone</span></div>
               <label className={styles.check}><input type="checkbox" checked={hide} onChange={(e) => setHide(e.target.checked)} /> Don&apos;t show on the slideshow</label>
             </>
           )}
@@ -232,7 +232,10 @@ export function Slideshow() {
           {photos.map((p) => <li key={p.id}><PhotoTile photo={p} event={event} /></li>)}
         </ul>
       )}
-      <p className={styles.foot}>Upload yours: {window.location.host}/e/{event.id}/gallery</p>
+      <div className={styles.foot}>
+        <QrCode value={`${window.location.origin}/e/${event.id}/gallery`} size={110} label="QR code to the photo gallery" />
+        <p>Scan to see and add photos · {window.location.host}/e/{event.id}/gallery</p>
+      </div>
     </main>
   )
 }

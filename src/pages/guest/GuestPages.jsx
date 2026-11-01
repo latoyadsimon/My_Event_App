@@ -10,10 +10,12 @@ import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useOutletContext } from 'react-router-dom'
 import { useStore } from '../../store/StoreContext'
 import { checkInCode } from '../../store/selectors'
+import { designOf } from '../../data/seedPlanning'
+import InvitationCard, { Envelope } from '../../components/invitation/InvitationCard'
 import { daysUntil } from '../../lib/clock'
 import { guestDate, guestTime } from '../../lib/guestText'
 import { downloadIcs } from '../../lib/ics'
-import { Button, Dialog, Field, Icon } from '../../components/ui'
+import { Button, Dialog, Field, Icon, QrCode } from '../../components/ui'
 import styles from './guest.module.css'
 
 const at = (event) => `${event.date}T${event.startTime ?? '17:00'}:00`
@@ -44,15 +46,24 @@ function MessageHost({ open, onClose, event, name }) {
 export function Invitation() {
   const { event, guest, token, t, lang, hosts, site } = useOutletContext()
   const { dispatch } = useStore()
+  const design = designOf(event)
+  const [opened, setOpened] = useState(!design.envelope)
+  const [music, setMusic] = useState(false)
   useEffect(() => { dispatch({ type: 'guest/opened', token }) }, [dispatch, token])
   const wording = event.invitation?.wording?.invitation
+  // Opening the envelope starts the music (a tap = consent); Skip goes straight to the card, quietly
+  const open = () => { setOpened(true); if (design.music) setMusic(true) }
 
+  if (!opened) return <Envelope event={event} design={design} name={guest.name} onOpen={open} onSkip={() => setOpened(true)} openLabel={t('openInvite')} skipLabel={t('skip')} />
   return (
-    <article className={styles.invite} aria-label={t('youreInvited')}>
-      <div className={styles.inviteInner}>
-        <p className={styles.kicker}>{t('youreInvited')}</p>
+    <>
+      {design.music && (
+        <p className={styles.music}>
+          <button type="button" className="link-button" aria-pressed={music} onClick={() => setMusic(!music)}>{music ? `♪ ${t('musicOn')}` : t('musicOff')}</button>
+        </p>
+      )}
+      <InvitationCard event={event} design={design} kicker={t('youreInvited')} title={event.name} titleAs="h1" label={t('youreInvited')}>
         <p className={styles.dear}>{guest.name}{guest.plusOnes ? ` +${guest.plusOnes}` : ''}</p>
-        <h1 className={styles.inviteTitle}>{event.name}</h1>
         <p className={styles.hostedBy}>{t('hostedBy', { hosts })}</p>
         {wording && lang === 'en' && <p className={styles.wording}>{wording}</p>}
         <p className={styles.when}>{guestDate(event.date, lang)} · {guestTime(event.startTime ?? '17:00', lang)}</p>
@@ -62,8 +73,8 @@ export function Invitation() {
           <Button variant="primary" to={withToken(`/e/${event.id}/rsvp`, token)}>{t('rsvp')}</Button>
           <Button to={withToken(`/e/${event.id}`, token)}>{t('viewDetails')}</Button>
         </div>
-      </div>
-    </article>
+      </InvitationCard>
+    </>
   )
 }
 
@@ -265,6 +276,7 @@ export function RsvpDone() {
       {going && (
         <div className={styles.checkIn}>
           <span className={styles.muted}>{t('checkInCode')}</span>
+          <QrCode value={checkInCode(guest)} size={128} label={`${t('checkInCode')}: ${checkInCode(guest)}`} />
           <strong className={styles.checkInCode}>{checkInCode(guest)}</strong>
           <span className={styles.muted}>{t('checkInHelp')}</span>
         </div>

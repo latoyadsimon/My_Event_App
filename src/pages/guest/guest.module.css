@@ -100,3 +100,4 @@ fieldset.panel > legend + * { clear: both; }
 /* Gallery (GU-5.6, GU-6.1) */
 .photoGrid { display: grid; gap: var(--space-3); grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr)); }
 .recipe { white-space: pre-wrap; font-size: var(--text-sm); }
+.music { display: flex; justify-content: flex-end; font-size: var(--text-sm); }

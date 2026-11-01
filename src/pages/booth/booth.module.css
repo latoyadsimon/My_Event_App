@@ -45,5 +45,5 @@
 
 /* Slideshow */
 .wall { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr)); width: 100%; }
-.foot { margin-top: auto; color: var(--theme-muted); }
+.foot { margin-top: auto; color: var(--theme-muted); display: flex; align-items: center; gap: var(--space-4); }
 .kiosk:focus, .slideshow:focus { outline: none; }

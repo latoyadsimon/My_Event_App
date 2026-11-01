@@ -1,5 +1,5 @@
 // =====================================================================
-// Event Hub › Guests › Invitations (PL-5.3): one simple branded design,
+// Event Hub › Guests › Invitations (PL-5.3): the design (see the Designer, PL-5.5),
 // editable wording per type (save-the-date, invitation, reminder,
 // thank-you), client approval, then send by email / text / link, now or
 // scheduled. Tracking per guest; bounces and STOP opt-outs are listed.
@@ -8,7 +8,8 @@ import { useState } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { useStore } from '../../../store/StoreContext'
 import { getEventGuests, guestCounts } from '../../../store/selectors'
-import { getTheme, themeToCssVars } from '../../../styles/themes'
+import { designOf } from '../../../data/seedPlanning'
+import InvitationCard from '../../../components/invitation/InvitationCard'
 import { formatDay, formatDayShort } from '../../../lib/clock'
 import { Button, Card, Dialog, Field, Kpis, Notice, StatusChip } from '../../../components/ui'
 import styles from './hub.module.css'
@@ -35,7 +36,6 @@ export default function Invitations() {
 
   const list = getEventGuests(state, event.id)
   const c = guestCounts(list)
-  const theme = getTheme(event.theme)
   const approval = event.invitation.approval
   const sent = (k) => event.invitation.sends.filter((s) => s.kind === k && !s.scheduled).at(-1)
   const sizes = {
@@ -67,15 +67,11 @@ export default function Invitations() {
       </div>
 
       <div className={styles.grid2}>
-        <Card title="Design + wording">
-          <div className={styles.inviteCard} style={themeToCssVars(theme)} aria-label="Invitation preview">
-            <div className={styles.inviteInner}>
-              <p className={styles.inviteKicker}>{KINDS.find(([k]) => k === kind)[1]}</p>
-              <p className={styles.inviteTitle}>{event.name}</p>
-              <p className={styles.inviteText}>{drafts[kind]}</p>
-              <p className={styles.inviteFoot}>{formatDay(event.date)} · {event.venue}</p>
-            </div>
-          </div>
+        <Card title="Design + wording" action={<Button size="small" variant="primary" to={`/app/events/${event.id}/guests/design`}>Open the designer</Button>}>
+          <InvitationCard event={event} design={designOf(event)} kicker={KINDS.find(([k]) => k === kind)[1]} title={event.name} label="Invitation preview">
+            <p className={styles.inviteText}>{drafts[kind]}</p>
+            <p className={styles.inviteFoot}>{formatDay(event.date)} · {event.venue}</p>
+          </InvitationCard>
           <Field label="Wording" as="textarea" value={drafts[kind]} onChange={(e) => setDrafts((d) => ({ ...d, [kind]: e.target.value }))} onBlur={saveWording} />
           {approval?.status === 'approved' && <StatusChip tone="success" label={`✓ Approved by ${approval.by.split(' ')[0]} · ${formatDayShort(approval.at)}`} />}
           {approval?.status === 'requested' && <StatusChip tone="warning" label="Waiting for the client's approval" />}

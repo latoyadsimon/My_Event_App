@@ -35,7 +35,16 @@ export const defaultInvitation = () => ({
   wording: { save_the_date: '', invitation: '', reminder: '', thank_you: '' },
   approval: null,     // { status: 'requested' | 'approved' | 'changes', by, at, comment }
   sends: [],          // { id, kind, at, channels, count }
+  design: defaultDesign(),
 })
+
+/**
+ * The invitation designer's choices (PL-5.5). null = use the event theme's own.
+ * layout: classic | photo-top · music: null | 'piano' | 'strings' | 'acoustic'
+ */
+export const defaultDesign = () => ({ themeId: null, font: null, accent: null, photo: null, layout: 'classic', envelope: false, music: null })
+/** An event's design, filling in anything missing (older events had none). */
+export const designOf = (event) => ({ ...defaultDesign(), ...(event.invitation?.design ?? {}) })
 
 // ---- Per-event details (merged into seed events) ----
 export const eventDetails = {
