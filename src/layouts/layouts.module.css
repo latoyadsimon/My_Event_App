@@ -35,6 +35,6 @@
 /* ---------- Public business pages (inquiry, booking, staff join) ---------- */
 .public { flex: 1; display: flex; flex-direction: column; }
 .publicHead { padding: var(--space-4); border-bottom: 1px solid var(--color-border); background: var(--color-surface); }
-.publicHeadInner, .publicMain, .publicFoot { width: 100%; max-width: 44rem; margin: 0 auto; }
+.publicHeadInner, .publicMain, .publicFoot { width: 100%; max-width: 52rem; margin: 0 auto; }
 .publicMain { flex: 1; padding: var(--space-6) var(--space-4); display: flex; flex-direction: column; gap: var(--space-5); outline: none; }
 .publicFoot { padding: var(--space-5) var(--space-4); display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-4); justify-content: space-between; border-top: 1px solid var(--color-border); }

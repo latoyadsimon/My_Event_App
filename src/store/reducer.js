@@ -11,20 +11,14 @@
 // =====================================================================
 import { createSeedState, createNewBusinessState, PERMISSIONS } from '../data/seed'
 import { nowStamp } from '../lib/clock'
+import { newId, updateById, withMessage, isEmailContact as isEmail } from './helpers'
+import { salesActions } from './actions/sales'
+
+// Each domain adds its own handlers: { 'lead/create': (state, action) => newState }
+const HANDLERS = { ...salesActions }
 
 export const MODES = ['calm', 'bold']
 export const ROLES = ['planner', 'client', 'guest', 'staff']
-
-let counter = 0
-const newId = (prefix) => `${prefix}-${Date.now().toString(36)}-${(counter++).toString(36)}`
-
-// Small helpers for "replace one item in a list" and "add a message to the Outbox"
-const updateById = (list, id, change) => list.map((x) => (x.id === id ? { ...x, ...change } : x))
-const withMessage = (state, message) => ({
-  ...state,
-  outbox: [{ id: newId('m'), at: nowStamp(), unread: true, ...message }, ...state.outbox],
-})
-const isEmail = (contact) => contact.includes('@')
 
 // Add a new catalog item (package / add-on) or update the one with the same id.
 function saveItem(list, item, prefix) {
@@ -35,7 +29,7 @@ function saveItem(list, item, prefix) {
 export function initialState() {
   return {
     ...createSeedState(),
-    ui: { mode: 'calm', role: 'planner' },
+    ui: { mode: 'calm', role: 'planner', clientId: 'ana' },
     toasts: [],
   }
 }
@@ -49,7 +43,8 @@ export function reducer(state, action) {
 
     case 'ui/setRole':
       if (!ROLES.includes(action.role)) return state
-      return { ...state, ui: { ...state.ui, role: action.role } }
+      // clientId: which client the portal shows (a proposal email for Linh opens Linh's portal)
+      return { ...state, ui: { ...state.ui, role: action.role, ...(action.clientId && { clientId: action.clientId }) } }
 
     // ---- Demo Outbox: stands in for email / SMS / push until the backend exists ----
     case 'outbox/send':
@@ -155,7 +150,10 @@ export function reducer(state, action) {
     case 'toast/dismiss':
       return { ...state, toasts: state.toasts.filter((t) => t.id !== action.id) }
 
-    default:
-      throw new Error(`Unknown action: ${action.type}`)
+    default: {
+      const handler = HANDLERS[action.type]
+      if (!handler) throw new Error(`Unknown action: ${action.type}`)
+      return handler(state, action)
+    }
   }
 }

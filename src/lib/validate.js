@@ -48,3 +48,13 @@ export function validateInvite(v) {
   if (!isEmail(v.contact) && !isPhone(v.contact)) errors.contact = 'Please enter an email address or a 10-digit phone number.'
   return errors
 }
+
+/** Inquiry Form (CL-1.1): name, a real email and the event type; the rest is optional. */
+export function validateInquiry(v) {
+  const errors = {}
+  if (!v.name.trim()) errors.name = 'Please tell us your name.'
+  if (!isEmail(v.email)) errors.email = 'Please enter a full email address, like you@gmail.com, so we can reply.'
+  if (!v.eventType) errors.eventType = 'Please pick the kind of event.'
+  if (v.guestCount && !(Number(v.guestCount) > 0)) errors.guestCount = 'Please enter a number of guests, like 120.'
+  return errors
+}

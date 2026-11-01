@@ -7,6 +7,7 @@
 // =====================================================================
 import { Link } from 'react-router-dom'
 import { useStore } from '../../store/StoreContext'
+import { useShareInquiryForm } from '../../hooks/useShareInquiryForm'
 import { getChecklist, getDashboard, getMe, nextOnboardingStep } from '../../store/selectors'
 import { TODAY, formatTime, parseDay } from '../../lib/clock'
 import { formatMoney } from '../../lib/money'
@@ -14,16 +15,10 @@ import { Button, Card, Icon, Kpis, Notice, PageHeader } from '../../components/u
 import styles from './Dashboard.module.css'
 
 function GettingStarted() {
-  const { state, dispatch } = useStore()
+  const { state } = useStore()
   const checklist = getChecklist(state)
   const resume = nextOnboardingStep(state)
-  const inquiryUrl = `${window.location.origin}/b/${state.business.slug}/inquire`
-
-  const shareForm = async () => {
-    try { await navigator.clipboard?.writeText(inquiryUrl) } catch { /* clipboard blocked: the link is still shown */ }
-    dispatch({ type: 'business/inquiryFormShared' })
-    dispatch({ type: 'toast/show', text: 'Inquiry form link copied. Paste it on your website or Instagram.' })
-  }
+  const shareForm = useShareInquiryForm()
 
   return (
     <Card title="Getting started" action={<span className="muted">{checklist.doneCount} of {checklist.items.length} done</span>}>

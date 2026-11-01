@@ -4,6 +4,7 @@
 // =====================================================================
 import { TODAY, daysUntil, parseDay, formatWeekdayDay } from '../lib/clock'
 import { formatMoney } from '../lib/money'
+import { eventTypeLabel } from '../data/seed'
 
 export const getLead = (state, id) => state.leads.find((l) => l.id === id)
 export const getEvent = (state, id) => state.events.find((e) => e.id === id)
@@ -14,7 +15,7 @@ export const getInvoiceForEvent = (state, eventId) => state.invoices.find((i) =>
  * The client portal's world for one client (the demo client is Ana).
  * Before the deposit there's a lead but no unlocked event, so planning pages stay locked.
  */
-export function getPortal(state, clientId = 'ana') {
+export function getPortal(state, clientId = state.ui?.clientId ?? 'ana') {
   const client = getClient(state, clientId)
   const lead = state.leads.find((l) => l.clientId === clientId && l.stage !== 'lost')
   const event = lead && state.events.find((e) => e.leadId === lead.id)
@@ -127,3 +128,95 @@ export function getDashboard(state) {
 
   return { kpis, week, alerts, pipeline }
 }
+
+// ---------------------------------------------------------------------
+// Leads and selling (Phase 2)
+// ---------------------------------------------------------------------
+const pad = (n) => String(n).padStart(2, '0')
+/** A Date → 'YYYY-MM-DD' (local calendar day). */
+export const toDay = (d) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`
+const addDays = (day, n) => { const d = parseDay(day); d.setDate(d.getDate() + n); return toDay(d) }
+
+/** What priceVersion() needs: packages, add-ons, tax rate and payment schedule. */
+export const getCatalog = (state) => ({
+  packages: state.packages, addons: state.addons,
+  taxRatePercent: state.business.taxRatePercent, paymentSchedule: state.business.paymentSchedule,
+})
+
+/** "Rivera · Wedding": the client's last name and the event type. */
+export const leadName = (state, lead) =>
+  `${getClient(state, lead.clientId)?.name.split(' ').at(-1) ?? lead.title} · ${eventTypeLabel(lead.eventType)}`
+
+export const getProposal = (state, leadId) => state.proposals.find((p) => p.leadId === leadId)
+
+/**
+ * Is this day already booked by another event? (PL-2.2 "Date taken", PL-2.3)
+ * Returns the event that has it, or null.
+ */
+export function dateTakenBy(state, day, exceptLeadId) {
+  if (!day) return null
+  return state.events.find((e) => e.date === day && e.leadId !== exceptLeadId && !['cancelled', 'closed'].includes(e.status)) ?? null
+}
+
+/** Another lead holding this day (a soft, dashed hold on the Calendar). */
+export function dateHeldBy(state, day, exceptLeadId) {
+  if (!day) return null
+  return state.leads.find((l) => l.id !== exceptLeadId && l.eventDate === day && l.hold && daysUntil(l.hold.until) >= 0) ?? null
+}
+
+/** Open dates near a taken one, same weekday: 1 week before, then 1 and 2 weeks after… */
+export function nearbyOpenDates(state, day, count = 3) {
+  return [-7, 7, 14, -14, 21, -21, 28]
+    .map((n) => addDays(day, n))
+    .filter((d) => daysUntil(d) > 0 && !dateTakenBy(state, d))
+    .slice(0, count)
+    .sort()
+}
+
+/** 'Instagram' → leads from Instagram; 'all' → every lead. Grouped by stage, newest first. */
+export function getLeadBoard(state, source = 'all') {
+  const shown = state.leads
+    .filter((l) => source === 'all' || l.source === source)
+    .sort((a, b) => b.receivedAt.localeCompare(a.receivedAt))
+  const byStage = {}
+  for (const l of shown) (byStage[l.stage] ??= []).push(l)
+  return byStage
+}
+
+// ---- Public booking page (PL-2.4): open consult times, like Calendly ----
+const stampMinutes = (stamp) => { const d = parseDay(stamp); return d.getHours() * 60 + d.getMinutes() }
+
+/** Open consult start times ('2026-11-09T14:00:00') on one day. */
+export function openSlots(state, day) {
+  const rules = state.business.booking
+  const date = parseDay(day)
+  if (!rules.weekdays.includes(date.getDay())) return []
+  const days = daysUntil(day)
+  if (days < 0 || days > 60) return []
+
+  const sameDay = state.appointments.filter((a) => a.at.slice(0, 10) === day)
+  if (sameDay.filter((a) => a.title === 'Consult').length >= rules.dailyLimit) return []
+
+  return rules.times
+    .map((t) => `${day}T${t}:00`)
+    .filter((stamp) => parseDay(stamp) > TODAY)
+    .filter((stamp) => {
+      const start = stampMinutes(stamp)
+      const end = start + rules.consultMinutes
+      return !sameDay.some((a) => {
+        const aStart = stampMinutes(a.at)
+        const aEnd = aStart + (a.minutes ?? 60)
+        return start < aEnd + rules.bufferMinutes && aStart < end + rules.bufferMinutes
+      })
+    })
+}
+
+/** The first day from `fromDay` (inclusive) with an open consult time, within 60 days. */
+export function firstOpenDay(state, fromDay = toDay(TODAY)) {
+  for (let i = 0; i <= 60; i++) {
+    const d = addDays(fromDay, i)
+    if (openSlots(state, d).length) return d
+  }
+  return null
+}
+

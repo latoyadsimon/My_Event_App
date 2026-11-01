@@ -11,6 +11,7 @@ import styles from './ui.module.css'
 export { default as Button } from './Button'
 export { default as Icon, Crown } from './Icon'
 export { default as ConfirmDialog } from './ConfirmDialog'
+export { default as Dialog } from './Dialog'
 
 /** The noun title at the top of a screen, with optional subtitle and actions. */
 export function PageHeader({ title, sub, actions, children }) {

@@ -34,6 +34,11 @@ import Planned from './pages/shared/Planned'
 import SignUp from './pages/planner/SignUp'
 import Onboarding from './pages/planner/Onboarding'
 import Dashboard from './pages/planner/Dashboard'
+import Leads from './pages/planner/leads/Leads'
+import LeadDetail from './pages/planner/leads/LeadDetail'
+import ProposalBuilder from './pages/planner/leads/ProposalBuilder'
+import InquiryForm from './pages/client/InquiryForm'
+import BookingPage from './pages/client/BookingPage'
 import SettingsLayout from './pages/planner/settings/SettingsLayout'
 import Appearance from './pages/planner/settings/Appearance'
 import {
@@ -61,9 +66,9 @@ export default function App() {
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="calendar" element={<Planned id="calendar" />} />
-          <Route path="leads" element={<Planned id="leads" />} />
-          <Route path="leads/:leadId" element={<Planned id="leadDetail" />} />
-          <Route path="proposals/:leadId" element={<Planned id="proposalBuilder" />} />
+          <Route path="leads" element={<Leads />} />
+          <Route path="leads/:leadId" element={<LeadDetail />} />
+          <Route path="proposals/:leadId" element={<ProposalBuilder />} />
           <Route path="contracts/:contractId" element={<Planned id="contract" />} />
           <Route path="invoices/:invoiceId" element={<Planned id="invoice" />} />
           <Route path="events" element={<Planned id="events" />} />
@@ -103,8 +108,8 @@ export default function App() {
 
         {/* ---------- The planner's public pages (no account) ---------- */}
         <Route element={<PublicLayout />}>
-          <Route path="b/:biz/inquire" element={<Planned id="inquiry" />} />
-          <Route path="b/:biz/book" element={<Planned id="booking" />} />
+          <Route path="b/:biz/inquire" element={<InquiryForm />} />
+          <Route path="b/:biz/book" element={<BookingPage />} />
           <Route path="join/:token" element={<Planned id="staffJoin" />} />
         </Route>
 

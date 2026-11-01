@@ -30,6 +30,15 @@ export const business = {
   brandColors: ['#A3336A', '#2E1A3A'],  // first = main brand color (schema: businesses.brand_colors)
   taxRatePercent: 8,
   depositPercent: 30,
+  // Payment schedule for new invoices: deposit, then the rest (percent of the total)
+  paymentSchedule: [
+    { label: 'Deposit 30%', percent: 30, due: 'at signing' },
+    { label: 'Payment 2 · 40%', percent: 40, due: '60 days before' },
+    { label: 'Final · 30%', percent: 30, due: '14 days before' },
+  ],
+  // Public booking page rules (PL-2.4), like Calendly: open times, buffers, a daily limit
+  booking: { consultMinutes: 30, bufferMinutes: 15, dailyLimit: 3, weekdays: [1, 2, 3, 4, 5], times: ['10:00', '11:30', '14:00', '16:30'] },
+  holdDays: 7,                      // "Hold date" on a lead lasts this long
   paymentProvider: 'stripe',        // 'stripe' | 'square' | null (null = not connected: check/cash only)
   calendarProvider: null,           // 'google' | 'apple' | 'outlook' | null
   inquiryFormShared: false,         // getting-started checklist item
@@ -92,6 +101,21 @@ export const clients = [
   { id: 'westlake', name: 'Karen Holt', company: 'Westlake Elementary PTA', email: 'pta@westlakeelem.org', phone: '(512) 555-0158' },
   { id: 'okafor', name: 'Chidi Okafor', email: 'chidi.okafor@gmail.com', phone: '(512) 555-0191' },
 ]
+
+// Event types (schema: events.event_type) with the words people see
+export const EVENT_TYPES = [
+  { id: 'wedding', label: 'Wedding' }, { id: 'birthday', label: 'Birthday' }, { id: 'baby_shower', label: 'Baby shower' },
+  { id: 'bridal_shower', label: 'Bridal shower' }, { id: 'corporate', label: 'Corporate' }, { id: 'fundraiser', label: 'Fundraiser' },
+  { id: 'reunion', label: 'Reunion' }, { id: 'potluck', label: 'Potluck' }, { id: 'church', label: 'Church event' },
+  { id: 'school', label: 'School event' }, { id: 'holiday', label: 'Holiday party' }, { id: 'memorial', label: 'Memorial' },
+  { id: 'other', label: 'Something else' },
+]
+export const eventTypeLabel = (id) => EVENT_TYPES.find((t) => t.id === id)?.label ?? 'Event'
+
+// Inquiry form choices (CL-1.1)
+export const SERVICES = ['Full planning', 'Photo booth', 'Karaoke', 'Rentals', 'Potluck organizer', 'Donations', 'Décor', 'Chairs']
+export const BUDGET_RANGES = ['Under $2k', '$2–4k', '$4–8k', '$8–15k', '$15–20k', '$20k+', 'Not sure yet']
+export const LEAD_SOURCES = ['Instagram', 'Facebook', 'Google', 'The Knot', 'Referral', 'Booking page', 'Other']
 
 // Lead stages, in kanban order
 export const LEAD_STAGES = [
