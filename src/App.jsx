@@ -10,6 +10,8 @@
 //   /b/:biz/...           the planner's public inquiry + booking pages
 //   /e/:slug/...  /i/:t   guest pages (no account)
 //   /join/:token          staff invite
+//   /v/:token/...         a vendor's page for one event (magic link, no account)
+//   /print/...            printable pages without the app frame (run of show)
 //   /outbox               demo: every email/text/push the app sent
 //   /help                 the How-To guide (same words as documentation/HOW_TO.md)
 //
@@ -20,11 +22,12 @@ import RootLayout from './layouts/RootLayout'
 import RequireRole from './layouts/RequireRole'
 import CrownedLayout from './layouts/CrownedLayout'
 import PlannerLayout from './layouts/PlannerLayout'
-import EventHubLayout, { GuestSubTabs } from './layouts/EventHubLayout'
+import EventHubLayout, { GuestSubTabs, LogisticsSubTabs } from './layouts/EventHubLayout'
 import PortalLayout from './layouts/PortalLayout'
 import PublicLayout from './layouts/PublicLayout'
 import GuestLayout from './layouts/GuestLayout'
 import StaffLayout from './layouts/StaffLayout'
+import VendorLayout from './layouts/VendorLayout'
 
 import Landing from './pages/shared/Landing'
 import NotFound from './pages/shared/NotFound'
@@ -45,6 +48,10 @@ const Tasks = lazyPage(() => import('./pages/planner/hub/Tasks'))
 const Guests = lazyPage(() => import('./pages/planner/hub/Guests'))
 const Website = lazyPage(() => import('./pages/planner/hub/Website'))
 const Invitations = lazyPage(() => import('./pages/planner/hub/Invitations'))
+const RunOfShow = lazyPage(() => import('./pages/planner/hub/RunOfShow'))
+const RunOfShowPrint = lazyPage(() => import('./pages/planner/hub/RunOfShow'), 'RunOfShowPrint')
+const Vendors = lazyPage(() => import('./pages/planner/hub/Vendors'))
+const Gear = lazyPage(() => import('./pages/planner/hub/Gear'))
 const Money = lazyPage(() => import('./pages/planner/hub/Money'))
 const Files = lazyPage(() => import('./pages/planner/hub/Files'))
 const Messages = lazyPage(() => import('./pages/planner/hub/Messages'))
@@ -82,6 +89,11 @@ const CalendarSettings = lazyPage(() => import('./pages/planner/settings/section
 const TeamSettings = lazyPage(() => import('./pages/planner/settings/sections'), 'TeamSettings')
 const TemplatesSettings = lazyPage(() => import('./pages/planner/settings/sections'), 'TemplatesSettings')
 const ExportSettings = lazyPage(() => import('./pages/planner/settings/sections'), 'ExportSettings')
+const VendorSettings = lazyPage(() => import('./pages/planner/settings/LogisticsSettings'), 'VendorSettings')
+const EquipmentSettings = lazyPage(() => import('./pages/planner/settings/LogisticsSettings'), 'EquipmentSettings')
+const VendorEvent = lazyPage(() => import('./pages/vendor/VendorPages'), 'VendorEvent')
+const VendorPaperwork = lazyPage(() => import('./pages/vendor/VendorPages'), 'VendorPaperwork')
+const VendorMessages = lazyPage(() => import('./pages/vendor/VendorPages'), 'VendorMessages')
 
 export default function App() {
   return (
@@ -118,6 +130,11 @@ export default function App() {
               <Route path="invitations" element={<Invitations />} />
               <Route path="website" element={<Website />} />
             </Route>
+            <Route path="logistics" element={<LogisticsSubTabs />}>
+              <Route index element={<RunOfShow />} />
+              <Route path="vendors" element={<Vendors />} />
+              <Route path="gear" element={<Gear />} />
+            </Route>
             <Route path="money" element={<Money />} />
             <Route path="files" element={<Files />} />
             <Route path="messages" element={<Messages />} />
@@ -132,6 +149,8 @@ export default function App() {
             <Route path="payments" element={<PaymentsSettings />} />
             <Route path="calendar" element={<CalendarSettings />} />
             <Route path="team" element={<TeamSettings />} />
+            <Route path="vendors" element={<VendorSettings />} />
+            <Route path="equipment" element={<EquipmentSettings />} />
             <Route path="templates" element={<TemplatesSettings />} />
             <Route path="export" element={<ExportSettings />} />
             <Route path="appearance" element={<Appearance />} />
@@ -165,6 +184,16 @@ export default function App() {
           <Route path="guests" element={<PortalGuests />} />
           <Route path="messages" element={<PortalMessages />} />
         </Route>
+
+        {/* ---------- Vendors (magic link, no account) ---------- */}
+        <Route path="v/:token" element={<VendorLayout />}>
+          <Route index element={<VendorEvent />} />
+          <Route path="paperwork" element={<VendorPaperwork />} />
+          <Route path="messages" element={<VendorMessages />} />
+        </Route>
+
+        {/* ---------- Printable pages (planner, no app frame) ---------- */}
+        <Route path="print/events/:eventId/run-of-show" element={<RequireRole role="planner"><RunOfShowPrint /></RequireRole>} />
 
         {/* ---------- Guests (no account) ---------- */}
         <Route path="e/:slug" element={<GuestLayout />}>

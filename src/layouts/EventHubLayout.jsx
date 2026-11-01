@@ -1,6 +1,6 @@
 // =====================================================================
 // One event's workspace: header (name, date · venue, status, Change date /
-// Cancel event) + tabs (Overview · Tasks · Guests · Money · Files · Messages).
+// Cancel event) + tabs (Overview · Tasks · Guests · Logistics · Money · Files · Messages).
 // Memorial events switch the whole hub to the respectful tone (style guide §13).
 // =====================================================================
 import { Link, NavLink, Outlet, useOutletContext, useParams } from 'react-router-dom'
@@ -16,6 +16,7 @@ const TABS = [
   { to: '', label: 'Overview', end: true },
   { to: 'tasks', label: 'Tasks' },
   { to: 'guests', label: 'Guests' },
+  { to: 'logistics', label: 'Logistics' },
   { to: 'money', label: 'Money' },
   { to: 'files', label: 'Files' },
   { to: 'messages', label: 'Messages' },
@@ -70,19 +71,12 @@ export default function EventHubLayout() {
   )
 }
 
-/** Guest list · Invitations · Website & RSVP (inside the Guests tab) */
-export function GuestSubTabs() {
-  const { eventId } = useParams()
+/** A row of sub-pages inside a tab; passes the hub's context through. */
+function SubTabs({ label, items }) {
   const hub = useOutletContext()
-  const base = `/app/events/${eventId}/guests`
-  const items = [
-    { to: base, label: 'Guest list', end: true },
-    { to: `${base}/invitations`, label: 'Invitations' },
-    { to: `${base}/website`, label: 'Website & RSVP' },
-  ]
   return (
     <>
-      <nav aria-label="Guests">
+      <nav aria-label={label}>
         <ul role="list" className={styles.subTabs}>
           {items.map((t) => (
             <li key={t.to}>
@@ -96,4 +90,26 @@ export function GuestSubTabs() {
       <Outlet context={hub} />
     </>
   )
+}
+
+/** Guest list · Invitations · Website & RSVP (inside the Guests tab) */
+export function GuestSubTabs() {
+  const { eventId } = useParams()
+  const base = `/app/events/${eventId}/guests`
+  return <SubTabs label="Guests" items={[
+    { to: base, label: 'Guest list', end: true },
+    { to: `${base}/invitations`, label: 'Invitations' },
+    { to: `${base}/website`, label: 'Website & RSVP' },
+  ]} />
+}
+
+/** Run of show · Vendors · Gear (inside the Logistics tab, product Phase 2) */
+export function LogisticsSubTabs() {
+  const { eventId } = useParams()
+  const base = `/app/events/${eventId}/logistics`
+  return <SubTabs label="Logistics" items={[
+    { to: base, label: 'Run of show', end: true },
+    { to: `${base}/vendors`, label: 'Vendors' },
+    { to: `${base}/gear`, label: 'Gear & pack list' },
+  ]} />
 }

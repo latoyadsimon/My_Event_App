@@ -1,6 +1,6 @@
 // =====================================================================
-// Settings: the onboarding forms again, plus Team & roles, Templates,
-// Data export and Appearance. Wireframe: a section list on the left (desktop),
+// Settings: the onboarding forms again, plus Team & roles, Vendors,
+// Equipment, Templates, Data export and Appearance. Wireframe: a section list on the left (desktop),
 // a scrolling row of sections on phones.
 // The owner must have a passkey or 2FA before seeing settings (PL-1.1).
 // =====================================================================
@@ -17,6 +17,8 @@ const SECTIONS = [
   { id: 'payments', label: 'Payments' },
   { id: 'calendar', label: 'Calendar sync' },
   { id: 'team', label: 'Team & roles' },
+  { id: 'vendors', label: 'Vendors' },
+  { id: 'equipment', label: 'Equipment' },
   { id: 'templates', label: 'Templates' },
   { id: 'export', label: 'Data export' },
   { id: 'appearance', label: 'Appearance' },

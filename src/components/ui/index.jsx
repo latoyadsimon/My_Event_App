@@ -119,3 +119,8 @@ export function Notice({ tone = 'info', action, children }) {
     </div>
   )
 }
+
+/** A 1–5 rating as stars, read out as "4 of 5 stars". */
+export function Stars({ n }) {
+  return <span className={styles.stars} role="img" aria-label={`${n} of 5 stars`}>{'★'.repeat(n)}{'☆'.repeat(5 - n)}</span>
+}

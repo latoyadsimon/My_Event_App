@@ -5,6 +5,9 @@
 import { TODAY, daysUntil, parseDay, formatWeekdayDay } from '../lib/clock'
 import { formatMoney } from '../lib/money'
 import { eventTypeLabel } from '../data/seed'
+import { logisticsAlerts } from './selectorsLogistics'
+
+export * from './selectorsLogistics'
 
 export const getLead = (state, id) => state.leads.find((l) => l.id === id)
 export const getEvent = (state, id) => state.events.find((e) => e.id === id)
@@ -128,6 +131,8 @@ export function getDashboard(state) {
   for (const [eventId, n] of Object.entries(lateByEvent)) {
     alerts.push({ id: `late-${eventId}`, tone: 'warning', text: `${eventById[eventId].name}: ${n} late task${n > 1 ? 's' : ''}`, to: `/app/events/${eventId}/tasks` })
   }
+
+  alerts.push(...logisticsAlerts(state))
 
   // ---- Pipeline ----
   const pipeline = {

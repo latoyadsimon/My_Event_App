@@ -9,6 +9,7 @@ import { formatDay, formatWeekdayDay, nowStamp, parseDay, daysUntil } from '../.
 import { formatMoney } from '../../lib/money'
 import { cancellationQuote, getEventGuests, toDay } from '../selectors'
 import { newId, updateById, withMessage, withToast, firstName } from '../helpers'
+import { notifyVendors } from './logistics'
 
 const shiftDay = (day, n) => { const d = parseDay(day); d.setDate(d.getDate() + n); return toDay(d) }
 const eventOf = (state, id) => state.events.find((e) => e.id === id)
@@ -174,6 +175,7 @@ export const hubActions = {
     const summary = `Final headcount for ${event.name}: ${count} (was ${event.guestCount}). RSVPs are closed.`
     next = { ...next, threads: next.threads.map((t) => (t.eventId === event.id && t.kind === 'vendor'
       ? { ...t, messages: [...t.messages, { id: newId('msg'), from: 'planner', author: firstName(me.name), at: nowStamp(), text: summary }] } : t)) }
+    next = notifyVendors(next, event.id, summary)
     return withToast(withLog(next, event.id, `Headcount locked at ${count}`), `Headcount locked at ${count}. Vendors notified.`)
   },
 
@@ -261,6 +263,7 @@ export const hubActions = {
     if (!thread || !a.text?.trim()) return state
     let next = { ...state, threads: updateById(state.threads, thread.id, (t) => ({ messages: [...t.messages, { id: newId('msg'), from: a.from, author: a.author, at: nowStamp(), text: a.text.trim(), attachment: a.attachment ?? null }] })) }
     const event = eventOf(next, thread.eventId)
+    if (a.from === 'vendor') next = pushToPlanner(next, `Message from ${a.author}`, a.text.trim(), `/app/events/${event.id}/messages`)
     if (a.from === 'client') next = pushToPlanner(next, `Message from ${a.author}`, a.text.trim(), `/app/events/${event.id}/messages`)
     if (a.from === 'planner' && thread.kind === 'client') next = emailClient(next, event, `New message from ${state.business.name}`, a.text.trim(), { label: 'Reply', to: '/portal/messages' })
     return next
@@ -349,6 +352,7 @@ export const hubActions = {
     const staff = [...new Set(state.tasks.filter((t) => t.eventId === event.id).map((t) => t.assignee))]
       .map((id) => state.team.find((m) => m.id === id && m.role !== 'owner' && m.status === 'active')).filter(Boolean)
     for (const m of staff) next = withMessage(next, { type: 'sms', to: `${m.name} · ${m.phone}`, from: state.business.name, subject: 'Date change', body: `Heads up: ${event.name} moved to ${formatDay(a.date)}.` })
+    next = notifyVendors(next, event.id, `${event.name} moved from ${formatDay(event.date)} to ${formatDay(a.date)}. Please confirm you're still available.`)
     return withToast(next, `${event.name} moved to ${formatDay(a.date)}`)
   },
 
@@ -372,6 +376,8 @@ export const hubActions = {
       } : i)),
     }
     next = withLog(next, event.id, `Cancelled${a.reason ? `: ${a.reason}` : ''}. Refund ${formatMoney(quote.refundCents)}.`)
+    next = notifyVendors(next, event.id, `${event.name} on ${formatDay(event.date)} is cancelled. We'll be in touch about any deposits.`)
+    next = { ...next, reservations: (next.reservations ?? []).filter((r) => r.eventId !== event.id) }   // gear is free again
     next = emailClient(next, event, `${event.name} is cancelled`, `We're sorry to see this one go. ${quote.refundCents ? `A refund of ${formatMoney(quote.refundCents)} is on its way to your original payment method.` : 'Per your contract, no refund is due.'}`)
     return withToast(next, `${event.name} cancelled`)
   },

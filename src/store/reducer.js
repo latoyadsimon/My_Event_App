@@ -16,12 +16,13 @@ import { salesActions } from './actions/sales'
 import { bookingActions } from './actions/booking'
 import { hubActions } from './actions/hub'
 import { guestActions } from './actions/guests'
+import { logisticsActions } from './actions/logistics'
 
 // Each domain adds its own handlers: { 'lead/create': (state, action) => newState }
-const HANDLERS = { ...salesActions, ...bookingActions, ...hubActions, ...guestActions }
+const HANDLERS = { ...salesActions, ...bookingActions, ...hubActions, ...guestActions, ...logisticsActions }
 
 export const MODES = ['calm', 'bold']
-export const ROLES = ['planner', 'client', 'guest', 'staff']
+export const ROLES = ['planner', 'client', 'guest', 'staff', 'vendor']
 
 // Add a new catalog item (package / add-on) or update the one with the same id.
 function saveItem(list, item, prefix) {

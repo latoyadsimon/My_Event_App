@@ -18,6 +18,7 @@ import { splitByPercent } from '../lib/money'
 import {
   defaultSite, defaultInvitation, eventDetails, guests, files, approvals, questionnaires, threads, moreAppointments,
 } from './seedPlanning'
+import { vendors, eventVendors, timeline, budgetLines, equipment, kits, reservations, ALWAYS_BRING } from './seedLogistics'
 
 export const business = {
   id: 'bella-events',
@@ -42,6 +43,8 @@ export const business = {
   // Public booking page rules (PL-2.4), like Calendly: open times, buffers, a daily limit
   booking: { consultMinutes: 30, bufferMinutes: 15, dailyLimit: 3, weekdays: [1, 2, 3, 4, 5], times: ['10:00', '11:30', '14:00', '16:30'] },
   holdDays: 7,                      // "Hold date" on a lead lasts this long
+  gearBufferDays: 1,                // gear isn't free again until a day after an event (cleaning, turnaround)
+  alwaysBring: ALWAYS_BRING,        // on every pack list (PL-6.3)
   // Contract template (PL-3.3): merge fields are filled from the accepted proposal
   contractTerms: {
     cancellation: 'The deposit is non-refundable. Cancel 90 or more days before the event and payments after the deposit are refunded in full; 30–89 days before, 50% is refunded; under 30 days, nothing is refunded. You may move your date once at no charge, subject to availability.',
@@ -350,6 +353,7 @@ export function createSeedState() {
     business, team, packages, addons, clients, leads, proposals, contracts, events: events.map(withPlanning), invoices, tasks, appointments,
     outbox: [...outbox].sort((a, b) => b.at.localeCompare(a.at)),
     guests, files, approvals, questionnaires, threads, requests: [],
+    vendors, eventVendors, timeline, budgetLines, equipment, kits, reservations,
   })
 }
 
@@ -373,5 +377,6 @@ export function createNewBusinessState({ ownerName, businessName, email }) {
     }],
     packages: [], addons: [], clients: [], leads: [], proposals: [], contracts: [], events: [], invoices: [], tasks: [], appointments: [], outbox: [],
     guests: [], files: [], approvals: [], questionnaires: [], threads: [], requests: [],
+    vendors: [], eventVendors: [], timeline: [], budgetLines: [], equipment: [], kits: [], reservations: [],
   }
 }

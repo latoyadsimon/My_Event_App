@@ -1,17 +1,18 @@
 // =====================================================================
 // Event Hub › Overview (PL-4.2): where the event stands at a glance.
 // Status path, countdown, balance, RSVPs, tasks, the next 3 deadlines,
-// the venue, the questionnaire and approvals, and the event's history.
+// the venue, the questionnaire and approvals, logistics at a glance
+// (with "Start final week", PL-6.5), and the event's history.
 // =====================================================================
 import { useState } from 'react'
 import { Link, useOutletContext } from 'react-router-dom'
 import { useStore } from '../../../store/StoreContext'
 import {
-  can, getEventGuests, getEventTasks, getInvoiceForEvent, guestCounts, invoiceTotals, nextDeadlines, STATUS_PATH,
+  can, getEventGuests, getEventTasks, getEventVendors, getInvoiceForEvent, getReservations, getTimeline, guestCounts, invoiceTotals, nextDeadlines, STATUS_PATH,
 } from '../../../store/selectors'
 import { daysUntil, formatDateTime, formatDayShort } from '../../../lib/clock'
 import { formatMoney } from '../../../lib/money'
-import { Button, Card, Dialog, Field, Icon, Kpis, Notice, StatusChip } from '../../../components/ui'
+import { Button, Card, ConfirmDialog, Dialog, Field, Icon, Kpis, Notice, StatusChip } from '../../../components/ui'
 import styles from './hub.module.css'
 
 const words = (s) => s.replaceAll('_', ' ').replace(/^./, (c) => c.toUpperCase())
@@ -48,6 +49,42 @@ function Venue({ event }) {
             </dl>
           </>
         )}
+    </Card>
+  )
+}
+
+function Logistics({ event }) {
+  const { state, dispatch } = useStore()
+  const [asking, setAsking] = useState(false)
+  const base = `/app/events/${event.id}/logistics`
+  const vendors = getEventVendors(state, event.id).filter((v) => v.status !== 'cancelled')
+  const flagged = vendors.filter((v) => v.coi === 'missing' || v.coi === 'expires').length
+  const cancelled = getEventVendors(state, event.id).filter((v) => v.status === 'cancelled').length
+  const short = getReservations(state, event.id).filter((r) => r.shortage > 0).length
+  const items = getTimeline(state, event.id).length
+  const canStart = ['booked', 'in_planning'].includes(event.status)
+  const days = daysUntil(event.date)
+  return (
+    <Card title="Logistics">
+      <ul role="list" className={styles.rows}>
+        <li><Link to={`${base}/vendors`}>Vendors</Link><span>{vendors.filter((v) => v.status === 'confirmed').length} of {vendors.length} confirmed</span>
+          {flagged > 0 && <StatusChip tone="danger" label={`${flagged} insurance flag${flagged > 1 ? 's' : ''}`} />}
+          {cancelled > 0 && <StatusChip tone="danger" label={`${cancelled} cancelled`} />}</li>
+        <li><Link to={base}>Run of show</Link><span>{items ? `${items} items` : 'Not started'}</span></li>
+        <li><Link to={`${base}/gear`}>Gear</Link><span>{getReservations(state, event.id).length} reserved</span>{short > 0 && <StatusChip tone="warning" label={`${short} short`} />}</li>
+      </ul>
+      {canStart && (
+        <>
+          <p className="muted">{days > 10 ? `Final week usually starts 7 days out (${days} days to go).` : 'It\'s nearly time.'} It sends final details to the client, vendors, staff and guests.</p>
+          <Button onClick={() => setAsking(true)}>Start final week</Button>
+        </>
+      )}
+      {event.status === 'final_week' && <p><Icon name="check" size={16} className={styles.inlineIcon} /> Final week: details sent.</p>}
+      <ConfirmDialog open={asking} danger={false} title="Start the final week?" confirmLabel="Send final details"
+        onCancel={() => setAsking(false)} onConfirm={() => { dispatch({ type: 'event/startFinalWeek', eventId: event.id }); setAsking(false) }}>
+        The status moves to Final week. The client gets the day-of contact and their timeline, each vendor their load-in time and final numbers,
+        staff their call details, and attending guests the one-week reminder.
+      </ConfirmDialog>
     </Card>
   )
 }
@@ -125,6 +162,8 @@ export default function Overview() {
                 ? <p>“{questionnaire.title}” sent {formatDayShort(questionnaire.sentAt)} · waiting for answers (due {formatDayShort(questionnaire.dueDate)})</p>
                 : <><p className="muted">“{questionnaire.title}” is ready to send.</p><Button onClick={() => dispatch({ type: 'questionnaire/send', eventId: event.id })}>Send questionnaire</Button></>}
         </Card>
+
+        {!['cancelled', 'awaiting_countersign'].includes(event.status) && <Logistics event={event} />}
 
         <Card title="Approvals">
           {approvals.length === 0

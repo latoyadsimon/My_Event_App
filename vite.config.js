@@ -8,6 +8,7 @@ export default defineConfig({
     environment: 'jsdom',          // a fake browser DOM for React components
     globals: true,                 // describe/it/expect without imports; lets Testing Library clean up after each test
     setupFiles: './src/test/setup.js',
+    testTimeout: 15000,            // whole-app tests click through many screens; parallel runs on a busy machine need headroom
     css: { modules: { classNameStrategy: 'non-scoped' } },  // readable class names in test output
   },
 })

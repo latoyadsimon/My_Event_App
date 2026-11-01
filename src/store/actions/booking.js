@@ -18,6 +18,7 @@ import { formatDay, formatWeekdayDay, nowStamp, parseDay } from '../../lib/clock
 import { formatMoney } from '../../lib/money'
 import { priceVersion, latestSent } from '../../lib/proposal'
 import { getCatalog, getProposal, toDay } from '../selectors'
+import { reserveFromLines } from './logistics'
 import { newId, updateById, withActivity, withMessage, withToast, firstName } from '../helpers'
 
 const today = () => nowStamp().slice(0, 10)
@@ -211,6 +212,10 @@ export const bookingActions = {
       leads: updateById(state.leads, event.leadId, { hold: null }),
       tasks: [...state.tasks, ...tasks],
     }
+    // Gear behind the accepted proposal is reserved to the date (PL-6.2)
+    const proposal = state.proposals.find((p) => p.leadId === event.leadId && p.status === 'accepted')
+    const version = proposal?.versions.find((v) => v.n === proposal.acceptedVersion)
+    if (version) next = reserveFromLines(next, event.id, version.lines.filter((l) => !l.optional || proposal.chosen?.includes(l.addonId)))
     if (event.leadId) next = withActivity(next, event.leadId, 'You countersigned: booked')
     next = withMessage(next, {
       type: 'email', to: client.email, from: state.business.name, subject: `You're officially booked: ${event.name}`,

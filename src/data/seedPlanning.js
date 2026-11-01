@@ -137,6 +137,8 @@ export const files = [
   { id: 'f4', eventId: 'acme', name: 'Gatsby-style photo booth backdrop', kind: 'link', url: 'https://www.pinterest.com/', shared: true, board: true, addedAt: '2026-10-10T10:05:00', addedBy: 'Priya', comments: [] },
   { id: 'f5', eventId: 'acme', name: 'Theme notes', kind: 'note', text: 'Roaring 20s, but modern: gold accents, black linens, warm lighting. Karaoke stage by the bar.', shared: true, board: true, addedAt: '2026-10-10T10:10:00', addedBy: 'LaToya', comments: [] },
   { id: 'f6', eventId: 'thompson', name: 'Order of service draft.docx', kind: 'file', shared: true, board: false, addedAt: '2026-10-28T10:00:00', addedBy: 'LaToya', comments: [] },
+  { id: 'f8', eventId: 'okafor', name: 'DJ booth on the patio.jpg', kind: 'file', shared: false, board: false, addedAt: '2026-10-18T10:00:00', addedBy: 'LaToya', comments: [] },
+  { id: 'f9', eventId: 'okafor', name: 'Dance floor at 10 PM.jpg', kind: 'file', shared: false, board: false, addedAt: '2026-10-18T10:01:00', addedBy: 'LaToya', comments: [] },
   { id: 'f7', eventId: 'thompson', name: 'Soft blues and white', kind: 'color', colors: ['#2F4858', '#86A8C0', '#F2F5F7', '#D9C8A9'], shared: true, board: true, addedAt: '2026-10-28T10:05:00', addedBy: 'LaToya', comments: [] },
 ]
 
@@ -186,11 +188,11 @@ export const threads = [
     { id: 'msg2', from: 'planner', author: 'LaToya', at: '2026-11-02T10:02:00', text: 'Absolutely. I asked the caterer for a mushroom risotto. Menu v2 is in your Approvals.' },
     { id: 'msg3', from: 'client', author: 'Priya', at: '2026-11-04T17:40:00', text: 'Perfect, I\'ll look tonight.' },
   ] },
-  { id: 'th-acme-catering', eventId: 'acme', kind: 'vendor', name: 'Hill Country Catering', shared: false, messages: [
+  { id: 'th-acme-catering', eventId: 'acme', kind: 'vendor', eventVendorId: 'acme-hcc', name: 'Hill Country Catering', shared: false, messages: [
     { id: 'msg4', from: 'planner', author: 'LaToya', at: '2026-11-02T10:05:00', text: 'Can you add a mushroom risotto as the vegetarian main? Final count by Dec 5.' },
     { id: 'msg5', from: 'vendor', author: 'Hill Country Catering', at: '2026-11-02T13:30:00', text: 'Yes, same price as the salmon. Updated menu attached.', attachment: 'Menu v2.pdf' },
   ] },
-  { id: 'th-acme-dj', eventId: 'acme', kind: 'vendor', name: 'DJ Rhythm (karaoke)', shared: false, messages: [
+  { id: 'th-acme-dj', eventId: 'acme', kind: 'vendor', eventVendorId: 'acme-rhythm', name: 'DJ Rhythm (karaoke)', shared: false, messages: [
     { id: 'msg6', from: 'planner', author: 'LaToya', at: '2026-11-03T11:00:00', text: 'Confirming 9:30–11:30 PM for karaoke. Song list coming from the guests\' RSVPs.',
       delivery: { failed: [{ name: 'DJ Rhythm', channel: 'SMS', reason: 'replied STOP' }] } },
   ] },
