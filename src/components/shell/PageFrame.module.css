@@ -1,0 +1,20 @@
+/* Page entrance: a quick fade and lift (style guide §8). Never on memorials or for reduced motion. */
+.enter { display: contents; }
+.enter > * { animation: pageIn var(--motion-base) var(--ease) both; }
+@keyframes pageIn { from { opacity: 0; transform: translateY(6px); } }
+:global([data-tone='respectful']) .enter > * { animation: none; }
+@media (prefers-reduced-motion: reduce) { .enter > * { animation: none; } }
+
+.loading { padding: var(--space-6) 0; }
+.bar {
+  display: block; height: 3px; width: 40%; border-radius: var(--radius-pill); background: var(--color-accent);
+  animation: slide 1.1s var(--ease) infinite alternate;
+}
+@keyframes slide { from { transform: translateX(0); opacity: .4; } to { transform: translateX(140%); opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .bar { animation: none; } }
+
+.crash { display: flex; flex-direction: column; gap: var(--space-3); padding: var(--space-6) 0; }
+.retry {
+  min-height: var(--tap-min); padding: 0 var(--space-5); border-radius: var(--radius-pill); cursor: pointer; font-weight: 600;
+  background: var(--color-accent); color: var(--color-on-accent); border: 0;
+}
