@@ -39,7 +39,7 @@ export default function Website() {
   const preview = () => {
     save()
     dispatch({ type: 'ui/setRole', role: 'guest' })
-    navigate(`/e/${event.id}`)
+    navigate(`/e/${event.id}?preview=1`)
   }
 
   return (

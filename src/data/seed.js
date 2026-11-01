@@ -77,6 +77,11 @@ export const team = [
   { id: 'devon', name: 'Devon Brooks', role: 'coordinator', jobTitle: 'Lead coordinator', email: 'devon@bellaevents.com', phone: '(512) 555-0177', status: 'active',
     permissions: { see_budgets: true, see_profit: false, take_payments: true, edit_vendors: true } },
   { id: 'sam', name: 'Sam Ortiz', role: 'staff', jobTitle: 'Photo booth attendant', email: 'sam.ortiz@gmail.com', phone: '(512) 555-0109', status: 'active',
+    emergencyContact: 'Maria Ortiz · (512) 555-0110', skills: ['Photo booth', 'Serving'], shirtSize: 'M', photo: null,
+    permissions: { see_budgets: false, see_profit: false, take_payments: false, edit_vendors: false } },
+  // Invited Nov 4, hasn't joined yet: the 💬 team invite in the Outbox opens /join/inv-jo (ST-1.1)
+  { id: 'jo', name: 'Jo Kim', role: 'staff', jobTitle: 'KJ', email: '', phone: '(512) 555-0199', status: 'invited', inviteToken: 'inv-jo',
+    skills: [], shirtSize: '', photo: null,
     permissions: { see_budgets: false, see_profit: false, take_payments: false, edit_vendors: false } },
 ]
 
@@ -314,6 +319,11 @@ export const outbox = [
     id: 'm3', type: 'email', at: '2026-11-04T11:02:00', to: 'ana.rivera@gmail.com', from: 'Bella Events',
     subject: 'Your proposal (v2) is ready', body: 'Photo magnets are now an optional add-on, as you asked. Review the proposal, then accept, sign and pay your deposit in one sitting.',
     link: { label: 'View your proposal', to: '/portal/proposal', role: 'client' }, foot: 'This link is just for you and expires in 7 days.',
+  },
+  {
+    id: 'm6', type: 'sms', at: '2026-11-04T15:20:00', to: 'Jo Kim · (512) 555-0199', from: 'Bella Events',
+    subject: 'Team invite', body: 'Bella Events invited you to join their team on Crowned as KJ. Tap to accept:',
+    link: { label: 'Accept the invite', to: '/join/inv-jo', role: 'staff' },
   },
   {
     id: 'm5', type: 'sms', at: '2026-11-01T09:00:00', to: 'Dana Lee · (512) 555-0303', from: 'Bella Events',

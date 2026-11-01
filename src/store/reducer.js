@@ -15,9 +15,10 @@ import { newId, updateById, withMessage, isEmailContact as isEmail } from './hel
 import { salesActions } from './actions/sales'
 import { bookingActions } from './actions/booking'
 import { hubActions } from './actions/hub'
+import { guestActions } from './actions/guests'
 
 // Each domain adds its own handlers: { 'lead/create': (state, action) => newState }
-const HANDLERS = { ...salesActions, ...bookingActions, ...hubActions }
+const HANDLERS = { ...salesActions, ...bookingActions, ...hubActions, ...guestActions }
 
 export const MODES = ['calm', 'bold']
 export const ROLES = ['planner', 'client', 'guest', 'staff']
@@ -31,7 +32,7 @@ function saveItem(list, item, prefix) {
 export function initialState() {
   return {
     ...createSeedState(),
-    ui: { mode: 'calm', role: 'planner', clientId: 'ana' },
+    ui: { mode: 'calm', role: 'planner', clientId: 'ana', staffId: 'sam' },
     toasts: [],
   }
 }

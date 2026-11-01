@@ -12,7 +12,6 @@
 //   /join/:token          staff invite
 //   /outbox               demo: every email/text/push the app sent
 //
-// <Planned id="…"> marks a screen a later phase builds (see routes/screens.js).
 // =====================================================================
 import { Navigate, Route, Routes } from 'react-router-dom'
 
@@ -30,7 +29,6 @@ import Landing from './pages/shared/Landing'
 import SignIn from './pages/shared/SignIn'
 import Outbox from './pages/shared/Outbox'
 import NotFound from './pages/shared/NotFound'
-import Planned from './pages/shared/Planned'
 import SignUp from './pages/planner/SignUp'
 import Onboarding from './pages/planner/Onboarding'
 import Dashboard from './pages/planner/Dashboard'
@@ -56,6 +54,8 @@ import PortalPay from './pages/client/portal/PortalPay'
 import PortalHome from './pages/client/portal/PortalHome'
 import { PortalQuestionnaire, PortalMoodBoard, PortalApprovals, PortalMessages } from './pages/client/portal/PortalPlanning'
 import { PortalPayments, PortalChange, PortalGuests } from './pages/client/portal/PortalMoney'
+import { Invitation, EventWebsite, Rsvp, RsvpDone } from './pages/guest/GuestPages'
+import { StaffJoin, StaffProfile } from './pages/staff/StaffPages'
 import InquiryForm from './pages/client/InquiryForm'
 import BookingPage from './pages/client/BookingPage'
 import SettingsLayout from './pages/planner/settings/SettingsLayout'
@@ -122,14 +122,14 @@ export default function App() {
         {/* ---------- Staff ---------- */}
         <Route path="app/staff" element={<RequireRole role="staff"><StaffLayout /></RequireRole>}>
           <Route index element={<Navigate to="profile" replace />} />
-          <Route path="profile" element={<Planned id="staffProfile" />} />
+          <Route path="profile" element={<StaffProfile />} />
         </Route>
 
         {/* ---------- The planner's public pages (no account) ---------- */}
         <Route element={<PublicLayout />}>
           <Route path="b/:biz/inquire" element={<InquiryForm />} />
           <Route path="b/:biz/book" element={<BookingPage />} />
-          <Route path="join/:token" element={<Planned id="staffJoin" />} />
+          <Route path="join/:token" element={<StaffJoin />} />
         </Route>
 
         {/* ---------- Client portal ---------- */}
@@ -149,12 +149,12 @@ export default function App() {
 
         {/* ---------- Guests (no account) ---------- */}
         <Route path="e/:slug" element={<GuestLayout />}>
-          <Route index element={<Planned id="eventWebsite" />} />
-          <Route path="rsvp" element={<Planned id="rsvp" />} />
-          <Route path="rsvp/done" element={<Planned id="rsvpDone" />} />
+          <Route index element={<EventWebsite />} />
+          <Route path="rsvp" element={<Rsvp />} />
+          <Route path="rsvp/done" element={<RsvpDone />} />
         </Route>
         <Route path="i/:token" element={<GuestLayout />}>
-          <Route index element={<Planned id="invitation" />} />
+          <Route index element={<Invitation />} />
         </Route>
 
         <Route path="*" element={<NotFound standalone />} />

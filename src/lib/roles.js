@@ -3,6 +3,6 @@
 export const ROLE_HOME = {
   planner: { label: 'Planner (LaToya)', short: 'Planner', to: '/app/dashboard' },
   client: { label: 'Client (Ana Rivera)', short: 'Client', to: '/portal' },
-  guest: { label: 'Guest (Rivera wedding)', short: 'Guest', to: '/e/rivera' },
+  guest: { label: 'Guest (Dana, Acme party)', short: 'Guest', to: '/i/acme-g8-t' },
   staff: { label: 'Staff (Sam Ortiz)', short: 'Staff', to: '/app/staff/profile' },
 }

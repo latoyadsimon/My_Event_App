@@ -114,7 +114,8 @@ export default function TeamManager() {
                   <Button onClick={() => dispatch({ type: 'team/reactivate', memberId: selected.id })}>Reactivate {firstName}</Button>
                 </>
               : <>
-                  <p className={styles.help} style={{ flex: 1 }}>Leaving the team? Deactivating signs them out everywhere right away. Their history stays for payroll.</p>
+                  <p className={styles.help} style={{ flex: 1 }}>Lost phone? Sign them out on every device; they sign in again with a text code. Leaving the team? Deactivate keeps their history for payroll.</p>
+                  {selected.status === 'active' && <Button onClick={() => dispatch({ type: 'team/signOutEverywhere', memberId: selected.id })}>Sign {firstName} out everywhere</Button>}
                   <Button variant="danger" onClick={() => setConfirming(true)}>Deactivate {firstName}</Button>
                 </>}
           </div>

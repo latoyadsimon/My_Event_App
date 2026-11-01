@@ -110,7 +110,11 @@ export default function Invitations() {
           {when === 'later' && <Field label="When" type="datetime-local" value={scheduleAt} onChange={(e) => setScheduleAt(e.target.value)} />}
           {error && <p className={styles.error} role="alert">{error}</p>}
           <Button variant="primary" onClick={send}>{when === 'later' ? 'Schedule' : 'Send'} {KINDS.find(([k]) => k === kind)[1].toLowerCase()}s</Button>
-          <p className="muted">A “one week to go” reminder with directions, parking and dress code goes out on its own.</p>
+          <p className="muted">A “one week to go” reminder with directions, parking and dress code goes out on its own, then a “see you tomorrow” text.</p>
+          <div className="cluster">
+            <Button size="small" onClick={() => dispatch({ type: 'guestReminders/send', eventId: event.id, kind: 'week' })}>Send “one week to go” now</Button>
+            <Button size="small" onClick={() => dispatch({ type: 'guestReminders/send', eventId: event.id, kind: 'day' })}>Send “see you tomorrow” now</Button>
+          </div>
         </Card>
       </div>
 

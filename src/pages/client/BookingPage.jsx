@@ -10,6 +10,7 @@ import { useStore } from '../../store/StoreContext'
 import { openSlots, firstOpenDay, toDay, getClient, getLead } from '../../store/selectors'
 import { TODAY, formatTime, parseDay } from '../../lib/clock'
 import { isEmail } from '../../lib/validate'
+import { downloadIcs } from '../../lib/ics'
 import { Button, Card, EmptyState, Field, Icon } from '../../components/ui'
 import NotFound from '../shared/NotFound'
 import styles from './public.module.css'
@@ -19,18 +20,6 @@ const WEEKDAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', '
 const MONTHS_AHEAD = 2
 
 const longDay = (day) => parseDay(day).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })
-
-/** A .ics file so the consult lands in any calendar app (Add to calendar). */
-function downloadIcs({ at, minutes, title }) {
-  const start = parseDay(at)
-  const end = new Date(start.getTime() + minutes * 60000)
-  const f = (d) => toDay(d).replaceAll('-', '') + 'T' + [d.getHours(), d.getMinutes()].map((n) => String(n).padStart(2, '0')).join('') + '00'
-  const ics = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Crowned//EN', 'BEGIN:VEVENT', `DTSTART:${f(start)}`, `DTEND:${f(end)}`, `SUMMARY:${title}`, 'END:VEVENT', 'END:VCALENDAR'].join('\r\n')
-  const url = URL.createObjectURL(new Blob([ics], { type: 'text/calendar' }))
-  const a = Object.assign(document.createElement('a'), { href: url, download: 'consult.ics' })
-  a.click()
-  URL.revokeObjectURL(url)
-}
 
 function MonthGrid({ month, selected, onSelect, state }) {
   const first = new Date(month.getFullYear(), month.getMonth(), 1)
@@ -108,7 +97,7 @@ export default function BookingPage() {
         <p><strong>{longDay(booked.at.slice(0, 10))} · {formatTime(booked.at)}</strong> ({booked.minutes} min) with {state.business.name}.</p>
         <p className="muted">A confirmation email is on its way, with reminders 24 hours and 1 hour before.</p>
         <div className="cluster">
-          <Button variant="primary" onClick={() => downloadIcs(booked)}>Add to calendar</Button>
+          <Button variant="primary" onClick={() => downloadIcs(booked, 'consult.ics')}>Add to calendar</Button>
           <Link to="/outbox" className={styles.demoNote}>Demo: see the emails in the Outbox</Link>
         </div>
       </Card>
