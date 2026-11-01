@@ -1,0 +1,34 @@
+/* Guest pages wear the event theme, not the app's Calm/Bold look. */
+.guest {
+  flex: 1; display: flex; flex-direction: column;
+  background: var(--theme-bg); color: var(--theme-text); font-family: var(--theme-font-body);
+  /* Map the app tokens onto the theme so shared components (Button, Field, Card) match it */
+  --color-bg: var(--theme-bg);
+  --color-surface: var(--theme-surface);
+  --color-text: var(--theme-text);
+  --color-muted: var(--theme-muted);
+  --color-accent: var(--theme-accent);
+  --color-on-accent: var(--theme-on-accent);
+  --color-secondary: var(--theme-secondary);
+  --color-border: var(--theme-border);
+  --color-input-border: var(--theme-border);
+  --color-focus: var(--theme-text);
+  --font-display: var(--theme-font-display);
+}
+.lang { display: flex; justify-content: flex-end; gap: var(--space-1); padding: var(--space-2) var(--space-4) 0; }
+.lang button {
+  min-width: var(--tap-min); min-height: var(--tap-min); border-radius: var(--radius-pill);
+  background: none; border: 1.5px solid transparent; color: var(--theme-text); font-weight: 600; font-size: var(--text-sm); cursor: pointer;
+}
+.lang button[aria-pressed='true'] { border-color: var(--theme-text); }
+
+.main {
+  flex: 1; width: 100%; max-width: 40rem; margin: 0 auto; outline: none;
+  padding: var(--space-4) var(--space-4) var(--space-7);
+  display: flex; flex-direction: column; gap: var(--space-5);
+}
+.foot {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: var(--space-2) var(--space-4);
+  padding: var(--space-5) var(--space-4); border-top: 1px solid var(--theme-border);
+}
+.plannedBy { font-size: var(--text-sm); color: var(--theme-muted); }
