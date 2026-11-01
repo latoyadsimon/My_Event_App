@@ -1,111 +1,61 @@
-:root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+/* =====================================================================
+   Global styles: the design tokens, a small reset, and a few layout helpers.
+   Component styles live next to each component in *.module.css files and
+   use the tokens only (style guide: never raw hex in components).
+   ===================================================================== */
+@import './styles/tokens.css';
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { min-height: 100dvh; }
+#root { min-height: 100dvh; display: flex; flex-direction: column; }
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+h1, h2, h3, h4, p, ul, ol, figure, dl, dd { margin: 0; }
+ul[role='list'], ol[role='list'] { list-style: none; padding: 0; }
+img, svg { display: block; max-width: 100%; }
+button, input, select, textarea { font: inherit; color: inherit; }
+a { color: var(--color-secondary); text-underline-offset: 0.18em; }
+:where(h1, h2, h3) { line-height: var(--leading-tight); text-wrap: balance; }
+p { text-wrap: pretty; max-width: 70ch; }
 
-  @media (max-width: 1024px) {
-    font-size: 16px;
-  }
+/* Display font only for large headings (style guide §5: 24px and up) */
+.display { font-family: var(--font-display); font-weight: 600; letter-spacing: -0.01em; }
+
+/* Numbers that line up in columns */
+.num { font-variant-numeric: tabular-nums; }
+
+.muted { color: var(--color-muted); }
+
+/* Hidden visually, still read by screen readers */
+.visually-hidden {
+  position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
-  }
+/* "Skip to content" link: first thing a keyboard user reaches */
+.skip-link {
+  position: absolute; left: var(--space-3); top: -10rem; z-index: var(--z-toast);
+  background: var(--color-surface); color: var(--color-text); padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-sm); border: 2px solid var(--color-focus);
+}
+.skip-link:focus { top: var(--space-3); }
 
-  #social .button-icon {
-    filter: invert(1) brightness(2);
-  }
-}
+/* Code paths and ids can be long: let them wrap instead of widening the page */
+code { overflow-wrap: anywhere; }
 
-body {
-  margin: 0;
-}
+/* Height of the demo bar, so the desktop sidebar can sit right under it */
+:root { --demo-h: 2.75rem; }
 
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-}
+/* Fieldset legends line up with labels */
+legend { padding: 0; }
 
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
-}
+/* Layout helpers */
+.stack { display: flex; flex-direction: column; gap: var(--stack-gap, var(--space-4)); }
+.cluster { display: flex; flex-wrap: wrap; align-items: center; gap: var(--cluster-gap, var(--space-3)); }
+.spacer { flex: 1; }
 
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
-  }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
-  }
-}
-p {
-  margin: 0;
-}
-
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
-}
-
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+/* A button that looks like a link (for small secondary actions like "Remove logo") */
+.link-button {
+  background: none; border: 0; padding: 0; min-height: var(--tap-min); cursor: pointer;
+  color: var(--color-secondary); text-decoration: underline; text-underline-offset: 0.18em; font-weight: 600;
 }

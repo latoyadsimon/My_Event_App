@@ -1,0 +1,24 @@
+/* Shared by the planner's Event Hub and the client portal: mood-board items and conversations. */
+.boardItem { margin: 0; display: flex; flex-direction: column; gap: var(--space-2); padding: var(--space-3); border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface); font-size: var(--text-sm); min-width: 0; }
+.boardImage { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--radius-sm); }
+.palette { display: flex; height: 4.5rem; border-radius: var(--radius-sm); overflow: hidden; }
+.palette span { flex: 1; }
+.boardLink { display: inline-flex; align-items: center; gap: var(--space-1); min-height: var(--tap-min); font-weight: 600; }
+.boardNote { font-style: italic; }
+.comments { display: flex; flex-direction: column; gap: var(--space-1); padding: var(--space-2); background: var(--color-surface-2); border-radius: var(--radius-sm); font-size: var(--text-xs); }
+.conversation { display: flex; flex-direction: column; gap: var(--space-3); border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--color-surface); padding: var(--space-4); }
+.messages { display: flex; flex-direction: column; gap: var(--space-3); max-height: 28rem; overflow-y: auto; }
+.mine, .theirs { display: flex; flex-direction: column; gap: 2px; max-width: 85%; }
+.mine { align-self: flex-end; align-items: flex-end; }
+.bubbleMeta { font-size: var(--text-xs); color: var(--color-muted); }
+.bubble { padding: var(--space-2) var(--space-3); border-radius: var(--radius-md); background: var(--color-surface-2); font-size: var(--text-sm); }
+.mine .bubble { background: var(--color-accent); color: var(--color-on-accent); }
+.attachment { display: inline-flex; gap: var(--space-1); align-items: center; font-size: var(--text-xs); font-weight: 600; }
+.failed { font-size: var(--text-xs); color: var(--status-danger-ink); font-weight: 600; }
+.composer { display: flex; flex-direction: column; gap: var(--space-2); border-top: 1px solid var(--color-border); padding-top: var(--space-3); }
+
+.uploadButton {
+  display: inline-flex; align-items: center; gap: var(--space-1); min-height: 2.25rem; padding: 0 var(--space-4); cursor: pointer;
+  border-radius: var(--radius-pill); border: 1.5px solid var(--color-input-border); font-weight: 600; font-size: var(--text-sm); background: var(--color-surface);
+}
+.uploadButton:focus-within { outline: 2px solid var(--color-focus); outline-offset: 2px; }

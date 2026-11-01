@@ -1,0 +1,52 @@
+/* Floor plan and seating (PL-4.12) */
+.layout { display: grid; gap: var(--space-4); grid-template-columns: 1fr; align-items: start; }
+@media (min-width: 1100px) { .layout { grid-template-columns: minmax(0, 1fr) 20rem; } }
+.layout > * { min-width: 0; }
+.toolbar { display: flex; flex-wrap: wrap; gap: var(--space-2) var(--space-3); align-items: flex-end; }
+.toolbar > * { flex: 0 1 11rem; }
+.room {
+  position: relative; width: 100%; border-radius: var(--radius-sm); border: 2px solid var(--color-text); touch-action: none;
+  background-color: var(--color-surface); background-size: cover; background-position: center;
+  background-image: linear-gradient(var(--color-border) 1px, transparent 1px), linear-gradient(90deg, var(--color-border) 1px, transparent 1px);
+}
+.room:not([style*='url']) { background-size: 5% 7.8%; }
+.thing {
+  position: absolute; display: grid; place-items: center; padding: 0; cursor: grab; user-select: none;
+  border: 1.5px solid var(--color-text); background: var(--color-surface-2); color: var(--color-text); border-radius: 4px; font: inherit;
+}
+.thing:active { cursor: grabbing; }
+.thing[data-kind='table-round'] { border-radius: 50%; background: var(--color-surface); }
+.thing[data-kind='dance'] { background: repeating-conic-gradient(var(--color-surface-2) 0 25%, var(--color-surface) 0 50%) 0 0 / 20% 20%; }
+.thing[data-kind='stage'] { background: var(--color-text); color: var(--color-surface); }
+.thing[data-kind='exit'] { background: var(--status-success-bg); border-color: var(--status-success-ink); }
+.thing[data-kind='outlet'] { background: var(--status-warning-bg); border-color: var(--status-warning-ink); border-radius: 2px; }
+.thing[aria-pressed='true'] { outline: 3px solid var(--color-accent); outline-offset: 2px; z-index: 2; }
+.flagged { border: 3px solid var(--status-danger-ink); }
+.thingLabel { font-size: clamp(8px, 1.1vw, 12px); font-weight: 700; line-height: 1.1; text-align: center; pointer-events: none; overflow: hidden; }
+.thing[data-kind='outlet'] .thingLabel, .thing[data-kind='exit'] .thingLabel { font-size: 0; }
+.flagText { color: var(--status-danger-ink); font-weight: 650; font-size: var(--text-sm); }
+.grid2 { display: grid; gap: var(--space-3); grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.list { display: flex; flex-direction: column; font-size: var(--text-sm); }
+.list > li { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-1) var(--space-2); min-height: var(--tap-min); padding: var(--space-1) 0; border-top: 1px solid var(--color-border); }
+.list > li:first-child { border-top: 0; }
+.guest { cursor: grab; }
+.allergy { color: var(--status-warning-ink); font-weight: 650; }
+.seatPick select { min-height: 2.25rem; padding: 0 var(--space-2); border-radius: var(--radius-sm); border: 1px solid var(--color-input-border); background: var(--color-surface); font: inherit; font-size: var(--text-sm); }
+.inline { display: flex; flex-wrap: wrap; gap: var(--space-2); align-items: flex-end; }
+.inline > * { flex: 1 1 8rem; }
+.inline > button { flex: 0 0 auto; }
+
+/* Print: escort cards, table numbers, place cards */
+.print { width: 100%; max-width: 60rem; margin: 0 auto; padding: var(--space-6) var(--space-4); display: flex; flex-direction: column; gap: var(--space-4); background: var(--color-surface); box-sizing: border-box; }
+.print:focus { outline: none; }
+.printHead { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-3); align-items: center; }
+.kinds { display: inline-flex; flex-wrap: wrap; gap: var(--space-1); padding: 3px; border-radius: var(--radius-lg); background: var(--color-surface-2); }
+.kinds button { min-height: calc(var(--tap-min) - 6px); padding: 0 var(--space-4); border: 0; border-radius: var(--radius-pill); background: transparent; font-weight: 600; cursor: pointer; color: var(--color-muted); }
+.kinds button[aria-pressed='true'] { background: var(--color-surface); color: var(--color-text); box-shadow: 0 0 0 1px var(--color-border); }
+.cards { display: grid; gap: var(--space-3); grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr)); }
+.cards > li { display: flex; flex-direction: column; align-items: center; gap: var(--space-1); padding: var(--space-4); border: 1px dashed var(--color-border); text-align: center; break-inside: avoid; }
+.cards strong { font-family: var(--font-display); font-size: var(--text-lg); }
+.bigCards { display: grid; gap: var(--space-3); grid-template-columns: repeat(auto-fill, minmax(12rem, 1fr)); }
+.bigCards > li { display: grid; place-items: center; aspect-ratio: 1; border: 1px dashed var(--color-border); break-inside: avoid; }
+.tableNumber { font-family: var(--font-display); font-size: 5rem; line-height: 1; }
+@media print { .noPrint { display: none !important; } }
