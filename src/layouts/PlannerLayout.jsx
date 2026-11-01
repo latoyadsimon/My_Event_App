@@ -1,5 +1,6 @@
 // The planner workspace: Crowned wordmark, the business's name, and the
 // planner nav from the wireframes (Dashboard · Leads · Calendar · Events · Settings).
+import { Link } from 'react-router-dom'
 import AppShell from '../components/shell/AppShell'
 import { Lockup } from '../components/brand/Brand'
 import { useStore } from '../store/StoreContext'
@@ -26,7 +27,12 @@ export default function PlannerLayout() {
           <span className={styles.workspace}>{state.business.name}</span>
         </div>
       }
-      footer={<p className={styles.byline}>brought to you by <strong>{BRAND_NAME}</strong></p>}
+      footer={
+        <>
+          <Link to="/help" className={styles.helpLink}>Help &amp; how-to</Link>
+          <p className={styles.byline}>brought to you by <strong>{BRAND_NAME}</strong></p>
+        </>
+      }
     />
   )
 }

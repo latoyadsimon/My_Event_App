@@ -9,3 +9,8 @@ if (!HTMLDialogElement.prototype.showModal) {
 
 // jsdom doesn't scroll; RootLayout calls window.scrollTo on every page change.
 window.scrollTo = () => {}
+
+// Pages are code-split (lib/lazyPage.js). Load them all up front so tests can
+// query the page right after render, as if it were already cached.
+import { preloadAllPages } from '../lib/lazyPage'
+beforeAll(() => preloadAllPages())

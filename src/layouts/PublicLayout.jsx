@@ -3,6 +3,7 @@
 import { Outlet } from 'react-router-dom'
 import { BusinessMark, PoweredBy } from '../components/brand/Brand'
 import { useStore } from '../store/StoreContext'
+import PageFrame from '../components/shell/PageFrame'
 import styles from './layouts.module.css'
 
 export default function PublicLayout() {
@@ -14,7 +15,7 @@ export default function PublicLayout() {
         <div className={styles.publicHeadInner}><BusinessMark business={b} sub={b.city} /></div>
       </header>
       <main id="main" className={styles.publicMain} tabIndex={-1}>
-        <Outlet />
+        <PageFrame><Outlet /></PageFrame>
       </main>
       <footer className={styles.publicFoot}>
         <span className="muted">{b.name} · {b.phone} · {b.email}</span>

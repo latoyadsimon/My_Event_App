@@ -11,6 +11,7 @@
 //   /e/:slug/...  /i/:t   guest pages (no account)
 //   /join/:token          staff invite
 //   /outbox               demo: every email/text/push the app sent
+//   /help                 the How-To guide (same words as documentation/HOW_TO.md)
 //
 // =====================================================================
 import { Navigate, Route, Routes } from 'react-router-dom'
@@ -26,44 +27,61 @@ import GuestLayout from './layouts/GuestLayout'
 import StaffLayout from './layouts/StaffLayout'
 
 import Landing from './pages/shared/Landing'
-import SignIn from './pages/shared/SignIn'
-import Outbox from './pages/shared/Outbox'
 import NotFound from './pages/shared/NotFound'
-import SignUp from './pages/planner/SignUp'
-import Onboarding from './pages/planner/Onboarding'
-import Dashboard from './pages/planner/Dashboard'
-import Leads from './pages/planner/leads/Leads'
-import LeadDetail from './pages/planner/leads/LeadDetail'
-import ProposalBuilder from './pages/planner/leads/ProposalBuilder'
-import Calendar from './pages/planner/Calendar'
-import Overview from './pages/planner/hub/Overview'
-import Tasks from './pages/planner/hub/Tasks'
-import Guests from './pages/planner/hub/Guests'
-import Website from './pages/planner/hub/Website'
-import Invitations from './pages/planner/hub/Invitations'
-import Money from './pages/planner/hub/Money'
-import Files from './pages/planner/hub/Files'
-import Messages from './pages/planner/hub/Messages'
-import { Reschedule, CancelEvent } from './pages/planner/hub/ChangeEvent'
-import Contract from './pages/planner/booking/Contract'
-import Invoice from './pages/planner/booking/Invoice'
-import Events from './pages/planner/booking/Events'
-import PortalProposal from './pages/client/portal/PortalProposal'
-import PortalContract from './pages/client/portal/PortalContract'
-import PortalPay from './pages/client/portal/PortalPay'
-import PortalHome from './pages/client/portal/PortalHome'
-import { PortalQuestionnaire, PortalMoodBoard, PortalApprovals, PortalMessages } from './pages/client/portal/PortalPlanning'
-import { PortalPayments, PortalChange, PortalGuests } from './pages/client/portal/PortalMoney'
-import { Invitation, EventWebsite, Rsvp, RsvpDone } from './pages/guest/GuestPages'
-import { StaffJoin, StaffProfile } from './pages/staff/StaffPages'
-import InquiryForm from './pages/client/InquiryForm'
-import BookingPage from './pages/client/BookingPage'
-import SettingsLayout from './pages/planner/settings/SettingsLayout'
-import Appearance from './pages/planner/settings/Appearance'
-import {
-  BusinessSettings, BrandingSettings, PackagesSettings, PaymentsSettings, CalendarSettings,
-  TeamSettings, TemplatesSettings, ExportSettings,
-} from './pages/planner/settings/sections'
+import { lazyPage } from './lib/lazyPage'
+// Pages load on first visit (code splitting); see lib/lazyPage.js
+const SignIn = lazyPage(() => import('./pages/shared/SignIn'))
+const Help = lazyPage(() => import('./pages/shared/Help'))
+const Outbox = lazyPage(() => import('./pages/shared/Outbox'))
+const SignUp = lazyPage(() => import('./pages/planner/SignUp'))
+const Onboarding = lazyPage(() => import('./pages/planner/Onboarding'))
+const Dashboard = lazyPage(() => import('./pages/planner/Dashboard'))
+const Leads = lazyPage(() => import('./pages/planner/leads/Leads'))
+const LeadDetail = lazyPage(() => import('./pages/planner/leads/LeadDetail'))
+const ProposalBuilder = lazyPage(() => import('./pages/planner/leads/ProposalBuilder'))
+const Calendar = lazyPage(() => import('./pages/planner/Calendar'))
+const Overview = lazyPage(() => import('./pages/planner/hub/Overview'))
+const Tasks = lazyPage(() => import('./pages/planner/hub/Tasks'))
+const Guests = lazyPage(() => import('./pages/planner/hub/Guests'))
+const Website = lazyPage(() => import('./pages/planner/hub/Website'))
+const Invitations = lazyPage(() => import('./pages/planner/hub/Invitations'))
+const Money = lazyPage(() => import('./pages/planner/hub/Money'))
+const Files = lazyPage(() => import('./pages/planner/hub/Files'))
+const Messages = lazyPage(() => import('./pages/planner/hub/Messages'))
+const Reschedule = lazyPage(() => import('./pages/planner/hub/ChangeEvent'), 'Reschedule')
+const CancelEvent = lazyPage(() => import('./pages/planner/hub/ChangeEvent'), 'CancelEvent')
+const Contract = lazyPage(() => import('./pages/planner/booking/Contract'))
+const Invoice = lazyPage(() => import('./pages/planner/booking/Invoice'))
+const Events = lazyPage(() => import('./pages/planner/booking/Events'))
+const PortalProposal = lazyPage(() => import('./pages/client/portal/PortalProposal'))
+const PortalContract = lazyPage(() => import('./pages/client/portal/PortalContract'))
+const PortalPay = lazyPage(() => import('./pages/client/portal/PortalPay'))
+const PortalHome = lazyPage(() => import('./pages/client/portal/PortalHome'))
+const PortalQuestionnaire = lazyPage(() => import('./pages/client/portal/PortalPlanning'), 'PortalQuestionnaire')
+const PortalMoodBoard = lazyPage(() => import('./pages/client/portal/PortalPlanning'), 'PortalMoodBoard')
+const PortalApprovals = lazyPage(() => import('./pages/client/portal/PortalPlanning'), 'PortalApprovals')
+const PortalMessages = lazyPage(() => import('./pages/client/portal/PortalPlanning'), 'PortalMessages')
+const PortalPayments = lazyPage(() => import('./pages/client/portal/PortalMoney'), 'PortalPayments')
+const PortalChange = lazyPage(() => import('./pages/client/portal/PortalMoney'), 'PortalChange')
+const PortalGuests = lazyPage(() => import('./pages/client/portal/PortalMoney'), 'PortalGuests')
+const Invitation = lazyPage(() => import('./pages/guest/GuestPages'), 'Invitation')
+const EventWebsite = lazyPage(() => import('./pages/guest/GuestPages'), 'EventWebsite')
+const Rsvp = lazyPage(() => import('./pages/guest/GuestPages'), 'Rsvp')
+const RsvpDone = lazyPage(() => import('./pages/guest/GuestPages'), 'RsvpDone')
+const StaffJoin = lazyPage(() => import('./pages/staff/StaffPages'), 'StaffJoin')
+const StaffProfile = lazyPage(() => import('./pages/staff/StaffPages'), 'StaffProfile')
+const InquiryForm = lazyPage(() => import('./pages/client/InquiryForm'))
+const BookingPage = lazyPage(() => import('./pages/client/BookingPage'))
+const SettingsLayout = lazyPage(() => import('./pages/planner/settings/SettingsLayout'))
+const Appearance = lazyPage(() => import('./pages/planner/settings/Appearance'))
+const BusinessSettings = lazyPage(() => import('./pages/planner/settings/sections'), 'BusinessSettings')
+const BrandingSettings = lazyPage(() => import('./pages/planner/settings/sections'), 'BrandingSettings')
+const PackagesSettings = lazyPage(() => import('./pages/planner/settings/sections'), 'PackagesSettings')
+const PaymentsSettings = lazyPage(() => import('./pages/planner/settings/sections'), 'PaymentsSettings')
+const CalendarSettings = lazyPage(() => import('./pages/planner/settings/sections'), 'CalendarSettings')
+const TeamSettings = lazyPage(() => import('./pages/planner/settings/sections'), 'TeamSettings')
+const TemplatesSettings = lazyPage(() => import('./pages/planner/settings/sections'), 'TemplatesSettings')
+const ExportSettings = lazyPage(() => import('./pages/planner/settings/sections'), 'ExportSettings')
 
 export default function App() {
   return (
@@ -75,6 +93,7 @@ export default function App() {
 
         {/* ---------- Planner: getting started ---------- */}
         <Route element={<CrownedLayout />}>
+          <Route path="help" element={<Help />} />
           <Route path="app/signup" element={<SignUp />} />
           <Route path="app/onboarding" element={<Navigate to="business" replace />} />
           <Route path="app/onboarding/:step" element={<Onboarding />} />

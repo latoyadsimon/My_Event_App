@@ -19,6 +19,7 @@ import { guestT } from '../lib/guestText'
 import { BusinessMark, PoweredBy } from '../components/brand/Brand'
 import { Button, Field } from '../components/ui'
 import NotFound from '../pages/shared/NotFound'
+import PageFrame from '../components/shell/PageFrame'
 import styles from './GuestLayout.module.css'
 
 const browserLang = () => (typeof navigator !== 'undefined' && navigator.language?.startsWith('es') ? 'es' : 'en')
@@ -83,7 +84,7 @@ export default function GuestLayout() {
             <Button type="submit" variant="primary">{t('enter')}</Button>
           </form>
         )}
-        {!gate && <Outlet context={{ event, theme, lang, quiet, guest, token, t, hosts, site }} />}
+        {!gate && <PageFrame><Outlet context={{ event, theme, lang, quiet, guest, token, t, hosts, site }} /></PageFrame>}
       </main>
       <footer className={styles.foot}>
         <span className={styles.plannedBy}>{t('plannedBy')}</span>

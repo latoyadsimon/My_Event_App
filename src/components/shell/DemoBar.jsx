@@ -49,6 +49,7 @@ export default function DemoBar() {
         <Icon name="outbox" size={16} />
         Outbox{unread > 0 && <span className={styles.count}>{unread}<span className="visually-hidden"> unread</span></span>}
       </Link>
+      <Link to="/help" className={styles.link}>Help</Link>
       <button type="button" className={styles.link} onClick={() => window.location.assign('/')}>
         Reset demo
       </button>

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repo is
 
-Repo for an all-in-one **event planner app** (multi-tenant SaaS for event planners: leads → proposals → contracts → payments → guests/RSVPs, later equipment, staff, photo booth, karaoke, donations). The repo holds the product design, a Supabase Postgres schema with server functions, database tests, and the front-end single-page app (`src/`, React + Vite), built phase by phase on in-memory demo data. The user is a beginner developer (Code Platoon), so explain decisions and keep code commented for learning.
+Repo for **Crowned**, an all-in-one **event planner app** (multi-tenant SaaS for event planners: leads → proposals → contracts → payments → guests/RSVPs, later equipment, staff, photo booth, karaoke, donations). The repo holds the product design, a Supabase Postgres schema with server functions, database tests, and the **complete P1 front end** (`src/`, React + Vite) running on in-memory demo data. Connecting Supabase is next. The user is a beginner developer (Code Platoon), so explain decisions and keep code commented for learning.
 
 Build phases: **P1** core business (the current focus), P2 event operations, P3 guest experience, P4 growth. Running example used everywhere: the **Rivera wedding** (Sat Jun 12, 2027, 120 guests, total $14,850 = deposit $4,455 + $5,940 + $4,455). Keep new examples consistent with its timeline (see `wireframes/walkthrough_rivera.md`).
 
@@ -29,6 +29,7 @@ npm test         # Vitest + React Testing Library (npm run test:watch while codi
 npx vitest run src/App.test.jsx -t "phone bar"   # one file / one test by name
 npm run lint     # ESLint (ignores .claude/ and the generated erd_data.js)
 npm run build
+npm run docs:howto   # regenerate documentation/HOW_TO.md from src/data/howTo.js (same words as the /help page)
 
 # Regenerate ERD data + data dictionary after editing schema.sql
 python3 app_outline/erd/build_erd.py
@@ -81,29 +82,41 @@ Supabase Postgres, verified on Postgres 16 (CI) and 18. Read `erd/README.md` and
 
 ## Front-end SPA (`src/`)
 
-React 19 + Vite + React Router 7 (declarative `BrowserRouter`). **No backend yet:** all data lives in memory and a refresh resets it (no localStorage) until Supabase is connected. Built in phases (0 Foundation, 1 Planner setup, 2 Leads and selling, 3 Booking, 4 Event Hub, 5 Client portal, 6 Guests and staff, 7 Polish); each phase ends with `qa/frontend/phase_N_review.md` plus Playwright screenshots in `qa/frontend/screens/phase-N/`, and waits for the owner's approval.
+React 19 + Vite + React Router 7 (declarative `BrowserRouter`). **No backend yet:** all data lives in memory and a refresh resets it (no localStorage) until Supabase is connected. Built in phases 0–7; each has `qa/frontend/phase_N_review.md` (stories covered, wireframe deviations, decisions) and screenshots in `qa/frontend/screens/`.
 
-- **Routes:** `src/App.jsx`. `/app/*` planner, `/app/staff/*` staff, `/portal/*` client (Ana), `/b/:biz/*` public inquiry/booking, `/e/:slug/*` and `/i/:token` guests, `/join/:token` staff invite, `/outbox` demo messages. A screen not built yet renders `<Planned id>` from `src/routes/screens.js` (phase, design folder, next links), so there are no dead links. Swap the `<Planned>` for the real page when you build it.
+- **Routes:** `src/App.jsx`.
+  - Areas: `/app/*` planner, `/app/staff/*` staff, `/portal/*` client, `/b/:biz/*` public inquiry/booking, `/i/:token` and `/e/:slug/*` guests (no account; the guest's token is `?t=`), `/join/:token` staff invite, `/outbox` demo messages, `/help` the How-To.
+  - Pages are code-split with `lazyPage()` (`src/lib/lazyPage.js`, uses React `use()`; call it on every render). Layouts stay eager.
+  - Every layout wraps its `<Outlet>` in `PageFrame` (`components/shell/PageFrame.jsx`): Suspense fallback, an error boundary with "Try again", and the page fade (off for reduced motion and the respectful tone).
 - **State:**
-  - `src/store/reducer.js` (pure; every change is an action, tested in `reducer.test.js`), `StoreContext.jsx` (`useStore()` → `{ state, dispatch }`), `selectors.js`.
-  - Seed data is `src/data/seed.js`: the Rivera story on **Thu Nov 5, 2026, 6 PM**, which `src/lib/clock.js` fixes as "today" (never call `new Date()` for today).
-  - Money is in cents (`src/lib/money.js`). Calendar days are `'YYYY-MM-DD'`, read as local days with `parseDay`.
-  - Reducer actions should mirror the server functions in `functions.sql` (same rules, e.g. countersign needs the deposit) so Supabase can replace them.
+  - `src/store/reducer.js` handles app-level actions and dispatches everything else to the domain handler maps in `src/store/actions/`:
+    - `sales.js` (leads, consults, proposals);
+    - `booking.js` (accept, sign, pay, countersign, invoice);
+    - `hub.js` (tasks, guests, website, invitations, files, approvals, threads, reschedule, cancel, client requests);
+    - `guests.js` (RSVP, reminders, staff join).
+  - Handler names mirror `functions.sql` (the mapping table is in `documentation/README.md` §3.5); keep the same rules (e.g. countersign needs the deposit). Shared helpers (`newId`, `updateById`, `withMessage`, `withActivity`, `withToast`) are in `store/helpers.js`. All lookups go through `selectors.js`.
+  - Seed: `src/data/seed.js` (business, team, catalog, leads, proposals, contracts, events, invoices, tasks, Outbox) + `seedPlanning.js` (guests, files, approvals, questionnaires, threads, per-event website/invitation details). "Today" is **Thu Nov 5, 2026, 6 PM** (`src/lib/clock.js`; never call `new Date()` for today).
+  - Money is in cents (`lib/money.js`; proposal math in `lib/proposal.js`). Calendar days are `'YYYY-MM-DD'`, read as local days with `parseDay`.
+  - Soft delete + Undo: `toast/show` takes `undo: <action>` (e.g. `{ type: 'guest/restore', guestId }`).
+  - **Action payloads can't use a `type` field for data** (it's the action name); use `eventType` etc.
 - **Demo:**
-  - The demo bar's role switcher (`ui.role`) decides which area opens. `RequireRole` shows the friendly no-access page otherwise.
-  - Emails/SMS/push go to the Outbox via `dispatch({ type: 'outbox/send', message })`. `message.link.role` switches the role when the link is opened.
-- **Planner setup (phase 1):** `src/pages/planner/setup/` holds the forms shared by the onboarding wizard and Settings (BusinessFields, BrandingFields, PackagesManager, ConnectCards, TeamManager, TemplatesEditor). Form checks live in `src/lib/validate.js`, and the brand color is made readable with `src/lib/brand.js` (`brandInk`). Dashboard numbers come from `getDashboard()` in `selectors.js`. Destructive actions use `ConfirmDialog`.
-- **Styling:** `src/main.jsx` imports `index.css` (which imports `tokens.css`) *before* any component, so CSS-module styles load after the tokens and win ties. `GuestLayout` remaps the app tokens (`--color-*`, `--font-display`) onto the event theme's `--theme-*` variables, so shared components (Button, Field, Card) automatically wear the event theme on guest pages.
+  - The demo bar's "Viewing as" sets `ui.role` plus who: `ui.memberId` (planner as a teammate, e.g. `planner:devon` to show permissions via `can(state, perm)`), `ui.clientId` (which client's portal: `ana` before booking, `acme` after), `ui.staffId`.
+  - Outbox messages carry `link.role` / `link.clientId`, and opening the link switches to that person.
+  - `RequireRole` shows the friendly no-access page otherwise. Demo codes: card 4242… works, 4000…0002 declines; staff SMS code 123456.
+- **Guest pages:** all words come from `src/lib/guestText.js` (EN + ES, `guestT(lang)`, `guestDate`). `GuestLayout` finds the event from the token or slug and gates private/password sites. `?preview=1` (or the planner role) bypasses the gate.
+- **Help / How-To:** `src/data/howTo.js` is the single source for the `/help` page and `documentation/HOW_TO.md` (screenshots in `documentation/how_to/`). Edit the data, then run `npm run docs:howto`.
+- **Styling:** `src/main.jsx` imports `index.css` (which imports `tokens.css`) *before* any component, so CSS-module styles load after the tokens and win ties. `GuestLayout` remaps the app tokens (`--color-*`, `--font-display`) onto the event theme's `--theme-*` variables, so shared components wear the event theme on guest pages.
 - **Layouts:** `AppShell` (sidebar ≥1024px, top tabs 768–1023, phone bottom bar with 4 items + "More (n)") is shared by the planner, portal and staff layouts.
   - The portal locks Home/Guests/Mood Board/Approvals until the deposit.
-  - `GuestLayout` applies the event theme via `themeToCssVars`.
-  - `EventHubLayout` sets `data-tone="respectful"` for memorials.
+  - `EventHubLayout` passes `{ event }` as outlet context (`GuestSubTabs` forwards it) and sets `data-tone="respectful"` for memorials.
+- **Overflow gotcha:** `.visually-hidden` is `position: absolute`, so inside a horizontally scrolling box it can widen the page. Give the scroll container `position: relative`.
 - **Tests:**
-  - `src/test/renderApp.jsx` renders the whole app at a URL as a role (optionally with a modified `initialState()`). Write tests first, query by role/label (Testing Library), and keep them in CI (`npm test` in the frontend job).
-  - `src/test/setup.js` adds jest-dom matchers and stubs what jsdom lacks (`<dialog>` `showModal`/`close`, `window.scrollTo`).
+  - `src/test/renderApp.jsx` renders the whole app at a URL as a role (optionally with a modified `initialState()`). Write tests first, and query by role/label.
+  - `src/test/setup.js` preloads every lazy page (so queries work right after render), adds jest-dom, and stubs `<dialog>` and `scrollTo`. Use fake timers (`vi.useFakeTimers({ shouldAdvanceTime: true })` + `vi.advanceTimersByTimeAsync`) for the 600 ms "processing" steps.
   - Accessible names join adjacent elements without spaces, so put a real `{' '}` between a visually-hidden prefix and the label.
-- **Lint rule to know:** `react-refresh/only-export-components`. A `.jsx` file should export only components, so shared constants live in `src/lib/` (e.g. `ROLE_HOME` in `lib/roles.js`) or stay unexported.
-- **Browser checks (Playwright/Chrome DevTools):** a full page load resets the store, including the demo role to planner. To open client/guest/staff pages, click the no-access page's "View as …" button or change the demo bar's select, then navigate client-side.
+  - `qa/frontend/rivera-walkthrough.js` clicks the whole story in a real browser (run it with the Playwright MCP `browser_run_code_unsafe`, `filename`).
+- **Lint rule to know:** `react-refresh/only-export-components`. A `.jsx` file should export only components, so shared constants and helpers live in `src/lib/` or `store/selectors.js`.
+- **Browser checks (Playwright/Chrome DevTools):** a full page load resets the store, including the demo role. Change the demo bar's select, then navigate client-side (links or `history.pushState` + `popstate`). Measure performance on `npx vite preview` (a production build), not the dev server.
 - **Design skills** in `.claude/skills/` (frontend-design, ui-ux-pro-max, taste-skill: read `references/app-screens.md` for workspace screens, design-motion-principles). Where they conflict with `style_guide.md`, the style guide wins.
 
 ## Style system (`app_outline/style_guide.md`)
@@ -126,5 +139,5 @@ GitHub Actions (`.github/workflows/ci.yml`) runs on every push and on pull reque
 
 - `.claude/agents/` and `.claude/skills/` were copied from a previous project ("BookWorm"). `front-end-agent.md` still refers to BookWorm's `front-end/` folder, so adapt it before relying on it.
 - Root-level `*:Zone.Identifier` files are Windows download metadata; ignore them.
-- `README.md` is still the Vite template boilerplate; the real project guide is `documentation/README.md`.
+- `README.md` is the short intro (try it, commands, phases); `documentation/README.md` is the long-form guide; `documentation/HOW_TO.md` is the user guide (generated).
 - `prompt-claude-master.md` (untracked) is the owner's front-end build prompt; its HTML comment about building the front end only, before the backend, is intentional and should stay.

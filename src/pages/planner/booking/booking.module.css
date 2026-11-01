@@ -10,7 +10,7 @@
 @media (min-width: 768px) { .sigGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 .sigBox { display: flex; flex-direction: column; gap: var(--space-1); font-size: var(--text-sm); }
 .sigRole { font-size: var(--text-xs); color: var(--color-muted); font-weight: 600; }
-.sigName { font-family: 'Great Vibes', 'Brush Script MT', cursive; font-size: 2.25rem; line-height: 1.2; border-bottom: 1.5px solid var(--color-text); }
+.sigName { min-height: 2.75rem; font-family: 'Great Vibes', 'Brush Script MT', cursive; font-size: 2.25rem; line-height: 1.2; border-bottom: 1.5px solid var(--color-text); }
 .sigImage { max-height: 4.5rem; border-bottom: 1.5px solid var(--color-text); }
 .booked { display: flex; align-items: center; gap: var(--space-2); font-weight: 600; color: var(--status-success-ink); }
 

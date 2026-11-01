@@ -12,6 +12,7 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { NavLink, Outlet, useLocation, matchPath } from 'react-router-dom'
 import Icon from '../ui/Icon'
+import PageFrame from './PageFrame'
 import styles from './AppShell.module.css'
 
 const PHONE_SLOTS = 4
@@ -120,7 +121,7 @@ export default function AppShell({ brand, items, navLabel, sideNote, footer, top
       </header>
 
       <main id="main" className={styles.main} tabIndex={-1}>
-        {children ?? <Outlet />}
+        <PageFrame>{children ?? <Outlet />}</PageFrame>
       </main>
 
       <BottomBar items={items} label={navLabel} />

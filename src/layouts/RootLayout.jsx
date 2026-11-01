@@ -3,6 +3,7 @@ import { useEffect } from 'react'
 import { Outlet, useLocation } from 'react-router-dom'
 import DemoBar from '../components/shell/DemoBar'
 import Toasts from '../components/shell/Toasts'
+import PageFrame from '../components/shell/PageFrame'
 
 export default function RootLayout() {
   const { pathname } = useLocation()
@@ -14,7 +15,7 @@ export default function RootLayout() {
     <>
       <a className="skip-link" href="#main">Skip to content</a>
       <DemoBar />
-      <Outlet />
+      <PageFrame outer><Outlet /></PageFrame>
       <Toasts />
     </>
   )

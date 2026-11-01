@@ -29,7 +29,7 @@
 }
 .sigInput[aria-invalid='true'] { border-color: var(--status-danger-ink); }
 .sigPreview {
-  font-family: 'Great Vibes', 'Brush Script MT', cursive; font-size: 2.25rem; line-height: 1.2;
+  min-height: 2.75rem; font-family: 'Great Vibes', 'Brush Script MT', cursive; font-size: 2.25rem; line-height: 1.2;
   border-bottom: 1.5px solid var(--color-text); padding: 0 var(--space-2); min-width: 12rem;
 }
 .canvas {
