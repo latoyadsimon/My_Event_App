@@ -20,9 +20,10 @@ import { logisticsActions } from './actions/logistics'
 import { staffActions } from './actions/staff'
 import { eventDayActions } from './actions/eventDay'
 import { potluckActions } from './actions/potluck'
+import { karaokeActions } from './actions/karaoke'
 
 // Each domain adds its own handlers: { 'lead/create': (state, action) => newState }
-const HANDLERS = { ...salesActions, ...bookingActions, ...hubActions, ...guestActions, ...logisticsActions, ...staffActions, ...eventDayActions, ...potluckActions }
+const HANDLERS = { ...salesActions, ...bookingActions, ...hubActions, ...guestActions, ...logisticsActions, ...staffActions, ...eventDayActions, ...potluckActions, ...karaokeActions }
 
 export const MODES = ['calm', 'bold']
 export const ROLES = ['planner', 'client', 'guest', 'staff', 'vendor']

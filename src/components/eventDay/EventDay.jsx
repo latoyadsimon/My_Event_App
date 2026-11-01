@@ -223,6 +223,7 @@ export function LivePanel({ eventId, money = true }) {
     ['Vendors arrived', `${p.vendorsArrived} / ${p.vendorsTotal}`],
     ['Incidents', p.incidents],
     ...(money ? [['On-site sales', formatMoney(p.onsiteCents)]] : []),
+    ...(p.karaoke ? [['Karaoke line', `${p.karaoke.waiting} waiting · ${p.karaoke.sung} sung`]] : []),
   ]
   return (
     <dl className={styles.panel} aria-label="Live numbers">

@@ -12,6 +12,7 @@
 //   /join/:token          staff invite
 //   /v/:token/...         a vendor's page for one event (magic link, no account)
 //   /print/...            printable pages without the app frame (run of show)
+//   /screen/...           big screens at the venue (karaoke)
 //   /outbox               demo: every email/text/push the app sent
 //   /help                 the How-To guide (same words as documentation/HOW_TO.md)
 //
@@ -89,6 +90,11 @@ const WrapUp = lazyPage(() => import('./pages/planner/hub/WrapUp'))
 const PortalDayOf = lazyPage(() => import('./pages/client/portal/PortalDayOf'))
 const GuestPotluck = lazyPage(() => import('./pages/guest/Potluck'))
 const PotluckTab = lazyPage(() => import('./pages/planner/hub/Potluck'))
+const Entertainment = lazyPage(() => import('./pages/planner/hub/Entertainment'))
+const KjConsole = lazyPage(() => import('./pages/karaoke/KjConsole'))
+const KaraokeScreen = lazyPage(() => import('./pages/karaoke/KjConsole'), 'KaraokeScreen')
+const GuestKaraoke = lazyPage(() => import('./pages/guest/Karaoke'))
+const PortalEntertainment = lazyPage(() => import('./pages/client/portal/PortalEntertainment'))
 const InquiryForm = lazyPage(() => import('./pages/client/InquiryForm'))
 const BookingPage = lazyPage(() => import('./pages/client/BookingPage'))
 const SettingsLayout = lazyPage(() => import('./pages/planner/settings/SettingsLayout'))
@@ -129,6 +135,7 @@ export default function App() {
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="calendar" element={<Calendar />} />
           <Route path="day-of/:eventId" element={<DayOf />} />
+          <Route path="kj/:eventId" element={<KjConsole />} />
           <Route path="leads" element={<Leads />} />
           <Route path="leads/:leadId" element={<LeadDetail />} />
           <Route path="proposals/:leadId" element={<ProposalBuilder />} />
@@ -149,6 +156,7 @@ export default function App() {
               <Route index element={<RunOfShow />} />
               <Route path="vendors" element={<Vendors />} />
               <Route path="staff" element={<StaffTab />} />
+              <Route path="entertainment" element={<Entertainment />} />
               <Route path="gear" element={<Gear />} />
             </Route>
             <Route path="money" element={<Money />} />
@@ -182,6 +190,7 @@ export default function App() {
           <Route path="pack/:eventId" element={<StaffPack />} />
           <Route path="chat" element={<StaffChat />} />
           <Route path="day-of" element={<StaffDayOf />} />
+          <Route path="kj/:eventId" element={<KjConsole />} />
           <Route path="profile" element={<StaffProfile />} />
         </Route>
 
@@ -206,6 +215,7 @@ export default function App() {
           <Route path="guests" element={<PortalGuests />} />
           <Route path="messages" element={<PortalMessages />} />
           <Route path="day-of" element={<PortalDayOf />} />
+          <Route path="entertainment" element={<PortalEntertainment />} />
         </Route>
 
         {/* ---------- Vendors (magic link, no account) ---------- */}
@@ -214,6 +224,9 @@ export default function App() {
           <Route path="paperwork" element={<VendorPaperwork />} />
           <Route path="messages" element={<VendorMessages />} />
         </Route>
+
+        {/* ---------- Screens at the venue (no app frame) ---------- */}
+        <Route path="screen/karaoke/:eventId" element={<KaraokeScreen />} />
 
         {/* ---------- Printable pages (planner, no app frame) ---------- */}
         <Route path="print/events/:eventId/run-of-show" element={<RequireRole role="planner"><RunOfShowPrint /></RequireRole>} />
@@ -224,6 +237,7 @@ export default function App() {
           <Route path="rsvp" element={<Rsvp />} />
           <Route path="rsvp/done" element={<RsvpDone />} />
           <Route path="potluck" element={<GuestPotluck />} />
+          <Route path="karaoke" element={<GuestKaraoke />} />
         </Route>
         <Route path="i/:token" element={<GuestLayout />}>
           <Route index element={<Invitation />} />

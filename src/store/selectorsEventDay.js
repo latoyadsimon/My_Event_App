@@ -4,6 +4,7 @@
 // event report. Re-exported from selectors.js.
 // =====================================================================
 import { budgetFor, getEventVendors, getTimeline, packList } from './selectorsLogistics'
+import { karaokeStats } from './selectorsKaraoke'
 
 const eventOf = (state, id) => state.events.find((e) => e.id === id)
 const sum = (list, f) => list.reduce((t, x) => t + f(x), 0)
@@ -51,6 +52,7 @@ export function livePanel(state, eventId) {
     vendorsArrived: vendors.filter((v) => v.arrivedAt).length, vendorsTotal: vendors.length,
     incidents: getIncidents(state, eventId).length,
     onsiteCents: sum((invoice?.installments ?? []).filter((p) => p.extra === 'onsite'), (p) => p.amountCents),
+    karaoke: eventOf(state, eventId)?.karaoke?.enabled ? karaokeStats(state, eventId) : null,   // P3 panel: queue length
   }
 }
 
@@ -89,6 +91,7 @@ export function eventReport(state, eventId) {
     checkedIn: counts.checkedIn, walkIns: counts.walkIns,
     incidents: getIncidents(state, eventId).length,
     vendorsOnTime: vendors.filter((v) => v.arrivedAt).length, vendorsTotal: vendors.length,
+    karaoke: eventOf(state, eventId)?.karaoke?.enabled ? karaokeStats(state, eventId) : null,
   }
 }
 

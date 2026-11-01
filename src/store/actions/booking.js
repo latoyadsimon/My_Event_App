@@ -215,7 +215,10 @@ export const bookingActions = {
     // Gear behind the accepted proposal is reserved to the date (PL-6.2)
     const proposal = state.proposals.find((p) => p.leadId === event.leadId && p.status === 'accepted')
     const version = proposal?.versions.find((v) => v.n === proposal.acceptedVersion)
-    if (version) next = reserveFromLines(next, event.id, version.lines.filter((l) => !l.optional || proposal.chosen?.includes(l.addonId)))
+    const booked = version ? version.lines.filter((l) => !l.optional || proposal.chosen?.includes(l.addonId)) : []
+    if (version) next = reserveFromLines(next, event.id, booked)
+    // Karaoke on the proposal turns the karaoke tools on for this event (PL-6.4)
+    if (booked.some((l) => l.addonId === 'karaoke')) next = { ...next, events: updateById(next.events, event.id, (e) => ({ karaoke: { ...e.karaoke, enabled: true } })) }
     if (event.leadId) next = withActivity(next, event.leadId, 'You countersigned: booked')
     next = withMessage(next, {
       type: 'email', to: client.email, from: state.business.name, subject: `You're officially booked: ${event.name}`,

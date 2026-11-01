@@ -7,10 +7,11 @@
 // The planner's brand sits in the footer (NFR-15). EN | ES follows the
 // browser language, with a toggle (NFR-10).
 // Privacy (GU-2.3): a private site shows "Ask the host" without a token;
-// a password site asks once; a public site lets anyone RSVP.
+// a password site asks once; a public site lets anyone RSVP. The karaoke
+// request page (/e/<event>/karaoke) is never gated: its QR is on the tables.
 // =====================================================================
 import { useState } from 'react'
-import { Outlet, useParams, useSearchParams } from 'react-router-dom'
+import { Outlet, useLocation, useParams, useSearchParams } from 'react-router-dom'
 import { useStore } from '../store/StoreContext'
 import { getEvent, getLead } from '../store/selectors'
 import { defaultSite } from '../data/seedPlanning'
@@ -38,6 +39,7 @@ function findGuestEvent(state, slug) {
 export default function GuestLayout() {
   const { slug, token: pathToken } = useParams()
   const [params] = useSearchParams()
+  const { pathname } = useLocation()
   const { state } = useStore()
   const [lang, setLang] = useState(browserLang)
   const [password, setPassword] = useState('')
@@ -56,7 +58,9 @@ export default function GuestLayout() {
   const hosts = client?.partner ? `${client.name.split(' ')[0]} & ${client.partner.split(' ')[0]}` : client?.company ?? client?.name ?? state.business.name
   const preview = params.get('preview') === '1' || state.ui.role === 'planner'
   const site = event.site
-  const gate = !guest && !preview && (site.privacy === 'private' ? 'private' : site.privacy === 'password' && !unlocked ? 'password' : null)
+  // The karaoke request page is opened from a QR code on the tables, at the venue: no gate (GU-5.5)
+  const atVenue = pathname.endsWith('/karaoke')
+  const gate = !guest && !preview && !atVenue && (site.privacy === 'private' ? 'private' : site.privacy === 'password' && !unlocked ? 'password' : null)
 
   return (
     <div className={styles.guest} style={themeToCssVars(theme)} data-tone={quiet ? 'respectful' : undefined} lang={lang}>

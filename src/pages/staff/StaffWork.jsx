@@ -6,7 +6,8 @@
 //   StaffAvailability  /app/staff/availability       weekly days + days off
 //   StaffPack          /app/staff/pack/:eventId      scan labels into the van; done flags the rest
 //   StaffChat          /app/staff/chat               the event's team chat, alerts, voice notes
-//   StaffDayOf         /app/staff/day-of             only my role's tools on event day (ST-4.2)
+//   StaffDayOf         /app/staff/day-of             only my role's tools on event day (ST-4.2);
+//                                                    the KJ gets the KJ console (ST-4.5)
 // "Me" is the teammate the demo bar (or a shift text) picked: ui.staffId.
 // =====================================================================
 import { useState } from 'react'
@@ -373,6 +374,7 @@ export function StaffDayOf() {
       {!shift.clockIn && <Notice tone="warning" action={<Button size="small" to={`/app/staff/shifts/${shift.id}`}>Clock in</Button>}>You haven&apos;t clocked in yet.</Notice>}
       {role === 'Coordinator' && <><LivePanel eventId={event.id} money={false} /><NowNext eventId={event.id} memberId={me.id} /><Arrivals eventId={event.id} /></>}
       {role === 'Door / check-in' && <CheckIn eventId={event.id} by={me.id} />}
+      {role === 'KJ' && event.karaoke?.enabled && <Button variant="primary" to={`/app/staff/kj/${event.id}`}>Open the KJ console</Button>}
       {['Setup crew', 'Teardown'].includes(role) && <GearReturn eventId={event.id} />}
       {!['Coordinator', 'Door / check-in'].includes(role) && (
         <Card title="My part of the timeline">

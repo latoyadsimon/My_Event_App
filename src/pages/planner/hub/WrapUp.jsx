@@ -119,8 +119,8 @@ export default function WrapUp() {
           {money && <li><span>Damage charges</span><strong>{formatMoney(r.damageCents)}</strong></li>}
           <li><span>Vendors arrived</span><strong>{r.vendorsOnTime} of {r.vendorsTotal}</strong></li>
           <li><span>Incidents</span><strong>{r.incidents}</strong></li>
+          {r.karaoke && <li><span>Karaoke</span><strong>{r.karaoke.sung} songs · {r.karaoke.singers} singers{r.karaoke.topSong ? ` · most sung “${r.karaoke.topSong.title}”` : ''}</strong></li>}
         </ul>
-        <p className="muted">Booth, karaoke and donation numbers join this report when those features are used.</p>
       </Card>
 
       <ConfirmDialog open={closing} danger={false} title={`Close ${event.name}?`} confirmLabel="Close event"

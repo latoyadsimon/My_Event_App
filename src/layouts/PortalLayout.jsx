@@ -12,7 +12,7 @@ import { useStore } from '../store/StoreContext'
 import { getPortal } from '../store/selectors'
 
 const LOCK_NOTE = 'Unlocks after your deposit'
-const LOCKED_BEFORE_DEPOSIT = ['/portal', '/portal/guests', '/portal/mood-board', '/portal/approvals']
+const LOCKED_BEFORE_DEPOSIT = ['/portal', '/portal/guests', '/portal/mood-board', '/portal/approvals', '/portal/entertainment']
 
 const ITEMS = [
   { to: '/portal', label: 'Home', icon: 'home', end: true },
@@ -31,7 +31,9 @@ export default function PortalLayout() {
 
   // Day-of info (CL-5.1) joins the menu in the final week and stays through wrap-up
   const dayOf = ['final_week', 'event_day', 'wrap_up'].includes(event?.status)
-  const menu = dayOf ? [ITEMS[0], { to: '/portal/day-of', label: 'Day-of', icon: 'star' }, ...ITEMS.slice(1)] : ITEMS
+  const menu = dayOf ? [ITEMS[0], { to: '/portal/day-of', label: 'Day-of', icon: 'star' }, ...ITEMS.slice(1)] : [...ITEMS]
+  // Karaoke lists (CL-3.7) when the event has karaoke
+  if (event?.karaoke?.enabled) menu.splice(menu.findIndex((x) => x.to === '/portal/approvals'), 0, { to: '/portal/entertainment', label: 'Karaoke', icon: 'star' })
   const items = menu.map((item) =>
     !unlocked && LOCKED_BEFORE_DEPOSIT.includes(item.to) ? { ...item, locked: true, lockNote: LOCK_NOTE } : item)
 
