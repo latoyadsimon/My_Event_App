@@ -26,7 +26,7 @@ const ITEMS = [
 export default function PortalLayout() {
   const { state } = useStore()
   const { pathname } = useLocation()
-  const { lead, unlocked } = getPortal(state)
+  const { client, lead, unlocked } = getPortal(state)
 
   const items = ITEMS.map((item) =>
     !unlocked && LOCKED_BEFORE_DEPOSIT.includes(item.to) ? { ...item, locked: true, lockNote: LOCK_NOTE } : item)
@@ -38,7 +38,7 @@ export default function PortalLayout() {
     <AppShell
       navLabel="Your event"
       items={items}
-      brand={<BusinessMark business={state.business} sub={lead ? `${lead.title} · Ana & Marco` : undefined} />}
+      brand={<BusinessMark business={state.business} sub={lead ? `${lead.title} · ${client.partner ? `${client.name.split(' ')[0]} & ${client.partner.split(' ')[0]}` : client.name}` : undefined} />}
       sideNote={unlocked ? undefined : LOCK_NOTE}
       footer={<PoweredBy />}
     >

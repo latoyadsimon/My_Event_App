@@ -220,3 +220,59 @@ export function firstOpenDay(state, fromDay = toDay(TODAY)) {
   return null
 }
 
+
+// ---------------------------------------------------------------------
+// Booking (Phase 3): contracts, invoices, the Events list
+// ---------------------------------------------------------------------
+export const getContract = (state, id) => state.contracts.find((c) => c.id === id)
+export const getContractForLead = (state, leadId) => state.contracts.find((c) => c.leadId === leadId)
+export const getInvoice = (state, id) => state.invoices.find((i) => i.id === id)
+
+/** paid · overdue · due, for one installment */
+export const installmentStatus = (p) => (p.paidAt ? 'paid' : daysUntil(p.dueDate) < 0 ? 'overdue' : 'due')
+
+/** Money totals for one invoice: total, paid, refunded, balance, and a status word. */
+export function invoiceTotals(invoice) {
+  const paid = invoice.installments.filter((p) => p.paidAt).reduce((s, p) => s + p.amountCents, 0)
+  const refunded = (invoice.refunds ?? []).reduce((s, r) => s + r.amountCents, 0)
+  const balance = invoice.totalCents - paid
+  const overdue = invoice.installments.some((p) => installmentStatus(p) === 'overdue')
+  const status = balance <= 0 ? 'paid' : overdue ? 'overdue' : paid > 0 ? 'partially_paid' : 'open'
+  return { totalCents: invoice.totalCents, paidCents: paid, refundedCents: refunded, balanceCents: balance, status }
+}
+
+/** The next unpaid installment (what Portal › Pay asks for). */
+export const nextDue = (invoice) => invoice?.installments.find((p) => !p.paidAt) ?? null
+
+/**
+ * Where the client is in booking: review → sign → pay → done.
+ * Mirrors the portal's progress bar (CL-2.2).
+ */
+export function getBookingStep(state, clientId = state.ui?.clientId ?? 'ana') {
+  const { lead, event } = getPortal(state, clientId)
+  if (!lead) return { step: 'none' }
+  const proposal = getProposal(state, lead.id)
+  const contract = getContractForLead(state, lead.id)
+  const invoice = event && getInvoiceForEvent(state, event.id)
+  if (!contract) return { step: 'review', lead, proposal }
+  if (!contract.clientSignedAt) return { step: 'sign', lead, proposal, contract }
+  if (!invoice?.installments[0].paidAt) return { step: 'pay', lead, proposal, contract, event, invoice }
+  return { step: 'done', lead, proposal, contract, event, invoice }
+}
+
+const CLOSED_EVENT = ['closed', 'cancelled']
+/** Events list rows (PL-4.1): sorted by date, with balance due and open tasks. */
+export function getEventRows(state, { when = 'upcoming', status = 'all' } = {}) {
+  return state.events
+    .filter((e) => (when === 'all' ? true : when === 'upcoming' ? !CLOSED_EVENT.includes(e.status) && daysUntil(e.date) >= 0 : CLOSED_EVENT.includes(e.status) || daysUntil(e.date) < 0))
+    .filter((e) => status === 'all' || e.status === status)
+    .sort((a, b) => (when === 'past' ? b.date.localeCompare(a.date) : a.date.localeCompare(b.date)))
+    .map((event) => {
+      const invoice = getInvoiceForEvent(state, event.id)
+      return {
+        event,
+        balanceCents: invoice ? invoiceTotals(invoice).balanceCents : null,
+        openTasks: state.tasks.filter((t) => t.eventId === event.id && !t.done).length,
+      }
+    })
+}

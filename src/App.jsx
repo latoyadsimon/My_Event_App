@@ -37,6 +37,12 @@ import Dashboard from './pages/planner/Dashboard'
 import Leads from './pages/planner/leads/Leads'
 import LeadDetail from './pages/planner/leads/LeadDetail'
 import ProposalBuilder from './pages/planner/leads/ProposalBuilder'
+import Contract from './pages/planner/booking/Contract'
+import Invoice from './pages/planner/booking/Invoice'
+import Events from './pages/planner/booking/Events'
+import PortalProposal from './pages/client/portal/PortalProposal'
+import PortalContract from './pages/client/portal/PortalContract'
+import PortalPay from './pages/client/portal/PortalPay'
 import InquiryForm from './pages/client/InquiryForm'
 import BookingPage from './pages/client/BookingPage'
 import SettingsLayout from './pages/planner/settings/SettingsLayout'
@@ -69,9 +75,9 @@ export default function App() {
           <Route path="leads" element={<Leads />} />
           <Route path="leads/:leadId" element={<LeadDetail />} />
           <Route path="proposals/:leadId" element={<ProposalBuilder />} />
-          <Route path="contracts/:contractId" element={<Planned id="contract" />} />
-          <Route path="invoices/:invoiceId" element={<Planned id="invoice" />} />
-          <Route path="events" element={<Planned id="events" />} />
+          <Route path="contracts/:contractId" element={<Contract />} />
+          <Route path="invoices/:invoiceId" element={<Invoice />} />
+          <Route path="events" element={<Events />} />
           <Route path="events/:eventId" element={<EventHubLayout />}>
             <Route index element={<Planned id="hubOverview" nested />} />
             <Route path="tasks" element={<Planned id="hubTasks" nested />} />
@@ -116,9 +122,9 @@ export default function App() {
         {/* ---------- Client portal ---------- */}
         <Route path="portal" element={<RequireRole role="client"><PortalLayout /></RequireRole>}>
           <Route index element={<Planned id="portalHome" />} />
-          <Route path="proposal" element={<Planned id="portalProposal" />} />
-          <Route path="contract" element={<Planned id="portalContract" />} />
-          <Route path="pay" element={<Planned id="portalPay" />} />
+          <Route path="proposal" element={<PortalProposal />} />
+          <Route path="contract" element={<PortalContract />} />
+          <Route path="pay" element={<PortalPay />} />
           <Route path="questionnaire/:questionnaireId" element={<Planned id="portalQuestionnaire" />} />
           <Route path="mood-board" element={<Planned id="portalMoodBoard" />} />
           <Route path="approvals" element={<Planned id="portalApprovals" />} />

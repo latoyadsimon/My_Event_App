@@ -13,9 +13,10 @@ import { createSeedState, createNewBusinessState, PERMISSIONS } from '../data/se
 import { nowStamp } from '../lib/clock'
 import { newId, updateById, withMessage, isEmailContact as isEmail } from './helpers'
 import { salesActions } from './actions/sales'
+import { bookingActions } from './actions/booking'
 
 // Each domain adds its own handlers: { 'lead/create': (state, action) => newState }
-const HANDLERS = { ...salesActions }
+const HANDLERS = { ...salesActions, ...bookingActions }
 
 export const MODES = ['calm', 'bold']
 export const ROLES = ['planner', 'client', 'guest', 'staff']

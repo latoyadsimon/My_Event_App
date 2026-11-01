@@ -1,0 +1,34 @@
+/* Client portal pages. */
+.actions { display: flex; flex-wrap: wrap; gap: var(--space-2); justify-content: flex-end; }
+@media (max-width: 639px) { .actions > * { flex: 1 1 100%; } }
+
+/* Contract signing */
+.signForm { display: flex; flex-direction: column; gap: var(--space-3); align-items: flex-start; }
+.consent { display: flex; align-items: center; gap: var(--space-3); min-height: var(--tap-min); cursor: pointer; font-weight: 550; }
+.consent input { width: 1.25rem; height: 1.25rem; accent-color: var(--color-accent); flex-shrink: 0; }
+.error { font-size: var(--text-sm); color: var(--status-danger-ink); }
+.signedLine { display: flex; align-items: center; gap: var(--space-2); color: var(--status-success-ink); font-weight: 650; }
+
+/* Pay */
+.bigAmount { font-size: var(--text-2xl); font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.tableWrap { overflow-x: auto; }
+.schedule { width: 100%; border-collapse: collapse; font-size: var(--text-sm); }
+.schedule th { text-align: left; font-size: var(--text-xs); color: var(--color-muted); font-weight: 600; padding: 0 var(--space-2) var(--space-2) 0; }
+.schedule td { padding: var(--space-2) var(--space-2) var(--space-2) 0; border-top: 1px solid var(--color-border); }
+.schedule tr[aria-current] td { font-weight: 650; }
+.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.payForm { display: flex; flex-direction: column; gap: var(--space-4); }
+.methods { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+.method {
+  min-height: var(--tap-min); padding: 0 var(--space-4); border-radius: var(--radius-pill); cursor: pointer;
+  border: 1.5px solid var(--color-input-border); background: var(--color-surface); font-weight: 600; font-size: var(--text-sm);
+}
+.method[aria-checked='true'] { background: var(--color-text); color: var(--color-surface); border-color: var(--color-text); }
+.cardGrid { display: grid; gap: var(--space-4); grid-template-columns: 1fr 1fr; }
+.cardGrid > :first-child { grid-column: 1 / -1; }
+.success { align-items: flex-start; }
+.successIcon {
+  width: 3rem; height: 3rem; border-radius: 50%; display: grid; place-items: center;
+  background: var(--status-success-bg); color: var(--status-success-ink);
+}
+.successTitle { font-size: var(--text-2xl); }

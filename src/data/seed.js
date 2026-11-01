@@ -32,13 +32,18 @@ export const business = {
   depositPercent: 30,
   // Payment schedule for new invoices: deposit, then the rest (percent of the total)
   paymentSchedule: [
-    { label: 'Deposit 30%', percent: 30, due: 'at signing' },
-    { label: 'Payment 2 · 40%', percent: 40, due: '60 days before' },
-    { label: 'Final · 30%', percent: 30, due: '14 days before' },
+    { label: 'Deposit 30%', percent: 30, due: 'at signing', daysBefore: null },
+    { label: 'Payment 2 · 40%', percent: 40, due: '60 days before', daysBefore: 60 },
+    { label: 'Final · 30%', percent: 30, due: '14 days before', daysBefore: 14 },
   ],
   // Public booking page rules (PL-2.4), like Calendly: open times, buffers, a daily limit
   booking: { consultMinutes: 30, bufferMinutes: 15, dailyLimit: 3, weekdays: [1, 2, 3, 4, 5], times: ['10:00', '11:30', '14:00', '16:30'] },
   holdDays: 7,                      // "Hold date" on a lead lasts this long
+  // Contract template (PL-3.3): merge fields are filled from the accepted proposal
+  contractTerms: {
+    cancellation: 'The deposit is non-refundable. Cancel 90 or more days before the event and payments after the deposit are refunded in full; 30–89 days before, 50% is refunded; under 30 days, nothing is refunded. You may move your date once at no charge, subject to availability.',
+    lateFee: true,                  // the contract allows a late fee (Invoice option)
+  },
   paymentProvider: 'stripe',        // 'stripe' | 'square' | null (null = not connected: check/cash only)
   calendarProvider: null,           // 'google' | 'apple' | 'outlook' | null
   inquiryFormShared: false,         // getting-started checklist item
@@ -111,6 +116,16 @@ export const EVENT_TYPES = [
   { id: 'other', label: 'Something else' },
 ]
 export const eventTypeLabel = (id) => EVENT_TYPES.find((t) => t.id === id)?.label ?? 'Event'
+
+// Starter checklists applied at countersign (PL-1.7, PL-3.4): due N days before the event
+export const CHECKLIST_ITEMS = {
+  wedding: [['Send the welcome questionnaire', 210], ['Venue walkthrough', 180], ['Share the mood board', 150], ['Confirm vendors', 120],
+    ['Send invitations', 100], ['Lock the final headcount', 7], ['Day-of timeline to vendors', 5], ['Final walkthrough', 3]],
+  corporate: [['Send the welcome questionnaire', 60], ['Confirm the venue layout', 45], ['Book entertainment', 40], ['Lock the final headcount', 7], ['Day-of timeline to the venue', 5]],
+  memorial: [['Confirm the order of service', 10], ['Print the programs', 3], ['Confirm the reception food', 5]],
+  default: [['Send the welcome questionnaire', 50], ['Confirm the venue', 40], ['Send invitations', 30], ['Lock the final headcount', 7], ['Day-of timeline', 3]],
+}
+export const MANUAL_PAYMENT_METHODS = ['Cash', 'Check', 'Venmo', 'Zelle', 'Cash App']
 
 // Inquiry form choices (CL-1.1)
 export const SERVICES = ['Full planning', 'Photo booth', 'Karaoke', 'Rentals', 'Potluck organizer', 'Donations', 'Décor', 'Chairs']
@@ -222,6 +237,8 @@ export const events = [
 ]
 
 // Invoices with their payment schedules (installments). Paid = paidAt set.
+// Clients who turned on autopay
+const hasAutopay = (id) => ['acme', 'garza'].includes(id)
 function invoice(id, number, eventId, totalCents, dues, paidCount) {
   const amounts = splitByPercent(totalCents, [30, 40, 30])
   const labels = ['Deposit 30%', 'Payment 2 · 40%', 'Final · 30%']
@@ -230,7 +247,10 @@ function invoice(id, number, eventId, totalCents, dues, paidCount) {
     installments: amounts.map((amountCents, i) => ({
       id: `${id}-${i + 1}`, label: labels[i], dueDate: dues[i], amountCents,
       paidAt: i < paidCount ? `${dues[i]}T12:00:00` : null,
+      method: i < paidCount ? 'Visa ·4242' : null,
     })),
+    refunds: [], failedAttempts: 0,
+    options: { autopay: hasAutopay(id), passCardFee: false, lateFee: false, remindersPaused: false },
   }
 }
 export const invoices = [
