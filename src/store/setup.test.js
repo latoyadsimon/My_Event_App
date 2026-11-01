@@ -125,7 +125,7 @@ describe('team and permissions', () => {
   it('deactivates and reactivates a person, keeping their history', () => {
     let s = run(initialState(), { type: 'team/deactivate', memberId: 'sam' })
     expect(s.team.find((m) => m.id === 'sam')).toMatchObject({ status: 'deactivated', deactivatedAt: '2026-11-05T18:00:00' })
-    expect(s.team).toHaveLength(4)
+    expect(s.team).toHaveLength(6)
     s = run(s, { type: 'team/reactivate', memberId: 'sam' })
     expect(s.team.find((m) => m.id === 'sam').status).toBe('active')
   })

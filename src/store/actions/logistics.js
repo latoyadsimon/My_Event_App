@@ -313,9 +313,9 @@ export const logisticsActions = {
     })
     const vendorsOn = next.eventVendors.filter((x) => x.eventId === event.id && x.status !== 'cancelled')
     for (const ev of vendorsOn) next = toVendor(next, ev, `Final details: ${event.name}`, `Load-in ${ev.arrival ? formatClock(ev.arrival) : 'time TBD'}${ev.area ? ` · ${ev.area}` : ''}. Final headcount and your timeline are on your event page. On-site contact: ${lead.name} (${lead.phone}).`)
-    const staffIds = new Set([...next.timeline.filter((t) => t.eventId === event.id && !t.removed).map((t) => t.owner), ...(next.shifts ?? []).filter((s) => s.eventId === event.id).map((s) => s.memberId)])
+    const staffIds = new Set([...next.timeline.filter((t) => t.eventId === event.id && !t.removed).map((t) => t.owner), ...(next.shifts ?? []).filter((s) => s.eventId === event.id && s.status === 'accepted').map((s) => s.memberId)])
     const crew = next.team.filter((m) => staffIds.has(m.id) && m.role !== 'owner' && m.status === 'active')
-    for (const m of crew) next = withMessage(next, { type: 'sms', to: `${m.name} · ${m.phone}`, from: state.business.name, subject: 'Final week', body: `${event.name} is ${when} at ${event.venue}. Your call sheet is in the app.`, link: { label: 'Open the app', to: '/app/staff/profile', role: 'staff' } })
+    for (const m of crew) next = withMessage(next, { type: 'sms', to: `${m.name} · ${m.phone}`, from: state.business.name, subject: 'Final week', body: `${event.name} is ${when} at ${event.venue}. Your call sheet is in the app.`, link: { label: 'Open the app', to: '/app/staff/shifts', role: 'staff', staffId: m.id } })
     const households = getEventGuests(next, event.id).filter((g) => g.rsvp === 'attending').length
     if (households) next = logisticsActionsGuestWeek(next, event.id)
     next = withLog(next, event.id, 'Final week: details sent to the client, vendors, staff and guests')

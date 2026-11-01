@@ -143,3 +143,29 @@ export const reservations = [
 ]
 // Packed into the van every time (PL-6.3)
 export const ALWAYS_BRING = ['Extension cords (4)', 'Gaffer tape', 'First-aid kit', 'Tool kit', 'Table skirts', 'Zip ties']
+
+// ---- Staff shifts (schema: shifts + shift_assignments + time_entries, simplified to one person per shift) ----
+// Roles and the skill each needs (null = anyone). Skills come from the staff profile (ST-1.2).
+export const SHIFT_ROLES = [
+  ['Setup crew', 'Setup crew'], ['Coordinator', 'Coordinator'], ['KJ', 'KJ'], ['Photo booth attendant', 'Photo booth'],
+  ['Server', 'Serving'], ['Bartender', 'Bartending'], ['Door / check-in', null], ['Teardown', 'Setup crew'],
+]
+// status: open | offered | accepted. declinedBy keeps who said no (they aren't suggested again).
+// clockIn { at, atVenue, reason } · clockOut { at, notes, breakMinutes, miles } · timesheet: pending | approved | paid
+const shift = (id, eventId, role, date, start, end, memberId, status, extra = {}) =>
+  ({ id, eventId, role, date, start, end, memberId, status, declinedBy: [], swap: null, clockIn: null, clockOut: null, timesheet: null, ...extra })
+export const shifts = [
+  shift('sh1', 'acme', 'Setup crew', '2026-12-12', '15:00', '18:30', 'sam', 'accepted', { swap: { toId: 'marcus', at: '2026-11-04T19:00:00', reason: 'Family dinner that afternoon' } }),
+  shift('sh2', 'acme', 'Coordinator', '2026-12-12', '17:00', '00:30', 'devon', 'accepted'),
+  shift('sh3', 'acme', 'Photo booth attendant', '2026-12-12', '21:00', '23:45', 'sam', 'accepted'),
+  shift('sh4', 'acme', 'KJ', '2026-12-12', '21:00', '23:45', 'keisha', 'offered'),
+  shift('sh5', 'acme', 'Server', '2026-12-12', '19:00', '23:00', 'marcus', 'offered'),
+  shift('sh6', 'acme', 'Teardown', '2026-12-12', '23:45', '01:00', null, 'open', { declinedBy: ['marcus'] }),
+  shift('sh10', 'thompson', 'Setup crew', '2026-11-14', '09:00', '11:00', 'devon', 'accepted'),
+  shift('sh11', 'thompson', 'Server', '2026-11-14', '10:30', '14:30', 'sam', 'offered'),
+  // Past events: timesheets
+  shift('sh20', 'okafor', 'KJ', '2026-10-17', '18:00', '23:00', 'keisha', 'accepted', {
+    clockIn: { at: '2026-10-17T17:55:00', atVenue: true }, clockOut: { at: '2026-10-17T23:10:00', notes: '30 min break', breakMinutes: 30, miles: 22 }, timesheet: 'pending' }),
+  shift('sh21', 'westlake', 'Photo booth attendant', '2026-10-03', '18:00', '22:00', 'sam', 'accepted', {
+    clockIn: { at: '2026-10-03T17:50:00', atVenue: true }, clockOut: { at: '2026-10-03T22:15:00', notes: '', breakMinutes: 0, miles: 9 }, timesheet: 'paid' }),
+]

@@ -103,13 +103,14 @@ export function GuestSubTabs() {
   ]} />
 }
 
-/** Run of show · Vendors · Gear (inside the Logistics tab, product Phase 2) */
+/** Run of show · Vendors · Staff · Gear (inside the Logistics tab, product Phase 2) */
 export function LogisticsSubTabs() {
   const { eventId } = useParams()
   const base = `/app/events/${eventId}/logistics`
   return <SubTabs label="Logistics" items={[
     { to: base, label: 'Run of show', end: true },
     { to: `${base}/vendors`, label: 'Vendors' },
+    { to: `${base}/staff`, label: 'Staff' },
     { to: `${base}/gear`, label: 'Gear & pack list' },
   ]} />
 }

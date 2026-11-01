@@ -17,9 +17,10 @@ import { bookingActions } from './actions/booking'
 import { hubActions } from './actions/hub'
 import { guestActions } from './actions/guests'
 import { logisticsActions } from './actions/logistics'
+import { staffActions } from './actions/staff'
 
 // Each domain adds its own handlers: { 'lead/create': (state, action) => newState }
-const HANDLERS = { ...salesActions, ...bookingActions, ...hubActions, ...guestActions, ...logisticsActions }
+const HANDLERS = { ...salesActions, ...bookingActions, ...hubActions, ...guestActions, ...logisticsActions, ...staffActions }
 
 export const MODES = ['calm', 'bold']
 export const ROLES = ['planner', 'client', 'guest', 'staff', 'vendor']
@@ -48,7 +49,8 @@ export function reducer(state, action) {
     case 'ui/setRole':
       if (!ROLES.includes(action.role)) return state
       // clientId: which client the portal shows (a proposal email for Linh opens Linh's portal)
-      return { ...state, ui: { ...state.ui, role: action.role, memberId: action.memberId ?? null, ...(action.clientId && { clientId: action.clientId }) } }
+      // staffId: which teammate the staff app shows (a shift text to Keisha opens Keisha's app)
+      return { ...state, ui: { ...state.ui, role: action.role, memberId: action.memberId ?? null, ...(action.clientId && { clientId: action.clientId }), ...(action.staffId && { staffId: action.staffId }) } }
 
     case 'ui/tourSeen':   // the client portal's first-visit tour (CL-2.5), once per client
       return { ...state, ui: { ...state.ui, toursSeen: [...(state.ui.toursSeen ?? []), action.clientId] } }

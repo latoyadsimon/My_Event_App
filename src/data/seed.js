@@ -18,7 +18,7 @@ import { splitByPercent } from '../lib/money'
 import {
   defaultSite, defaultInvitation, eventDetails, guests, files, approvals, questionnaires, threads, moreAppointments,
 } from './seedPlanning'
-import { vendors, eventVendors, timeline, budgetLines, equipment, kits, reservations, ALWAYS_BRING } from './seedLogistics'
+import { vendors, eventVendors, timeline, budgetLines, equipment, kits, reservations, ALWAYS_BRING, shifts } from './seedLogistics'
 
 export const business = {
   id: 'bella-events',
@@ -45,6 +45,7 @@ export const business = {
   holdDays: 7,                      // "Hold date" on a lead lasts this long
   gearBufferDays: 1,                // gear isn't free again until a day after an event (cleaning, turnaround)
   alwaysBring: ALWAYS_BRING,        // on every pack list (PL-6.3)
+  staffDressCode: 'All black, closed-toe shoes, name badge',   // on every call sheet (ST-3.1)
   // Contract template (PL-3.3): merge fields are filled from the accepted proposal
   contractTerms: {
     cancellation: 'The deposit is non-refundable. Cancel 90 or more days before the event and payments after the deposit are refunded in full; 30–89 days before, 50% is refunded; under 30 days, nothing is refunded. You may move your date once at no charge, subject to availability.',
@@ -75,16 +76,25 @@ export const JOB_TITLES = ['Lead coordinator', 'Coordinator', 'KJ', 'Photo booth
 
 // The team (schema: memberships). role: owner | coordinator | staff; status: invited | active | deactivated
 export const team = [
-  { id: 'latoya', name: 'LaToya Simon', role: 'owner', jobTitle: 'Owner', email: 'latoya@bellaevents.com', phone: '(512) 555-0142', status: 'active', twoFactor: 'passkey',
+  { id: 'latoya', name: 'LaToya Simon', role: 'owner', jobTitle: 'Owner', email: 'latoya@bellaevents.com', phone: '(512) 555-0142', status: 'active', twoFactor: 'passkey', skills: ['Coordinator'], hourlyCents: 0,
     permissions: { see_budgets: true, see_profit: true, take_payments: true, edit_vendors: true } },
-  { id: 'devon', name: 'Devon Brooks', role: 'coordinator', jobTitle: 'Lead coordinator', email: 'devon@bellaevents.com', phone: '(512) 555-0177', status: 'active',
+  { id: 'devon', name: 'Devon Brooks', role: 'coordinator', jobTitle: 'Lead coordinator', email: 'devon@bellaevents.com', phone: '(512) 555-0177', status: 'active', skills: ['Coordinator', 'Setup crew'], hourlyCents: 3500,
+    availability: { weekdays: [0, 1, 2, 3, 4, 5, 6], off: [] },
     permissions: { see_budgets: true, see_profit: false, take_payments: true, edit_vendors: true } },
   { id: 'sam', name: 'Sam Ortiz', role: 'staff', jobTitle: 'Photo booth attendant', email: 'sam.ortiz@gmail.com', phone: '(512) 555-0109', status: 'active',
-    emergencyContact: 'Maria Ortiz · (512) 555-0110', skills: ['Photo booth', 'Serving'], shirtSize: 'M', photo: null,
+    emergencyContact: 'Maria Ortiz · (512) 555-0110', skills: ['Photo booth', 'Serving', 'Setup crew'], shirtSize: 'M', photo: null, hourlyCents: 2200,
+    availability: { weekdays: [0, 4, 5, 6], off: ['2026-11-21'] },   // Thu–Sun; away Nov 21 (ST-2.1)
     permissions: { see_budgets: false, see_profit: false, take_payments: false, edit_vendors: false } },
   // Invited Nov 4, hasn't joined yet: the 💬 team invite in the Outbox opens /join/inv-jo (ST-1.1)
   { id: 'jo', name: 'Jo Kim', role: 'staff', jobTitle: 'KJ', email: '', phone: '(512) 555-0199', status: 'invited', inviteToken: 'inv-jo',
-    skills: [], shirtSize: '', photo: null,
+    skills: [], shirtSize: '', photo: null, hourlyCents: 2500,
+    permissions: { see_budgets: false, see_profit: false, take_payments: false, edit_vendors: false } },
+  // Product Phase 2: more crew, so shifts have people to suggest
+  { id: 'marcus', name: 'Marcus Hill', role: 'staff', jobTitle: 'Server', email: '', phone: '(512) 555-0121', status: 'active',
+    skills: ['Serving', 'Bartending', 'Setup crew'], shirtSize: 'L', photo: null, hourlyCents: 2000, availability: { weekdays: [0, 1, 2, 3, 4, 5, 6], off: ['2026-11-14'] },
+    permissions: { see_budgets: false, see_profit: false, take_payments: false, edit_vendors: false } },
+  { id: 'keisha', name: 'Keisha Grant', role: 'staff', jobTitle: 'KJ', email: 'keisha.g@gmail.com', phone: '(512) 555-0186', status: 'active',
+    skills: ['KJ', 'Serving'], shirtSize: 'S', photo: null, hourlyCents: 2500, availability: { weekdays: [0, 5, 6], off: [] },
     permissions: { see_budgets: false, see_profit: false, take_payments: false, edit_vendors: false } },
 ]
 
@@ -353,7 +363,7 @@ export function createSeedState() {
     business, team, packages, addons, clients, leads, proposals, contracts, events: events.map(withPlanning), invoices, tasks, appointments,
     outbox: [...outbox].sort((a, b) => b.at.localeCompare(a.at)),
     guests, files, approvals, questionnaires, threads, requests: [],
-    vendors, eventVendors, timeline, budgetLines, equipment, kits, reservations,
+    vendors, eventVendors, timeline, budgetLines, equipment, kits, reservations, shifts,
   })
 }
 
@@ -377,6 +387,6 @@ export function createNewBusinessState({ ownerName, businessName, email }) {
     }],
     packages: [], addons: [], clients: [], leads: [], proposals: [], contracts: [], events: [], invoices: [], tasks: [], appointments: [], outbox: [],
     guests: [], files: [], approvals: [], questionnaires: [], threads: [], requests: [],
-    vendors: [], eventVendors: [], timeline: [], budgetLines: [], equipment: [], kits: [], reservations: [],
+    vendors: [], eventVendors: [], timeline: [], budgetLines: [], equipment: [], kits: [], reservations: [], shifts: [],
   }
 }

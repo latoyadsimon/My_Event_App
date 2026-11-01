@@ -22,7 +22,7 @@ function MessageLink({ link }) {
   const navigate = useNavigate()
   if (!link) return null
   const open = () => {
-    if (link.role) dispatch({ type: 'ui/setRole', role: link.role, clientId: link.clientId })
+    if (link.role) dispatch({ type: 'ui/setRole', role: link.role, clientId: link.clientId, staffId: link.staffId })
     navigate(link.to)
   }
   return <Button variant="primary" onClick={open}>{link.label}</Button>

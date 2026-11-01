@@ -176,7 +176,78 @@ export function logisticsAlerts(state) {
       if (ev.unacked.length) alerts.push({ id: `ack-${ev.id}`, tone: 'warning', text: `${event.name}: ${ev.vendor.name} hasn't acknowledged ${ev.unacked.length} change${ev.unacked.length > 1 ? 's' : ''}`, to })
     }
     const short = getReservations(state, event.id).filter((r) => r.shortage > 0)
+    const staffTo = `/app/events/${event.id}/logistics/staff`
+    const crew = (state.shifts ?? []).filter((x) => x.eventId === event.id && !x.removed)
+    const swaps = crew.filter((x) => x.swap).length
+    if (swaps) alerts.push({ id: `swap-${event.id}`, tone: 'warning', text: `${event.name}: ${swaps} shift swap${swaps > 1 ? 's' : ''} to approve`, action: 'Review', to: staffTo })
+    const open = crew.filter((x) => x.status === 'open').length
+    if (open) alerts.push({ id: `open-${event.id}`, tone: 'warning', text: `${event.name}: ${open} open shift${open > 1 ? 's' : ''}`, action: 'Staff it', to: staffTo })
     if (short.length) alerts.push({ id: `gear-${event.id}`, tone: 'warning', text: `${event.name}: short ${short.map((r) => `${r.shortage} ${r.item.name.toLowerCase()}${r.shortage > 1 ? 's' : ''}`).join(', ')}`, action: 'Add a rental', to: `/app/events/${event.id}/logistics/gear` })
+  }
+  const sheets = (state.shifts ?? []).filter((x) => x.timesheet === 'pending' && !x.removed)
+  for (const eventId of new Set(sheets.map((x) => x.eventId))) {
+    const n = sheets.filter((x) => x.eventId === eventId).length
+    alerts.push({ id: `hours-${eventId}`, tone: 'info', text: `${eventOf(state, eventId).name}: ${n} timesheet${n > 1 ? 's' : ''} to approve`, to: `/app/events/${eventId}/logistics/staff` })
   }
   return alerts
 }
+
+// ---------------------------------------------------------------------
+// Staff shifts (PL-6.1, ST-2.x to ST-5.x)
+// ---------------------------------------------------------------------
+const SKILL_FOR = {
+  'Setup crew': 'Setup crew', Coordinator: 'Coordinator', KJ: 'KJ', 'Photo booth attendant': 'Photo booth',
+  Server: 'Serving', Bartender: 'Bartending', 'Door / check-in': null, Teardown: 'Setup crew',
+}
+export const skillFor = (role) => SKILL_FOR[role] ?? null
+export const getShift = (state, id) => state.shifts.find((s) => s.id === id)
+/** Scheduled length in minutes (a shift ending after midnight wraps). */
+export const shiftMinutes = (s) => ((minutesOf(s.end) - minutesOf(s.start) + 1440) % 1440) || 1440
+/** Minutes actually worked (clock in → out, minus breaks), or null before clock-out. */
+export function workedMinutes(s) {
+  if (!s.clockIn || !s.clockOut) return null
+  return Math.max(0, Math.round((parseDay(s.clockOut.at) - parseDay(s.clockIn.at)) / 60000) - (s.clockOut.breakMinutes ?? 0))
+}
+export const formatHours = (mins) => `${Math.floor(mins / 60)}h ${String(mins % 60).padStart(2, '0')}m`
+
+export const getShifts = (state, eventId) => state.shifts.filter((s) => s.eventId === eventId && !s.removed)
+  .sort((a, b) => minutesOf(a.start) - minutesOf(b.start))
+
+/** Free on that date by their availability (weekly days + days off). ST-2.1 */
+export function isAvailable(member, day) {
+  const a = member.availability
+  if (!a) return true
+  return a.weekdays.includes(parseDay(day).getDay()) && !a.off.includes(day)
+}
+
+/** Already on another shift that overlaps this one (offered or accepted). */
+export function isBusy(state, memberId, shift) {
+  const start = minutesOf(shift.start)
+  const end = start + shiftMinutes(shift)
+  return state.shifts.some((s) => s.id !== shift.id && !s.removed && s.memberId === memberId && s.date === shift.date && s.status !== 'open' && (() => {
+    const s0 = minutesOf(s.start)
+    return s0 < end && start < s0 + shiftMinutes(s)
+  })())
+}
+
+/** Who could take a shift: qualified, available and free come first ("suggested"). PL-6.1 */
+export function suggestStaff(state, shiftId) {
+  const shift = getShift(state, shiftId)
+  const skill = skillFor(shift.role)
+  return state.team.filter((m) => m.status === 'active' && m.role !== 'owner' && !shift.declinedBy.includes(m.id)).map((m) => {
+    const qualified = !skill || (m.skills ?? []).includes(skill)
+    const available = isAvailable(m, shift.date)
+    const busy = isBusy(state, m.id, shift)
+    return { member: m, qualified, available, busy, suggested: qualified && available && !busy }
+  }).sort((a, b) => Number(b.suggested) - Number(a.suggested) || a.member.name.localeCompare(b.member.name))
+}
+
+/** A staff member's shifts with the event joined, soonest first. */
+export const myShifts = (state, memberId) => state.shifts
+  .filter((s) => s.memberId === memberId && !s.removed)
+  .map((s) => ({ ...s, event: eventOf(state, s.eventId) }))
+  .filter((s) => s.event && s.event.status !== 'cancelled')
+  .sort((a, b) => `${a.date}${a.start}`.localeCompare(`${b.date}${b.start}`))
+
+/** Accepted, not clocked in, 15+ minutes after the start (PL-6.1 no-show). `now` = a timestamp. */
+export const isNoShow = (s, now) => s.status === 'accepted' && !s.clockIn && parseDay(now) - parseDay(`${s.date}T${s.start}:00`) >= 15 * 60000

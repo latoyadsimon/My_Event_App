@@ -77,6 +77,12 @@ const Rsvp = lazyPage(() => import('./pages/guest/GuestPages'), 'Rsvp')
 const RsvpDone = lazyPage(() => import('./pages/guest/GuestPages'), 'RsvpDone')
 const StaffJoin = lazyPage(() => import('./pages/staff/StaffPages'), 'StaffJoin')
 const StaffProfile = lazyPage(() => import('./pages/staff/StaffPages'), 'StaffProfile')
+const StaffShifts = lazyPage(() => import('./pages/staff/StaffWork'), 'StaffShifts')
+const StaffShift = lazyPage(() => import('./pages/staff/StaffWork'), 'StaffShift')
+const StaffAvailability = lazyPage(() => import('./pages/staff/StaffWork'), 'StaffAvailability')
+const StaffPack = lazyPage(() => import('./pages/staff/StaffWork'), 'StaffPack')
+const StaffChat = lazyPage(() => import('./pages/staff/StaffWork'), 'StaffChat')
+const StaffTab = lazyPage(() => import('./pages/planner/hub/Staff'))
 const InquiryForm = lazyPage(() => import('./pages/client/InquiryForm'))
 const BookingPage = lazyPage(() => import('./pages/client/BookingPage'))
 const SettingsLayout = lazyPage(() => import('./pages/planner/settings/SettingsLayout'))
@@ -133,6 +139,7 @@ export default function App() {
             <Route path="logistics" element={<LogisticsSubTabs />}>
               <Route index element={<RunOfShow />} />
               <Route path="vendors" element={<Vendors />} />
+              <Route path="staff" element={<StaffTab />} />
               <Route path="gear" element={<Gear />} />
             </Route>
             <Route path="money" element={<Money />} />
@@ -159,7 +166,12 @@ export default function App() {
 
         {/* ---------- Staff ---------- */}
         <Route path="app/staff" element={<RequireRole role="staff"><StaffLayout /></RequireRole>}>
-          <Route index element={<Navigate to="profile" replace />} />
+          <Route index element={<Navigate to="shifts" replace />} />
+          <Route path="shifts" element={<StaffShifts />} />
+          <Route path="shifts/:shiftId" element={<StaffShift />} />
+          <Route path="availability" element={<StaffAvailability />} />
+          <Route path="pack/:eventId" element={<StaffPack />} />
+          <Route path="chat" element={<StaffChat />} />
           <Route path="profile" element={<StaffProfile />} />
         </Route>
 

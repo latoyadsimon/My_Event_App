@@ -14,7 +14,7 @@ const ENTRIES = [
   { role: 'planner', who: 'LaToya, owner of Bella Events', what: 'Leads, proposals, contracts, payments and every event, in one place. The Riveras are reviewing proposal v2 right now.', icon: 'dashboard' },
   { role: 'client', who: 'Ana Rivera, getting married Jun 12, 2027', what: 'Review the proposal, sign and pay the deposit in one sitting, then plan together in the portal.', icon: 'proposal' },
   { role: 'guest', who: 'A guest at the Rivera wedding', what: 'Open the event website and RSVP in under a minute. No account, no password.', icon: 'users' },
-  { role: 'staff', who: 'Sam Ortiz, event staff', what: 'Join the team from a text message and keep a profile. Shifts and day-of tools come in Phase 2.', icon: 'user' },
+  { role: 'staff', who: 'Sam Ortiz, event staff', what: 'Join from a text, set availability, accept shifts, see the call sheet, pack the van and clock in.', icon: 'user' },
 ]
 
 export default function Landing() {
