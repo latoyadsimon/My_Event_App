@@ -6,8 +6,10 @@ import { TODAY, daysUntil, parseDay, formatWeekdayDay } from '../lib/clock'
 import { formatMoney } from '../lib/money'
 import { eventTypeLabel } from '../data/seed'
 import { logisticsAlerts } from './selectorsLogistics'
+import { closeOut } from './selectorsEventDay'
 
 export * from './selectorsLogistics'
+export * from './selectorsEventDay'
 
 export const getLead = (state, id) => state.leads.find((l) => l.id === id)
 export const getEvent = (state, id) => state.events.find((e) => e.id === id)
@@ -133,6 +135,10 @@ export function getDashboard(state) {
   }
 
   alerts.push(...logisticsAlerts(state))
+  for (const e of state.events.filter((x) => x.status === 'wrap_up')) {
+    const c = closeOut(state, e.id)
+    alerts.push({ id: `close-${e.id}`, tone: 'info', text: `${e.name}: close-out ${c.doneCount} of ${c.items.length} done`, action: 'Wrap up', to: `/app/events/${e.id}/wrap-up` })
+  }
 
   // ---- Pipeline ----
   const pipeline = {

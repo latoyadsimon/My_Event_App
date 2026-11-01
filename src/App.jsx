@@ -83,6 +83,10 @@ const StaffAvailability = lazyPage(() => import('./pages/staff/StaffWork'), 'Sta
 const StaffPack = lazyPage(() => import('./pages/staff/StaffWork'), 'StaffPack')
 const StaffChat = lazyPage(() => import('./pages/staff/StaffWork'), 'StaffChat')
 const StaffTab = lazyPage(() => import('./pages/planner/hub/Staff'))
+const StaffDayOf = lazyPage(() => import('./pages/staff/StaffWork'), 'StaffDayOf')
+const DayOf = lazyPage(() => import('./pages/planner/DayOf'))
+const WrapUp = lazyPage(() => import('./pages/planner/hub/WrapUp'))
+const PortalDayOf = lazyPage(() => import('./pages/client/portal/PortalDayOf'))
 const InquiryForm = lazyPage(() => import('./pages/client/InquiryForm'))
 const BookingPage = lazyPage(() => import('./pages/client/BookingPage'))
 const SettingsLayout = lazyPage(() => import('./pages/planner/settings/SettingsLayout'))
@@ -122,6 +126,7 @@ export default function App() {
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="calendar" element={<Calendar />} />
+          <Route path="day-of/:eventId" element={<DayOf />} />
           <Route path="leads" element={<Leads />} />
           <Route path="leads/:leadId" element={<LeadDetail />} />
           <Route path="proposals/:leadId" element={<ProposalBuilder />} />
@@ -130,6 +135,7 @@ export default function App() {
           <Route path="events" element={<Events />} />
           <Route path="events/:eventId" element={<EventHubLayout />}>
             <Route index element={<Overview />} />
+            <Route path="wrap-up" element={<WrapUp />} />
             <Route path="tasks" element={<Tasks />} />
             <Route path="guests" element={<GuestSubTabs />}>
               <Route index element={<Guests />} />
@@ -172,6 +178,7 @@ export default function App() {
           <Route path="availability" element={<StaffAvailability />} />
           <Route path="pack/:eventId" element={<StaffPack />} />
           <Route path="chat" element={<StaffChat />} />
+          <Route path="day-of" element={<StaffDayOf />} />
           <Route path="profile" element={<StaffProfile />} />
         </Route>
 
@@ -195,6 +202,7 @@ export default function App() {
           <Route path="change-request" element={<PortalChange />} />
           <Route path="guests" element={<PortalGuests />} />
           <Route path="messages" element={<PortalMessages />} />
+          <Route path="day-of" element={<PortalDayOf />} />
         </Route>
 
         {/* ---------- Vendors (magic link, no account) ---------- */}

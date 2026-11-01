@@ -1,0 +1,17 @@
+/* Day-of Mode: one narrow column, big targets, the "now" card first. */
+.dayOf { display: flex; flex-direction: column; gap: var(--space-4); max-width: 40rem; width: 100%; margin: 0 auto; }
+.crumb { font-size: var(--text-sm); align-self: flex-start; }
+.head { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--space-3); }
+.title { font-size: var(--text-2xl); }
+.sub { display: block; font-size: var(--text-sm); color: var(--color-muted); }
+.grid2 { display: grid; gap: var(--space-3); grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); }
+.list { display: flex; flex-direction: column; font-size: var(--text-sm); }
+.list > li { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-2); min-height: var(--tap-min); padding: var(--space-2) 0; border-top: 1px solid var(--color-border); }
+.list > li:first-child { border-top: 0; }
+.segmented { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--space-1); padding: 3px; border-radius: var(--radius-lg); background: var(--color-surface-2); }
+.segmented button {
+  min-height: var(--tap-min); padding: 0 var(--space-1); border: 0; border-radius: var(--radius-md);
+  background: transparent; font-weight: 650; font-size: var(--text-sm); cursor: pointer; color: var(--color-muted); min-width: 0; overflow-wrap: anywhere;
+}
+.segmented button[aria-selected='true'] { background: var(--color-surface); color: var(--color-text); box-shadow: 0 0 0 1px var(--color-border); }
+@media (max-width: 420px) { .segmented button { font-size: var(--text-xs); } }

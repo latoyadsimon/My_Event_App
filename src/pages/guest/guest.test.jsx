@@ -130,7 +130,7 @@ describe('ST-1.1 / ST-1.2 Staff', () => {
     await user.click(screen.getByRole('button', { name: 'Sign in' }))
     expect(screen.getByRole('heading', { name: 'Profile' })).toBeInTheDocument()
     expect(screen.getByLabelText('Name')).toHaveValue('Jo Kim')
-    expect(screen.getAllByText(/locked: Coming soon/).length).toBeGreaterThan(0)   // Day-of (sidebar + phone bar)
+    expect(screen.getAllByRole('link', { name: 'Day-of' }).length).toBeGreaterThan(0)   // every staff tab is open now
   })
 
   it('a staff member edits their profile; the role is read-only', async () => {
@@ -140,6 +140,5 @@ describe('ST-1.1 / ST-1.2 Staff', () => {
     await user.click(screen.getByRole('button', { name: 'Save profile' }))
     expect(screen.getByText('Profile saved')).toBeInTheDocument()
     expect(screen.queryByRole('textbox', { name: /role/i })).not.toBeInTheDocument()
-    expect(screen.getAllByText(/locked: Coming soon/).length).toBeGreaterThan(0)
   })
 })

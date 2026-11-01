@@ -3,6 +3,7 @@
 // their logo and name at the top, "Powered by Crowned" at the bottom.
 // Before the deposit, Home / Guests / Mood Board / Approvals are shown
 // locked with "Unlocks after your deposit"; Messages stays open (walkthrough decision).
+// From the final week, Day-of joins the menu.
 // =====================================================================
 import { Navigate, Outlet, useLocation } from 'react-router-dom'
 import AppShell from '../components/shell/AppShell'
@@ -26,9 +27,12 @@ const ITEMS = [
 export default function PortalLayout() {
   const { state } = useStore()
   const { pathname } = useLocation()
-  const { client, lead, unlocked } = getPortal(state)
+  const { client, lead, event, unlocked } = getPortal(state)
 
-  const items = ITEMS.map((item) =>
+  // Day-of info (CL-5.1) joins the menu in the final week and stays through wrap-up
+  const dayOf = ['final_week', 'event_day', 'wrap_up'].includes(event?.status)
+  const menu = dayOf ? [ITEMS[0], { to: '/portal/day-of', label: 'Day-of', icon: 'star' }, ...ITEMS.slice(1)] : ITEMS
+  const items = menu.map((item) =>
     !unlocked && LOCKED_BEFORE_DEPOSIT.includes(item.to) ? { ...item, locked: true, lockNote: LOCK_NOTE } : item)
 
   // A locked page opened directly (old link, typed URL) goes to the proposal instead.

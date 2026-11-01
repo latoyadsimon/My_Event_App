@@ -6,6 +6,7 @@
 //   StaffAvailability  /app/staff/availability       weekly days + days off
 //   StaffPack          /app/staff/pack/:eventId      scan labels into the van; done flags the rest
 //   StaffChat          /app/staff/chat               the event's team chat, alerts, voice notes
+//   StaffDayOf         /app/staff/day-of             only my role's tools on event day (ST-4.2)
 // "Me" is the teammate the demo bar (or a shift text) picked: ui.staffId.
 // =====================================================================
 import { useState } from 'react'
@@ -18,6 +19,7 @@ import { daysUntil, formatDateTime, formatDay, formatTime, formatWeekdayDay } fr
 import { Button, Card, EmptyState, Field, Icon, Notice, PageHeader, StatusChip } from '../../components/ui'
 import Conversation from '../../components/planning/Conversation'
 import NotFound from '../shared/NotFound'
+import { Arrivals, CheckIn, GearReturn, Incidents, LivePanel, NowNext, OfflineBanner } from '../../components/eventDay/EventDay'
 import styles from './staff.module.css'
 
 const DUTIES = {
@@ -333,6 +335,58 @@ export function StaffChat() {
             </>
           } />
       </Card>
+    </>
+  )
+}
+
+/** ST-4.2: Day-of shows only my role's tools. Coordinator: now/next, cues, vendor arrivals,
+ *  incidents. Door: check-in. Setup/teardown: gear back in. Everyone: my timeline + incidents. */
+export function StaffDayOf() {
+  const { state } = useStore()
+  const me = useMe()
+  const mine = myShifts(state, me.id).filter((s) => s.status === 'accepted')
+  const today = mine.filter((s) => s.event.status === 'event_day')
+  const [pick, setPick] = useState(null)
+  const shift = today.find((s) => s.id === pick) ?? today[0]
+  if (!shift) {
+    const next = mine.find((s) => daysUntil(s.date) >= 0)
+    return (
+      <>
+        <PageHeader title="Day-of" />
+        <EmptyState title="No event today" action={next && <Button to={`/app/staff/shifts/${next.id}`}>See your call sheet</Button>}>
+          {next ? `Your next shift is ${next.role} at ${next.event.name}, ${formatWeekdayDay(next.date)}. Day-of opens when the event day starts.` : 'Day-of opens on the day of your next event.'}
+        </EmptyState>
+      </>
+    )
+  }
+  const event = shift.event
+  const role = shift.role
+  return (
+    <>
+      <PageHeader title={`Day-of · ${role}`} sub={event.name} />
+      <OfflineBanner />
+      {today.length > 1 && (
+        <Field label="Shift" as="select" value={shift.id} onChange={(e) => setPick(e.target.value)}>
+          {today.map((s) => <option key={s.id} value={s.id}>{s.role} · {formatClock(s.start)}</option>)}
+        </Field>
+      )}
+      {!shift.clockIn && <Notice tone="warning" action={<Button size="small" to={`/app/staff/shifts/${shift.id}`}>Clock in</Button>}>You haven&apos;t clocked in yet.</Notice>}
+      {role === 'Coordinator' && <><LivePanel eventId={event.id} money={false} /><NowNext eventId={event.id} memberId={me.id} /><Arrivals eventId={event.id} /></>}
+      {role === 'Door / check-in' && <CheckIn eventId={event.id} by={me.id} />}
+      {['Setup crew', 'Teardown'].includes(role) && <GearReturn eventId={event.id} />}
+      {!['Coordinator', 'Door / check-in'].includes(role) && (
+        <Card title="My part of the timeline">
+          <ol role="list" className={`${styles.list} ${styles.timeline}`}>
+            {getTimeline(state, event.id, 'staff').filter((t) => t.owner === me.id || t.visibility.includes('staff')).map((t) => (
+              <li key={t.id} className={t.owner === me.id ? styles.mineItem : undefined}>
+                <span className={styles.shiftWhen}>{formatClock(t.time)}</span><span>{t.done ? <s>{t.title}</s> : t.title}</span>
+              </li>
+            ))}
+          </ol>
+        </Card>
+      )}
+      <Incidents eventId={event.id} memberId={me.id} />
+      <Button to={`/app/staff/chat?e=${event.id}`}>Team chat</Button>
     </>
   )
 }

@@ -1,6 +1,7 @@
 // =====================================================================
 // One event's workspace: header (name, date · venue, status, Change date /
-// Cancel event) + tabs (Overview · Tasks · Guests · Logistics · Money · Files · Messages).
+// Cancel event, Day-of Mode in the final week) + tabs (Overview · [Wrap-up] · Tasks ·
+// Guests · Logistics · Money · Files · Messages).
 // Memorial events switch the whole hub to the respectful tone (style guide §13).
 // =====================================================================
 import { Link, NavLink, Outlet, useOutletContext, useParams } from 'react-router-dom'
@@ -30,6 +31,9 @@ export default function EventHubLayout() {
 
   const quiet = isRespectful(getTheme(event.theme), event.type)
   const base = `/app/events/${event.id}`
+  // Wrap-up appears once teardown is done (product Phase 2)
+  const tabs = ['wrap_up', 'closed'].includes(event.status) ? [...TABS.slice(0, 1), { to: 'wrap-up', label: 'Wrap-up' }, ...TABS.slice(1)] : TABS
+  const dayOf = ['final_week', 'event_day'].includes(event.status)
 
   return (
     <div className={styles.hub} data-tone={quiet ? 'respectful' : undefined}>
@@ -42,8 +46,9 @@ export default function EventHubLayout() {
             <StatusChip status={event.status} />
           </p>
         </div>
-        {!['cancelled', 'closed'].includes(event.status) && (
+        {!['cancelled', 'closed', 'wrap_up'].includes(event.status) && (
           <div className={styles.hubActions}>
+            {dayOf && <Button size="small" variant="primary" to={`/app/day-of/${event.id}`}>Day-of Mode</Button>}
             <Button size="small" to={`${base}/reschedule`}>Change date</Button>
             <Button size="small" variant="danger" to={`${base}/cancel`}>Cancel event</Button>
           </div>
@@ -52,7 +57,7 @@ export default function EventHubLayout() {
 
       <nav className={styles.tabs} aria-label="Event sections">
         <ul role="list" className={styles.tabList}>
-          {TABS.map((t) => (
+          {tabs.map((t) => (
             <li key={t.label}>
               <NavLink
                 to={t.to ? `${base}/${t.to}` : base}

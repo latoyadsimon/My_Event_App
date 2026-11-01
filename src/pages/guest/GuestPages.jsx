@@ -9,6 +9,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useOutletContext } from 'react-router-dom'
 import { useStore } from '../../store/StoreContext'
+import { checkInCode } from '../../store/selectors'
 import { daysUntil } from '../../lib/clock'
 import { guestDate, guestTime } from '../../lib/guestText'
 import { downloadIcs } from '../../lib/ics'
@@ -257,6 +258,13 @@ export function RsvpDone() {
         {guest.allergies && <li>{t('allergies')}: {guest.allergies}</li>}
         {guest.songRequest && <li>{t('song')}: {guest.songRequest}</li>}
       </ul>
+      {going && (
+        <div className={styles.checkIn}>
+          <span className={styles.muted}>{t('checkInCode')}</span>
+          <strong className={styles.checkInCode}>{checkInCode(guest)}</strong>
+          <span className={styles.muted}>{t('checkInHelp')}</span>
+        </div>
+      )}
       <div className={styles.actions}>
         {going && <Button variant="primary" onClick={() => downloadIcs({ at: at(event), minutes: event.minutes ?? 240, title: event.name, place: event.venue })}>{t('addToCalendar')}</Button>}
         {site.fundLink && <a className={styles.fundLink} href={site.fundLink} target="_blank" rel="noreferrer">{t('openFund')} <Icon name="external" size={16} /></a>}

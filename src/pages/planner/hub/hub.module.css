@@ -178,3 +178,8 @@
 .gearFix { grid-column: 1 / -1; }
 .moneyInput { display: inline-flex; align-items: center; gap: 2px; font-variant-numeric: tabular-nums; }
 .moneyInput input { width: 6.5rem; min-height: 2.25rem; padding: 0 var(--space-2); text-align: right; border-radius: var(--radius-sm); border: 1px solid var(--color-input-border); background: var(--color-surface); font: inherit; }
+
+/* Wrap-up */
+.deposit { display: flex; flex-direction: column; gap: var(--space-2); padding-top: var(--space-3); border-top: 1px solid var(--color-border); }
+.okIcon { color: var(--status-success-ink); flex-shrink: 0; }
+.todoIcon { color: var(--status-danger-ink); flex-shrink: 0; }

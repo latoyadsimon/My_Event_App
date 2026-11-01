@@ -271,6 +271,8 @@ function invoice(id, number, eventId, totalCents, dues, paidCount) {
       method: i < paidCount ? 'Visa ·4242' : null,
     })),
     refunds: [], failedAttempts: 0,
+    // A refundable security deposit held on the client's card (PL-8.2): held → released, or applied to damage
+    securityDeposit: ['acme', 'thompson'].includes(id) ? { amountCents: 25000, status: 'held', method: 'Visa ·4242' } : null,
     options: { autopay: hasAutopay(id), passCardFee: false, lateFee: false, remindersPaused: false },
   }
 }
@@ -363,7 +365,7 @@ export function createSeedState() {
     business, team, packages, addons, clients, leads, proposals, contracts, events: events.map(withPlanning), invoices, tasks, appointments,
     outbox: [...outbox].sort((a, b) => b.at.localeCompare(a.at)),
     guests, files, approvals, questionnaires, threads, requests: [],
-    vendors, eventVendors, timeline, budgetLines, equipment, kits, reservations, shifts,
+    vendors, eventVendors, timeline, budgetLines, equipment, kits, reservations, shifts, incidents: [],
   })
 }
 
@@ -387,6 +389,6 @@ export function createNewBusinessState({ ownerName, businessName, email }) {
     }],
     packages: [], addons: [], clients: [], leads: [], proposals: [], contracts: [], events: [], invoices: [], tasks: [], appointments: [], outbox: [],
     guests: [], files: [], approvals: [], questionnaires: [], threads: [], requests: [],
-    vendors: [], eventVendors: [], timeline: [], budgetLines: [], equipment: [], kits: [], reservations: [], shifts: [],
+    vendors: [], eventVendors: [], timeline: [], budgetLines: [], equipment: [], kits: [], reservations: [], shifts: [], incidents: [],
   }
 }

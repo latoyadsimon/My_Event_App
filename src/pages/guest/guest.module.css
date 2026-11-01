@@ -72,3 +72,6 @@
 /* A fieldset's legend normally sits on the border; float it so it reads like the other panel titles */
 fieldset.panel > legend { float: left; width: 100%; margin-bottom: var(--space-1); }
 fieldset.panel > legend + * { clear: both; }
+/* GU-5.1: the code door staff scan or type */
+.checkIn { display: flex; flex-direction: column; align-items: center; gap: var(--space-1); padding: var(--space-4); border-radius: var(--theme-radius, var(--radius-md)); border: 1.5px dashed var(--theme-border); text-align: center; }
+.checkInCode { font-size: var(--text-xl); letter-spacing: .12em; font-variant-numeric: tabular-nums; color: var(--theme-text); }
