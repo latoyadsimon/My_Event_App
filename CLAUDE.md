@@ -4,9 +4,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repo is
 
-Repo for **Crowned**, an all-in-one **event planner app** (multi-tenant SaaS for event planners: leads → proposals → contracts → payments → guests/RSVPs, later equipment, staff, photo booth, karaoke, donations). The repo holds the product design, a Supabase Postgres schema with server functions, database tests, and the **complete P1 front end** (`src/`, React + Vite) running on in-memory demo data. Connecting Supabase is next. The user is a beginner developer (Code Platoon), so explain decisions and keep code commented for learning.
+Repo for **Crowned**, an all-in-one **event planner app** (multi-tenant SaaS for event planners: leads → proposals → contracts → payments → guests/RSVPs, later equipment, staff, photo booth, karaoke, donations). The repo holds the product design, a Supabase Postgres schema with server functions, database tests, and the front end (`src/`, React + Vite) for product Phase 1, running on in-memory demo data. The user is a beginner developer (Code Platoon), so explain decisions and keep code commented for learning.
 
-Build phases: **P1** core business (the current focus), P2 event operations, P3 guest experience, P4 growth. Running example used everywhere: the **Rivera wedding** (Sat Jun 12, 2027, 120 guests, total $14,850 = deposit $4,455 + $5,940 + $4,455). Keep new examples consistent with its timeline (see `wireframes/walkthrough_rivera.md`).
+Running example used everywhere: the **Rivera wedding** (Sat Jun 12, 2027, 120 guests, total $14,850 = deposit $4,455 + $5,940 + $4,455). Keep new examples consistent with its timeline (see `wireframes/walkthrough_rivera.md`).
+
+## "Phase" means three different things here
+
+Say which one you mean; mixing them up has confused the owner before.
+
+- **Product phases (P1–P4), what features:** from `app_outline/product_spec.md` ("Suggested phases"). P1 core business; P2 event operations (equipment, staff shifts, run-of-show, day-of mode, vendors, potluck); P3 guest experience (invitation designer, photo booth, live gallery, karaoke jockey); P4 growth (ticketing, donations/auctions, floor plans and seating, rental store, reports). Every story in `app_outline/user_stories.md` is tagged on its header line (`· P1`, `· P2`, `· P2 / P4`…).
+- **Build steps, how we build:** the owner's order is **(1) all the front end → (2) the database attached to the ERD → (3) the APIs** (payments, email/SMS, calendars…). The owner chose to finish step 1 for *every* product phase before starting the database.
+- **Front-end build phases 0–7:** only the order product Phase 1's screens were built in (one PR and one `qa/frontend/phase_N_review.md` each).
+
+**Status:** the front end is done for P1 (stacked PRs #3–#10 into `dev`, merge in order). **Next:** front-end screens for the P2–P4 stories (about 75), still on demo data. Then the database, then the APIs. Wait for the owner's go-ahead before starting.
 
 ## Commands
 
@@ -82,7 +92,7 @@ Supabase Postgres, verified on Postgres 16 (CI) and 18. Read `erd/README.md` and
 
 ## Front-end SPA (`src/`)
 
-React 19 + Vite + React Router 7 (declarative `BrowserRouter`). **No backend yet:** all data lives in memory and a refresh resets it (no localStorage) until Supabase is connected. Built in phases 0–7; each has `qa/frontend/phase_N_review.md` (stories covered, wireframe deviations, decisions) and screenshots in `qa/frontend/screens/`.
+React 19 + Vite + React Router 7 (declarative `BrowserRouter`). **No backend yet:** all data lives in memory and a refresh resets it (no localStorage) until Supabase is connected. Product Phase 1 was built in front-end phases 0–7; each has `qa/frontend/phase_N_review.md` (stories covered, wireframe deviations, decisions) and screenshots in `qa/frontend/screens/`. P2–P4 features that P1 screens already show (the staff app's locked "My Shifts / Day-of / Chat" tabs, the karaoke add-ons, KJ job title, guest song requests) are hooks for later; there's no KJ, booth, shift or equipment screen yet.
 
 - **Routes:** `src/App.jsx`.
   - Areas: `/app/*` planner, `/app/staff/*` staff, `/portal/*` client, `/b/:biz/*` public inquiry/booking, `/i/:token` and `/e/:slug/*` guests (no account; the guest's token is `?t=`), `/join/:token` staff invite, `/outbox` demo messages, `/help` the How-To.
