@@ -75,3 +75,18 @@ fieldset.panel > legend + * { clear: both; }
 /* GU-5.1: the code door staff scan or type */
 .checkIn { display: flex; flex-direction: column; align-items: center; gap: var(--space-1); padding: var(--space-4); border-radius: var(--theme-radius, var(--radius-md)); border: 1.5px dashed var(--theme-border); text-align: center; }
 .checkInCode { font-size: var(--text-xl); letter-spacing: .12em; font-variant-numeric: tabular-nums; color: var(--theme-text); }
+
+/* Potluck and volunteers (GU-3.1, GU-3.2) */
+.formGrid { display: grid; gap: var(--space-3); grid-template-columns: 1fr; }
+@media (min-width: 560px) { .formGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+.formGrid > * { min-width: 0; }
+.note { font-size: var(--text-sm); padding: var(--space-3); border-radius: var(--radius-sm); background: var(--status-warning-bg); color: var(--status-warning-ink); }
+.fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+.legend { font-weight: 650; font-size: var(--text-sm); cursor: pointer; }
+.tags { display: grid; grid-template-columns: repeat(auto-fill, minmax(7.5rem, 1fr)); gap: 0 var(--space-3); }
+.check { display: flex; align-items: center; gap: var(--space-2); min-height: var(--tap-min); cursor: pointer; font-size: var(--text-sm); }
+.check input { width: 1.2rem; height: 1.2rem; accent-color: var(--theme-accent); flex-shrink: 0; }
+.meter { display: flex; flex-direction: column; gap: var(--space-2); font-size: var(--text-sm); }
+.meter > li { display: grid; grid-template-columns: minmax(6rem, 1fr) minmax(4rem, 2fr) auto; gap: var(--space-3); align-items: center; }
+.bar { height: .5rem; border-radius: 999px; background: var(--theme-border); overflow: hidden; }
+.bar > span { display: block; height: 100%; background: var(--theme-accent); border-radius: inherit; }

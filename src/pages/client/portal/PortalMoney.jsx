@@ -8,7 +8,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useStore } from '../../../store/StoreContext'
-import { cancellationQuote, getEventGuests, getInvoiceForEvent, getPortal, guestCounts, installmentStatus, invoiceTotals, nextDue } from '../../../store/selectors'
+import { cancellationQuote, getEventGuests, getInvoiceForEvent, getPortal, guestCounts, installmentStatus, invoiceTotals, nextDue, potluckBoard, volunteerBoard } from '../../../store/selectors'
 import { formatMoney } from '../../../lib/money'
 import { formatDay, formatDayShort, formatDateTime } from '../../../lib/clock'
 import { isEmail } from '../../../lib/validate'
@@ -216,9 +216,33 @@ export function PortalGuests() {
             </ul>
           </Card>
         )}
+      {event.potluck?.enabled && <PotluckTotals event={event} />}
       <AddGuestDialog open={adding} onClose={() => setAdding(false)} eventId={event.id} addedBy="client" />
       <ImportDialog open={importing} onClose={() => setImporting(false)} eventId={event.id} addedBy="client" />
       {cohost && <CoHostDialog open onClose={() => setCohost(false)} client={client} />}
     </>
+  )
+}
+
+/** CL-3.8 (P2): what's covered at the potluck, by category, and who's helping. */
+function PotluckTotals({ event }) {
+  const { state } = useStore()
+  const board = potluckBoard(state, event.id)
+  const slots = event.volunteer?.enabled ? volunteerBoard(state, event.id) : []
+  return (
+    <Card title={`Potluck · ${board.total} of ${board.needed} dishes`}>
+      <ul role="list" className={styles.rows}>
+        {board.categories.map((c) => (
+          <li key={c.id}>
+            <strong className={styles.snippet}>{c.name}</strong>
+            <span>{c.filled} of {c.target}</span>
+            {c.short ? <StatusChip tone="warning" label={`${c.short} more needed`} /> : <StatusChip tone="success" label="Covered" />}
+            <span className="muted">{c.dishes.map((d) => d.dish).join(', ')}</span>
+          </li>
+        ))}
+      </ul>
+      {slots.length > 0 && <p className="muted">Volunteers: {slots.map((s) => `${s.name} ${s.filled}/${s.needed}`).join(' · ')}</p>}
+      <Button to={`/e/${event.id}/potluck?preview=1`}>See the sign-up page</Button>
+    </Card>
   )
 }

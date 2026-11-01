@@ -87,6 +87,8 @@ const StaffDayOf = lazyPage(() => import('./pages/staff/StaffWork'), 'StaffDayOf
 const DayOf = lazyPage(() => import('./pages/planner/DayOf'))
 const WrapUp = lazyPage(() => import('./pages/planner/hub/WrapUp'))
 const PortalDayOf = lazyPage(() => import('./pages/client/portal/PortalDayOf'))
+const GuestPotluck = lazyPage(() => import('./pages/guest/Potluck'))
+const PotluckTab = lazyPage(() => import('./pages/planner/hub/Potluck'))
 const InquiryForm = lazyPage(() => import('./pages/client/InquiryForm'))
 const BookingPage = lazyPage(() => import('./pages/client/BookingPage'))
 const SettingsLayout = lazyPage(() => import('./pages/planner/settings/SettingsLayout'))
@@ -141,6 +143,7 @@ export default function App() {
               <Route index element={<Guests />} />
               <Route path="invitations" element={<Invitations />} />
               <Route path="website" element={<Website />} />
+              <Route path="potluck" element={<PotluckTab />} />
             </Route>
             <Route path="logistics" element={<LogisticsSubTabs />}>
               <Route index element={<RunOfShow />} />
@@ -220,6 +223,7 @@ export default function App() {
           <Route index element={<EventWebsite />} />
           <Route path="rsvp" element={<Rsvp />} />
           <Route path="rsvp/done" element={<RsvpDone />} />
+          <Route path="potluck" element={<GuestPotluck />} />
         </Route>
         <Route path="i/:token" element={<GuestLayout />}>
           <Route index element={<Invitation />} />

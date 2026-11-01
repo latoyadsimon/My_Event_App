@@ -169,3 +169,38 @@ export const shifts = [
   shift('sh21', 'westlake', 'Photo booth attendant', '2026-10-03', '18:00', '22:00', 'sam', 'accepted', {
     clockIn: { at: '2026-10-03T17:50:00', atVenue: true }, clockOut: { at: '2026-10-03T22:15:00', notes: '', breakMinutes: 0, miles: 9 }, timesheet: 'paid' }),
 ]
+
+// ---- Potluck and volunteers (schema: potluck_slots, potluck_signups) ----
+export const DIET_TAGS = ['Vegetarian', 'Vegan', 'Gluten-free', 'Dairy-free', 'Nut-free', 'Halal', 'Kosher', 'Spicy']
+// temp: hot | cold | room · outlet: needs an outlet or warming tray
+const dish = (id, categoryId, name, dishName, servings, diet = [], extra = {}) =>
+  ({ id, eventId: 'hope', categoryId, name, contact: '', dish: dishName, servings, diet, outlet: false, temp: 'room', at: '2026-11-01T12:00:00', ...extra })
+export const potluckSignups = [
+  dish('p1', 'mains', 'Gloria Mendez', 'Chicken enchiladas', 20, ['Gluten-free'], { temp: 'hot', outlet: true, contact: '(512) 555-0401' }),
+  dish('p2', 'mains', 'The Okoye family', 'Jollof rice', 25, ['Vegan', 'Spicy'], { temp: 'hot', contact: 'okoyes@gmail.com' }),
+  dish('p3', 'mains', 'Pastor James Cole', 'Smoked brisket', 30, [], { temp: 'hot', outlet: true }),
+  dish('p4', 'sides', 'Ruth Bell', 'Mac and cheese', 20, ['Vegetarian'], { temp: 'hot', outlet: true, contact: '(512) 555-0412' }),
+  dish('p5', 'sides', 'Ana Flores', 'Elote', 15, ['Vegetarian', 'Gluten-free']),
+  dish('p6', 'sides', 'Mike Tran', 'Mac and cheese', 15, ['Vegetarian'], { temp: 'hot' }),
+  dish('p7', 'salads', 'Linda Park', 'Fruit salad', 25, ['Vegan', 'Gluten-free', 'Nut-free'], { temp: 'cold' }),
+  dish('p8', 'desserts', 'Bea Johnson', 'Peach cobbler', 24, ['Vegetarian'], { contact: '(512) 555-0420' }),
+  dish('p9', 'desserts', 'The Nguyens', 'Pound cake', 20, ['Vegetarian']),
+  dish('p10', 'desserts', 'Carol White', 'Brownies', 24, ['Vegetarian']),
+  dish('p11', 'drinks', 'Youth group', 'Sweet tea (3 gallons)', 50, ['Vegan', 'Gluten-free'], { temp: 'cold' }),
+]
+export const volunteerSignups = [
+  { id: 'v1', eventId: 'hope', slotId: 'setup', name: 'Deacon Ray Hill', contact: '(512) 555-0431', at: '2026-10-28T10:00:00' },
+  { id: 'v2', eventId: 'hope', slotId: 'setup', name: 'Tasha Hill', contact: '(512) 555-0432', at: '2026-10-28T10:00:00' },
+  { id: 'v3', eventId: 'hope', slotId: 'serving', name: 'Youth group (4)', contact: 'youth@hopechurchatx.org', at: '2026-10-30T10:00:00', people: 4 },
+  { id: 'v4', eventId: 'hope', slotId: 'greeting', name: 'Mrs. Alma Reyes', contact: '', at: '2026-11-02T10:00:00' },
+  { id: 'v5', eventId: 'hope', slotId: 'cleanup', name: 'Men\'s fellowship (3)', contact: '', at: '2026-11-03T10:00:00', people: 3 },
+]
+// Off until the planner turns them on (PL-5.6); sensible starting categories and slots
+export const defaultPotluck = () => ({
+  enabled: false, dropOff: '',
+  categories: [{ id: 'mains', name: 'Main dishes', per: 10 }, { id: 'sides', name: 'Sides', per: 8 }, { id: 'desserts', name: 'Desserts', per: 10 }, { id: 'drinks', name: 'Drinks', per: 20 }],
+})
+export const defaultVolunteer = () => ({
+  enabled: false,
+  slots: [{ id: 'setup', name: 'Setup', time: '', needed: 4 }, { id: 'serving', name: 'Serving', time: '', needed: 4 }, { id: 'cleanup', name: 'Cleanup', time: '', needed: 4 }, { id: 'greeting', name: 'Greeting', time: '', needed: 2 }, { id: 'kids', name: 'Kids\' table', time: '', needed: 2 }],
+})

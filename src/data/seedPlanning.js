@@ -89,6 +89,26 @@ export const eventDetails = {
       sends: [{ id: 'send-thompson-1', kind: 'invitation', at: '2026-10-30T10:00:00', channels: ['email', 'sms'], count: 8 }],
     },
   },
+  // Product Phase 2: a public church potluck with sign-ups (PL-5.6, GU-3.1, GU-3.2)
+  hope: {
+    venueInfo: { address: '2100 E 12th St, Austin, TX 78702', loadIn: 'Kitchen door on the east side. Tables are set by 11 AM.', wifi: 'HopeGuest' },
+    costsCents: 60000,
+    site: {
+      ...defaultSite({ type: 'potluck' }),
+      welcome: 'Our New Year potluck! Bring a dish to share (sign up so we get a little of everything) and lend a hand if you can.',
+      schedule: [{ time: '12:00 PM', text: 'Blessing and lunch' }, { time: '1:30 PM', text: 'Kids\' games and dessert' }],
+      privacy: 'public', rsvpCutoff: '2027-01-06', meals: [], songRequest: false,
+    },
+    potluck: {
+      enabled: true, dropOff: '11:15',
+      // per = one dish for every N people expected
+      categories: [{ id: 'mains', name: 'Main dishes', per: 10 }, { id: 'sides', name: 'Sides', per: 8 }, { id: 'salads', name: 'Salads', per: 12 }, { id: 'desserts', name: 'Desserts', per: 10 }, { id: 'drinks', name: 'Drinks', per: 20 }],
+    },
+    volunteer: {
+      enabled: true,
+      slots: [{ id: 'setup', name: 'Setup', time: '10:00', needed: 6 }, { id: 'greeting', name: 'Greeting', time: '11:30', needed: 2 }, { id: 'serving', name: 'Serving', time: '12:00', needed: 8 }, { id: 'kids', name: 'Kids\' table', time: '12:00', needed: 3 }, { id: 'cleanup', name: 'Cleanup', time: '14:00', needed: 6 }],
+    },
+  },
 }
 
 // ---- Guests: one row per household (PL-5.1). size = invited people incl. plus-ones ----

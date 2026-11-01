@@ -18,7 +18,7 @@ import { splitByPercent } from '../lib/money'
 import {
   defaultSite, defaultInvitation, eventDetails, guests, files, approvals, questionnaires, threads, moreAppointments,
 } from './seedPlanning'
-import { vendors, eventVendors, timeline, budgetLines, equipment, kits, reservations, ALWAYS_BRING, shifts } from './seedLogistics'
+import { vendors, eventVendors, timeline, budgetLines, equipment, kits, reservations, ALWAYS_BRING, shifts, potluckSignups, volunteerSignups, defaultPotluck, defaultVolunteer } from './seedLogistics'
 
 export const business = {
   id: 'bella-events',
@@ -356,7 +356,7 @@ export const outbox = [
 /** Every event carries its website, invitation and planning details (Phase 4). */
 export const withPlanning = (event) => ({
   venueInfo: { address: '', loadIn: '', wifi: '' }, costsCents: 0, headcount: null, log: [],
-  site: defaultSite(event), invitation: defaultInvitation(),
+  site: defaultSite(event), invitation: defaultInvitation(), potluck: defaultPotluck(), volunteer: defaultVolunteer(),
   ...event, ...(eventDetails[event.id] ?? {}),
 })
 
@@ -365,7 +365,7 @@ export function createSeedState() {
     business, team, packages, addons, clients, leads, proposals, contracts, events: events.map(withPlanning), invoices, tasks, appointments,
     outbox: [...outbox].sort((a, b) => b.at.localeCompare(a.at)),
     guests, files, approvals, questionnaires, threads, requests: [],
-    vendors, eventVendors, timeline, budgetLines, equipment, kits, reservations, shifts, incidents: [],
+    vendors, eventVendors, timeline, budgetLines, equipment, kits, reservations, shifts, incidents: [], potluckSignups, volunteerSignups,
   })
 }
 
@@ -389,6 +389,6 @@ export function createNewBusinessState({ ownerName, businessName, email }) {
     }],
     packages: [], addons: [], clients: [], leads: [], proposals: [], contracts: [], events: [], invoices: [], tasks: [], appointments: [], outbox: [],
     guests: [], files: [], approvals: [], questionnaires: [], threads: [], requests: [],
-    vendors: [], eventVendors: [], timeline: [], budgetLines: [], equipment: [], kits: [], reservations: [], shifts: [], incidents: [],
+    vendors: [], eventVendors: [], timeline: [], budgetLines: [], equipment: [], kits: [], reservations: [], shifts: [], incidents: [], potluckSignups: [], volunteerSignups: [],
   }
 }

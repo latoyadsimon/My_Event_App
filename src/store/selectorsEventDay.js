@@ -91,3 +91,45 @@ export function eventReport(state, eventId) {
     vendorsOnTime: vendors.filter((v) => v.arrivedAt).length, vendorsTotal: vendors.length,
   }
 }
+
+// ---------------------------------------------------------------------
+// Potluck and volunteers (PL-5.6, GU-3.1, GU-3.2, CL-3.8)
+// ---------------------------------------------------------------------
+/** How many people to plan food for: the locked headcount, else RSVPs, else the estimate. */
+export function potluckHeadcount(state, event) {
+  if (event.headcount?.lockedAt) return event.headcount.count
+  const attending = state.guests.filter((g) => g.eventId === event.id && !g.removed && g.rsvp === 'attending').reduce((t, g) => t + g.attending, 0)
+  return attending || event.guestCount || 0
+}
+
+/** Each category with its target (scales with headcount), dishes signed up and what's missing. */
+export function potluckBoard(state, eventId) {
+  const event = eventOf(state, eventId)
+  const people = potluckHeadcount(state, event)
+  const signups = (state.potluckSignups ?? []).filter((x) => x.eventId === eventId)
+  const categories = (event.potluck?.categories ?? []).map((c) => {
+    const dishes = signups.filter((x) => x.categoryId === c.id)
+    const target = Math.max(1, Math.ceil(people / c.per))
+    return { ...c, dishes, target, filled: dishes.length, servings: sum(dishes, (d) => d.servings), short: Math.max(0, target - dishes.length) }
+  })
+  return { people, categories, total: signups.length, needed: sum(categories, (c) => c.target) }
+}
+
+const words = (s) => s.toLowerCase().replace(/[^a-z\s]/g, '').split(/\s+/).filter((w) => w.length > 2)
+/** "Mac and cheese" twice? Returns the similar dish already signed up (GU-3.1), or null. */
+export function similarDish(state, eventId, categoryId, dish) {
+  const mine = new Set(words(dish))
+  if (!mine.size) return null
+  return (state.potluckSignups ?? []).find((x) => x.eventId === eventId && x.categoryId === categoryId && words(x.dish).some((w) => mine.has(w))) ?? null
+}
+
+/** Volunteer slots with who signed up (GU-3.2). A group sign-up can count as several people. */
+export function volunteerBoard(state, eventId) {
+  const event = eventOf(state, eventId)
+  const signups = (state.volunteerSignups ?? []).filter((x) => x.eventId === eventId)
+  return (event.volunteer?.slots ?? []).map((s) => {
+    const people = signups.filter((x) => x.slotId === s.id)
+    const filled = sum(people, (x) => x.people ?? 1)
+    return { ...s, people, filled, open: Math.max(0, s.needed - filled) }
+  })
+}

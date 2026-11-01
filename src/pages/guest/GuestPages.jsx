@@ -88,6 +88,10 @@ export function EventWebsite() {
         </nav>
       )}
 
+      {(event.potluck?.enabled || event.volunteer?.enabled) && (
+        <p><Button to={withToken(`/e/${event.id}/potluck`, token)}>{event.potluck?.enabled && event.volunteer?.enabled ? t('signUpLink') : event.potluck?.enabled ? t('bringDish') : t('lendHand')}</Button></p>
+      )}
+
       <div className={styles.grid}>
         <section id="details" className={styles.panel} aria-labelledby="h-when">
           <h2 id="h-when" className={styles.panelTitle}>{t('whenWhere')}</h2>

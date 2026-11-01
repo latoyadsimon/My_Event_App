@@ -5,6 +5,7 @@
 //   rsvp/submit  → functions.sql submit_rsvp (rsvp.updated)
 // =====================================================================
 import { formatDay, nowStamp } from '../../lib/clock'
+import { formatClock } from '../selectors'
 import { newId, updateById, withMessage, withToast, firstName } from '../helpers'
 
 const eventOf = (state, id) => state.events.find((e) => e.id === id)
@@ -70,11 +71,13 @@ export const guestActions = {
     const body = a.kind === 'week'
       ? `One week to go! ${event.name} is ${formatDay(event.date)} at ${event.venue}${event.venueInfo?.address ? `, ${event.venueInfo.address}` : ''}.${site.dressCode ? ` Dress code: ${site.dressCode}.` : ''} Parking and directions are on the event page.`
       : `See you tomorrow at ${event.venue}! Directions are on the event page.`
+    // Potluck on: the drop-off time rides along (GU-4.1)
+    const potluck = event.potluck?.enabled && event.potluck.dropOff ? ` Bringing a dish? Drop-off is by ${formatClock(event.potluck.dropOff)}.` : ''
     let next = state
     for (const g of targets) {
       next = withMessage(next, {
         type: g.phone ? 'sms' : 'email', to: `${g.name} · ${g.phone || g.email}`, from: state.business.name,
-        subject: a.kind === 'week' ? 'One week to go' : 'See you tomorrow', body,
+        subject: a.kind === 'week' ? 'One week to go' : 'See you tomorrow', body: body + potluck,
         link: { label: 'Event page', to: `/e/${event.id}?t=${g.token}`, role: 'guest' },
       })
     }
