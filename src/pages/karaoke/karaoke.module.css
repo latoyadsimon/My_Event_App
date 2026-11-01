@@ -1,0 +1,34 @@
+/* KJ console: built for a tablet on a dark stage, big targets. */
+.console { display: flex; flex-direction: column; gap: var(--space-4); max-width: 52rem; width: 100%; margin: 0 auto; }
+.grid2 { display: grid; gap: var(--space-3); grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr)); }
+.now { display: flex; flex-direction: column; gap: var(--space-2); padding: var(--space-5); border-radius: var(--radius-lg); background: var(--color-text); color: var(--color-surface); }
+.label { font-size: var(--text-xs); letter-spacing: .12em; text-transform: uppercase; font-weight: 700; opacity: .85; }
+.nowSong { font-size: var(--text-2xl); font-weight: 750; line-height: 1.15; }
+.buttons { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-2); }
+.buttons > * { min-height: 3rem; }
+.queue { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; font-size: var(--text-sm); }
+.queue > li { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-3); min-height: var(--tap-min); padding: var(--space-2) 0; border-top: 1px solid var(--color-border); }
+.queue > li:first-child { border-top: 0; }
+.pos { width: 1.75rem; height: 1.75rem; border-radius: 50%; display: grid; place-items: center; background: var(--color-surface-2); font-weight: 700; flex-shrink: 0; }
+.who { flex: 1 1 12rem; min-width: 0; }
+.sub { display: block; font-size: var(--text-xs); color: var(--color-muted); }
+.tools { display: flex; flex-wrap: wrap; gap: var(--space-1); }
+.judges { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-2); }
+.leader { padding-left: 1.25rem; display: flex; flex-direction: column; gap: var(--space-1); font-size: var(--text-sm); }
+.leader li > * + * { margin-left: var(--space-2); }
+
+/* The big screen: the event theme, huge type, readable from the back of the room */
+.screen {
+  min-height: 100vh; display: flex; flex-direction: column; gap: var(--space-6); padding: clamp(1.5rem, 5vw, 4rem);
+  background: var(--theme-surface); color: var(--theme-text); font-family: var(--theme-font-body);
+}
+.screenTitle { font-family: var(--theme-font-display); font-size: clamp(1.5rem, 4vw, 3rem); color: var(--theme-accent); }
+.screenNow { display: flex; flex-direction: column; gap: var(--space-2); }
+.screenSong { font-family: var(--theme-font-display); font-size: clamp(2.5rem, 8vw, 6rem); line-height: 1.05; }
+.screenWho { font-size: clamp(1.25rem, 3vw, 2.25rem); font-weight: 650; }
+.screenNext { font-size: clamp(1.1rem, 2.5vw, 1.75rem); padding-left: 1.5em; display: flex; flex-direction: column; gap: var(--space-2); margin-top: var(--space-2); }
+.screenFoot { margin-top: auto; font-size: clamp(.9rem, 1.8vw, 1.25rem); color: var(--theme-muted); }
+/* Outline buttons on the dark "now singing" card read light-on-dark */
+.buttons > :not([class*='primary']) { color: var(--color-surface); border-color: var(--color-surface); background: transparent; }
+.buttons > :not([class*='primary']):hover { background: color-mix(in srgb, var(--color-surface) 12%, transparent); }
+.buttons > :not([class*='primary'])[aria-pressed='true'] { background: var(--color-surface); color: var(--color-text); }
